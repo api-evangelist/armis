@@ -1,0 +1,34 @@
+generated: '2026-07-18'
+method: searched
+source: https://github.com/ArmisSecurity/armis-sdk-python
+docs: https://developers.armis.com/
+summary:
+  types: [oauth2, apiKey]
+  oauth2_flows: [clientCredentials]
+  primary: OAuth2 client-credentials -> short-lived JWT bearer, tenant-scoped audience
+schemes:
+  - name: clientCredentials
+    type: oauth2
+    flow: clientCredentials
+    token_endpoint: /api/v1/auth/token
+    parameters:
+      audience: Tenant URL including trailing slash (e.g. https://acme.armis.com/)
+      client_id: Client ID (email of the account that generated the client secret)
+      client_secret: Confidential credential generated within the Armis tenant
+      vendor_id: Identifier for the developer account / integration, obtained on the developer portal
+      scopes: Specific permissions the access token needs for the desired API endpoints
+    env: [ARMIS_AUDIENCE, ARMIS_CLIENT_ID, ARMIS_CLIENT_SECRET, ARMIS_VENDOR_ID]
+    token_lifetime: short-lived JWT (~55 min cache observed in official clients)
+    sources: [https://github.com/ArmisSecurity/armis-sdk-python, https://github.com/ArmisSecurity/armis-knowledge-mcp]
+  - name: apiToken
+    type: apiKey
+    in: header
+    status: legacy
+    parameters:
+      token: API token
+      tenant_id: Tenant identifier
+    env: [ARMIS_API_TOKEN, ARMIS_TENANT_ID]
+    note: Legacy Basic/token auth path retained by armis-cli (--token/--tenant-id).
+    sources: [https://github.com/ArmisSecurity/armis-cli]
+notes:
+  - Access tokens are OAuth scope-gated (permissions per endpoint); the scope enumeration is issued per developer registration and is not published as a flat catalog, so no scopes/ artifact is derived.
