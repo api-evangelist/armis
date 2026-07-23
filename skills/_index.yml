@@ -1,0 +1,29 @@
+generated: '2026-07-18'
+method: searched
+source: https://github.com/ArmisSecurity/armis-knowledge-mcp
+note: Armis publishes Agent Skills as a Claude Code plugin bundle (shell-skills variant, SKILL.md files) alongside the MCP variant. Skills authenticate via OAuth client-credentials (ARMIS_CLIENT_ID/SECRET -> JWT) and call the Armis Knowledge REST API. Grounded in the provider's own published SKILL.md files, not fabricated. No OpenAPI is captured in this repo, so no locally-grounded skills are generated.
+skills:
+  - name: knowledge
+    slash_command: /knowledge
+    description: Query the Armis AppSec knowledge base for security guidance.
+    published: https://github.com/ArmisSecurity/armis-knowledge-mcp
+  - name: ask
+    slash_command: /ask
+    description: Agentic Q&A over the Armis knowledge base (MCP variant only).
+    published: https://github.com/ArmisSecurity/armis-knowledge-mcp
+  - name: cwe-fix
+    slash_command: /cwe-fix
+    description: Get remediation guidance for a specific CWE.
+    published: https://github.com/ArmisSecurity/armis-knowledge-mcp
+  - name: framework-guidance
+    slash_command: /framework-guidance
+    description: Secure-usage guidance for a given framework.
+    published: https://github.com/ArmisSecurity/armis-knowledge-mcp
+  - name: tech-guidance
+    slash_command: /tech-guidance
+    description: Secure-usage guidance for a given technology.
+    published: https://github.com/ArmisSecurity/armis-knowledge-mcp
+  - name: security-scan
+    slash_command: /security-scan
+    description: On-demand AI security scan of code/files/diffs (armis-appsec plugin).
+    published: https://github.com/ArmisSecurity/armis-appsec-mcp

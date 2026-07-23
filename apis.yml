@@ -1,9 +1,32 @@
 aid: armis
 name: Armis
-description: 'Armis is a company surfaced as a portfolio company of general-catalyst, insight-partners
-  and added to the API Evangelist network as a stub for enrichment. Sector: defense-government. This profile
-  is a lead awaiting the enrichment pipeline.'
+description: >-
+  Armis is a cyber exposure management and asset intelligence company. Its Armis
+  Centrix platform discovers, protects, and manages every physical and virtual
+  asset in an enterprise environment — IT, OT, ICS, IoT, IoMT, medical devices,
+  cloud workloads, and applications — giving security teams real-time visibility,
+  risk prioritization, and threat detection across the full attack surface. Armis
+  exposes this intelligence through a tenant-scoped REST API secured with OAuth2
+  client-credentials, an official Python SDK (armis-sdk), a Go application-security
+  scanning CLI (armis-cli), and two published Model Context Protocol servers
+  (armis-knowledge-mcp and armis-appsec-mcp) for agent-native AppSec workflows.
+  The company was surfaced as a portfolio company of General Catalyst and Insight
+  Partners and enriched by the API Evangelist pipeline from its public developer
+  surface.
 url: https://raw.githubusercontent.com/api-evangelist/armis/refs/heads/main/apis.yml
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://avatars.githubusercontent.com/u/32813597?v=4
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
@@ -13,10 +36,18 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-18'
 tags:
 - Company
 - Defense Government
+- Security
+- Cybersecurity
+- Asset Intelligence
+- Exposure Management
+- IoT
+- OT Security
+- Vulnerability Management
+- Developer Tools
 apis: []
 maintainers:
 - FN: Kin Lane
@@ -26,3 +57,38 @@ maintainers:
 common:
 - type: Website
   url: https://www.armis.com
+- type: DeveloperPortal
+  url: https://developers.armis.com/
+- type: Documentation
+  url: https://armis-python-sdk.readthedocs.io
+- type: GitHubOrganization
+  url: https://github.com/ArmisSecurity
+- type: Blog
+  url: https://www.armis.com/blog/
+- type: Support
+  url: https://support.armis.com/
+- type: TrustCenter
+  url: security/armis-trust-center.yml
+- type: Compliance
+  url: https://trust.armis.com/
+- type: Authentication
+  url: authentication/armis-authentication.yml
+- type: Packages
+  url: packages/armis-packages.yml
+- type: SDKs
+  url: packages/armis-packages.yml
+- type: CLI
+  url: cli/armis-cli.yml
+- type: MCPServer
+  url: mcp/armis-mcp.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DomainSecurity
+  url: security/armis-domain-security.yml
+- type: LLMsTxt
+  url: llms/armis-llms.txt
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

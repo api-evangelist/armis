@@ -1,0 +1,56 @@
+generated: '2026-07-18'
+method: searched
+source: https://github.com/ArmisSecurity/armis-cli
+name: armis-cli
+summary: Enterprise-grade CLI for static application security scanning with Armis Cloud. Integrates security scanning into developer workflows and CI/CD pipelines.
+language: go
+license: Apache-2.0
+version: v1.20.0
+repo: https://github.com/ArmisSecurity/armis-cli
+install:
+  - method: homebrew
+    command: brew install armissecurity/tap/armis-cli
+  - method: script-unix
+    command: "curl -sSL https://raw.githubusercontent.com/ArmisSecurity/armis-cli/main/scripts/install.sh | bash"
+  - method: script-windows
+    command: "irm https://raw.githubusercontent.com/ArmisSecurity/armis-cli/main/scripts/install.ps1 | iex"
+  - method: source
+    command: go install (see repo Building from Source)
+authentication:
+  recommended:
+    - flag: --client-id
+      env: ARMIS_CLIENT_ID
+    - flag: --client-secret
+      env: ARMIS_CLIENT_SECRET
+    - flag: --region
+      env: ARMIS_REGION
+  legacy:
+    - flag: --token
+      env: ARMIS_API_TOKEN
+    - flag: --tenant-id
+      env: ARMIS_TENANT_ID
+output_formats: [human, json, sarif, junit]
+features:
+  - Scan repositories and container images
+  - SBOM generation (CycloneDX)
+  - VEX generation (Vulnerability Exploitability eXchange)
+  - Supply-chain protection (block recently-published packages across npm, Python, Java) — no Armis Cloud auth required
+  - CI/CD integrations (GitHub Actions, Jenkins, GitLab, Azure, Bitbucket, CircleCI)
+  - Configurable exit codes and fail-on severity
+commands:
+  - group: scan
+    resources:
+      - name: repo
+        usage: armis-cli scan repo [path]
+        description: Scans a local directory, tarballs it, and uploads to Armis Cloud for analysis (2GB size limit). Supports --changed (staged/unstaged/untracked), --sbom, --vex.
+      - name: image
+        description: Scan a container image.
+global_flags:
+  - name: --format
+    description: "Output format: human, json, sarif, junit (default human)"
+  - name: --fail-on
+    description: "Fail build on severity levels (default CRITICAL)"
+  - name: --exit-code
+    description: Exit code to use when failing (default 1)
+  - name: --page-limit
+    description: "Results page size for pagination (default 500, range 1-1000)"

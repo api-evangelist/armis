@@ -1,0 +1,48 @@
+generated: '2026-07-18'
+method: searched
+status: published
+source: https://github.com/ArmisSecurity
+servers:
+  - name: armis-knowledge
+    status: published
+    transport: streamable-http
+    variants:
+      - name: armis-knowledge-prod
+        variant: mcp
+        backend: https://knowledge-mcp.moose.armis.com
+        slash_commands: [/knowledge, /ask, /cwe-fix, /framework-guidance, /tech-guidance]
+      - name: armis-knowledge-skills-prod
+        variant: shell-skills
+        backend: https://knowledge-api.moose.armis.com
+        slash_commands: [/knowledge, /cwe-fix, /framework-guidance, /tech-guidance]
+    install: "/plugin marketplace add ArmisSecurity/armis-knowledge-mcp"
+    repo: https://github.com/ArmisSecurity/armis-knowledge-mcp
+    auth:
+      type: oauth2-client-credentials
+      env: [ARMIS_CLIENT_ID, ARMIS_CLIENT_SECRET]
+      token_endpoint: POST /api/v1/auth/token
+      note: Exchanges client credentials for a short-lived JWT; tenant resolved server-side. Bridge proxies stdio to the remote streamable-HTTP MCP endpoint.
+    description: Armis Knowledge — AppSec guidance MCP/skills bundle for Claude Code, Claude Desktop, Cursor. Answers security questions, CWE fixes, framework/tech guidance from Armis knowledge base (data server-side).
+  - name: armis-appsec
+    status: published
+    transport: stdio
+    install: "git clone https://github.com/ArmisSecurity/armis-appsec-mcp.git && make setup CLIENT=<client>"
+    repo: https://github.com/ArmisSecurity/armis-appsec-mcp
+    clients: [Claude Code, Cursor, VS Code (Copilot), Gemini CLI, GitHub Copilot CLI, Codex CLI, Cline]
+    license: Apache-2.0
+    auth:
+      type: oauth2-client-credentials
+      env: [ARMIS_CLIENT_ID, ARMIS_CLIENT_SECRET]
+    tools:
+      - name: scan_code
+        description: Scan a code snippet for vulnerabilities.
+      - name: scan_file
+        description: Scan a file on disk.
+      - name: scan_diff
+        description: Scan git changes (staged, unstaged, or diff against a branch).
+      - name: approve_findings
+        description: Approve findings after user consent (for shipping with known risks).
+      - name: debug_config
+        description: Check scanner configuration status.
+    slash_commands: [/security-scan]
+    description: AI-powered real-time security scanning MCP plugin — scans code, files, and git diffs for vulnerabilities via the Armis scanning API; includes a git pre-commit gate.

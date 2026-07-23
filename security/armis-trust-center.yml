@@ -1,0 +1,38 @@
+generated: '2026-07-18'
+method: searched
+probe: true
+source: https://trust.armis.com/
+url: https://trust.armis.com/
+certifications:
+- SOC 2
+- ISO/IEC 27001
+- ISO/IEC 27001 SoA
+- ISO/IEC 27017:2015
+- ISO/IEC 27018:2019
+- ISO/IEC 42001:2023
+- FedRAMP Certified (Class C)
+- DoD IL5
+- TX-RAMP Level 2
+- CSA STAR Level 1
+- C5
+- Cyber Essentials
+- ENS
+- TISAX
+- VPAT
+compliance_programs:
+- SOC 2
+- ISO/IEC 27001
+- FedRAMP
+- CSA STAR
+evidence:
+- source: https://trust.armis.com/
+  keywords:
+  - soc 2
+  - iso/iec 27001
+  - iso/iec 27017
+  - iso/iec 27018
+  - iso/iec 42001
+  - fedramp
+  - dod il5
+  - csa star
+  - trust center

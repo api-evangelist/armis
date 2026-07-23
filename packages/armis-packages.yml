@@ -1,0 +1,38 @@
+generated: '2026-07-18'
+method: searched
+source: https://github.com/ArmisSecurity
+packages:
+  - language: python
+    registry: pypi
+    name: armis-sdk
+    import: armis_sdk
+    url: https://pypi.org/project/armis-sdk/
+    install: pip install armis_sdk
+    source: https://github.com/ArmisSecurity/armis-sdk-python
+    docs: https://armis-python-sdk.readthedocs.io
+    version: 1.2.2
+    license: MIT
+    official: true
+    description: Official Armis SDK for Python 3.9+ encapsulating common use-cases for interacting with the Armis platform (client-credentials auth, tenant audience).
+  - language: go
+    registry: homebrew
+    name: armis-cli
+    url: https://github.com/ArmisSecurity/armis-cli
+    install: brew install armissecurity/tap/armis-cli
+    source: https://github.com/ArmisSecurity/armis-cli
+    tap: https://github.com/ArmisSecurity/homebrew-tap
+    version: v1.20.0
+    license: Apache-2.0
+    official: true
+    description: Enterprise CLI for static application security scanning with Armis Cloud (SBOM/VEX/SARIF, supply-chain protection, CI/CD). Binary; command surface catalogued in cli/armis-cli.yml.
+  - language: python
+    registry: pypi
+    name: armis
+    url: https://pypi.org/project/armis/
+    install: pip install armis
+    source: https://github.com/mmlange/armis-python
+    version: 1.0.23
+    official: false
+    description: Third-party (community) Python client for the Armis cloud, not published by Armis.
+notes:
+  - "npm @jupiterone/graph-armis is a third-party JupiterOne integration, not a first-party Armis client library."
