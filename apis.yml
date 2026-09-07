@@ -66,6 +66,10 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Conformance
+  url: conformance/armis-conformance.yml
+- type: Conventions
+  url: conventions/armis-conventions.yml
 - type: Website
   url: https://www.armis.com
 - type: DeveloperPortal
