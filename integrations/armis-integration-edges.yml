@@ -1,0 +1,38 @@
+generated: '2026-10-13'
+method: searched
+checked:
+- https://aws.amazon.com/marketplace/
+- https://azuremarketplace.microsoft.com/
+marketplace_apps: []
+edges:
+- partner_name: AWS Marketplace
+  partner: amazon-web-services
+  partner_match: aggregator
+  type: marketplace
+  marketplace: aws-marketplace
+  channel: distribution
+  relationship: platform-app
+  direction: provider-built
+  evidence: https://aws.amazon.com/marketplace/seller-profile?id=a082c0e4-bee2-49bf-98f6-e7615902f5e0
+  listing_count: 2
+  apps:
+  - Armis Device Security Platform
+  - Armis Centrix ViPR Pro
+  seller_name: Armis
+  detected_by: sweep-cloud-marketplaces.py
+  detected: '2026-10-13'
+- partner_name: Microsoft Azure Marketplace
+  partner: microsoft-azure
+  partner_match: aggregator
+  type: marketplace
+  marketplace: azure-marketplace
+  channel: distribution
+  relationship: platform-app
+  direction: provider-built
+  evidence: https://azuremarketplace.microsoft.com/en-us/marketplace/apps?search=Armis%2C%20Inc.
+  listing_count: 1
+  apps:
+  - Armis
+  seller_name: Armis, Inc.
+  detected_by: sweep-cloud-marketplaces.py
+  detected: '2026-10-13'
