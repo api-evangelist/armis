@@ -1,0 +1,1635 @@
+openapi: 3.2.0
+info:
+  title: Armis API v3 Assets API
+  version: 0.13.0
+servers:
+- url: https://api.armis.com/v3
+tags:
+- name: Assets
+paths:
+  /assets/_bulk:
+    post:
+      tags:
+      - Assets
+      summary: Update assets in bulk
+      description: '### Required scopes:
+
+        * `PERMISSION.DEVICE.MANAGE.EDIT`'
+      operationId: post_assets__bulk_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkRequest'
+        required: true
+      responses:
+        '207':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+  /assets/_search:
+    post:
+      tags:
+      - Assets
+      summary: Search assets that match a certain criteria
+      description: '### Required scopes:
+
+        * `PERMISSION.DEVICE.READ`
+
+        * `PERMISSION.PII.DEVICE`
+
+        * `FULL_VISIBILITY`'
+      operationId: search_assets__search_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchAssetsRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchAssetsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+  /assets/_search/fields:
+    get:
+      tags:
+      - Assets
+      summary: List allowed fields
+      description: 'List the values that are valid in the `POST /assets/_search` endpoint''s `field` parameter.
+
+
+        Includes:
+
+        * Common Armis fields.
+
+        * Custom fields (also reflected in the `GET /settings/device-custom-properties` endpoint).
+
+        * Integration fields.'
+      operationId: fields_assets__search_fields_get
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: asset_type
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/AssetType'
+          default: DEVICE
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchFieldsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    BulkItemResponse:
+      properties:
+        status:
+          type: integer
+          title: Status
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+      type: object
+      required:
+      - status
+      title: BulkItemResponse
+      examples:
+      - status: 200
+      - error: Bad Request
+        status: 400
+    FieldDescription:
+      properties:
+        name:
+          anyOf:
+          - $ref: '#/components/schemas/AssetField'
+          - $ref: '#/components/schemas/CustomPropertyField-Output'
+          - $ref: '#/components/schemas/IntegrationPropertyField-Output'
+          title: Name
+        type:
+          $ref: '#/components/schemas/FieldType'
+          default: string
+        is_list:
+          type: boolean
+          title: Is List
+          default: false
+      type: object
+      required:
+      - name
+      title: FieldDescription
+      examples:
+      - is_list: true
+        name: boundaries
+        type: object
+      - is_list: false
+        name: brand
+        type: string
+      - is_list: false
+        name: device_id
+        type: integer
+      - is_list: false
+        name: first_seen
+        type: timestamp
+      - is_list: true
+        name: ipv4_addresses
+        type: ipv4
+      - is_list: false
+        name: custom.custom1
+        type: string
+      - is_list: false
+        name: integration.gcp_image
+        type: string
+    BulkItemUnsetRequest:
+      properties:
+        asset_id:
+          anyOf:
+          - type: integer
+          - type: string
+          title: Asset Id
+          description: 'The identifier that will be used to find the asset that needs to be updated.
+
+
+            The content type will vary according to the selected `asset_id_source` field (e.g. IP v4, Asset ID, etc.).
+
+
+            Generally speaking, all identifiers except Asset ID are provided by the customer''s environment.'
+          examples:
+          - 8.8.8.8
+          - 1234
+        operation:
+          type: string
+          const: UNSET
+          title: Operation
+        key:
+          type: string
+          title: Key
+          description: 'The key of the asset you wish to update.
+
+            * Currently, only custom properties are supported.
+
+            * For custom properties, add the `custom.` prefix. (e.g. `custom.MY_CUSTOM_PROPERTY`).
+
+            * To see the available custom properties, please refer to the [List all device custom property configurations](/reference/get_settings_device_custom_properties_get#/) endpoint.'
+          examples:
+          - custom.MY_CUSTOM_PROPERTY
+      type: object
+      required:
+      - asset_id
+      - operation
+      - key
+      title: BulkItemUnsetRequest
+      examples:
+      - asset_id: 1
+        key: custom.Size
+        operation: UNSET
+      - asset_id: 1.2.3.4
+        key: custom.Size
+        operation: UNSET
+      - asset_id: ::ffff:1.2.3.4
+        key: custom.Size
+        operation: UNSET
+      - asset_id: aa:bb:cc:dd:ee:ff
+        key: custom.Size
+        operation: UNSET
+      - asset_id: ABCDEF
+        key: custom.Size
+        operation: UNSET
+    AssetIdSource:
+      type: string
+      enum:
+      - ASSET_ID
+      - IPV4_ADDRESS
+      - IPV6_ADDRESS
+      - MAC_ADDRESS
+      - SERIAL_NUMBER
+      title: AssetIdSource
+    AssetResponse:
+      properties:
+        asset_id:
+          anyOf:
+          - type: integer
+          - type: string
+          title: Asset Id
+        fields:
+          type: object
+          title: Fields
+      type: object
+      required:
+      - asset_id
+      - fields
+      title: AssetResponse
+    CustomPropertyField-Input:
+      type: string
+      pattern: ^custom\..+$
+      title: CustomPropertyField
+      description: 'This model represents a device custom property field.
+
+        It makes sure that it has a prefix "custom."'
+    BulkItemSetRequest:
+      properties:
+        asset_id:
+          anyOf:
+          - type: integer
+          - type: string
+          title: Asset Id
+          description: 'The identifier that will be used to find the asset that needs to be updated.
+
+
+            The content type will vary according to the selected `asset_id_source` field (e.g. IP v4, Asset ID, etc.).
+
+
+            Generally speaking, all identifiers except Asset ID are provided by the customer''s environment.'
+          examples:
+          - 8.8.8.8
+          - 1234
+        operation:
+          type: string
+          const: SET
+          title: Operation
+        key:
+          type: string
+          title: Key
+          description: 'The key of the asset you wish to update.
+
+            * Currently, only custom properties are supported.
+
+            * For custom properties, add the `custom.` prefix. (e.g. `custom.MY_CUSTOM_PROPERTY`).
+
+            * To see the available custom properties, please refer to the [List all device custom property configurations](/reference/get_settings_device_custom_properties_get#/) endpoint.'
+          examples:
+          - custom.MY_CUSTOM_PROPERTY
+        value:
+          title: Value
+      type: object
+      required:
+      - asset_id
+      - operation
+      - key
+      title: BulkItemSetRequest
+      examples:
+      - asset_id: 1
+        key: custom.Size
+        operation: SET
+        value: small
+      - asset_id: 1.2.3.4
+        key: custom.Size
+        operation: SET
+        value: small
+      - asset_id: ::ffff:1.2.3.4
+        key: custom.Size
+        operation: SET
+        value: small
+      - asset_id: aa:bb:cc:dd:ee:ff
+        key: custom.Size
+        operation: SET
+        value: small
+      - asset_id: ABCDEF
+        key: custom.Size
+        operation: SET
+        value: small
+    IntegrationPropertyField-Input:
+      type: string
+      pattern: ^integration\..+$
+      title: IntegrationPropertyField
+      description: 'This model represents a device integration property field.
+
+        It makes sure that it has a prefix "integration.<something>."'
+    DeviceType:
+      type: string
+      enum:
+      - Access Controls
+      - Access Points
+      - Access Readers
+      - Access Solutions
+      - Acute Cares
+      - AC Drives
+      - Alarms
+      - Alarm Systems
+      - Amplifiers
+      - Analog Gateways
+      - Anesthesia Machines
+      - Angiography
+      - Appliances
+      - ATA Boxes
+      - ATMs
+      - Attendance Systems
+      - Audio Headsets
+      - Automatic Counters
+      - AV Transmitters
+      - Barcode Readers
+      - Beacons
+      - Biometric Scanners
+      - Biopsy Systems
+      - Body Cameras
+      - Building Control Systems
+      - Cabinets
+      - Cable Managers
+      - Cars
+      - Carts
+      - Cash Deposit Machines
+      - Central Stations
+      - Charging Stations
+      - Chassis
+      - Communication Adapter
+      - Conference Control Systems
+      - Connectivity Hubs
+      - Controllers
+      - Cooling Units
+      - Credit Card Reader
+      - CR Systems
+      - CTs
+      - Dash Cams
+      - Defibrillators
+      - Dental CAD/CAMs
+      - Dental CBCTs
+      - Desktops
+      - Diagnostics
+      - Dialysis Machines
+      - Digital Cameras
+      - Doorbells
+      - Door Control Modules
+      - Driver Terminals
+      - Drive Thru Equipment
+      - Drones
+      - DSPs
+      - DVRs
+      - ECGs
+      - EEGs
+      - Electric Scooters
+      - Elevator Panels
+      - Emergency Response
+      - Endoscopy
+      - Engineering Stations
+      - Engineering Workstations
+      - Ereaders
+      - Field Devices
+      - Fillers
+      - Firewalls
+      - Fitness
+      - Fluoroscopy
+      - Frames
+      - Franking Machines
+      - Game Consoles
+      - Game Machines
+      - Gaming
+      - Gateways
+      - General Imaging
+      - Generic IO's
+      - Generic OT's
+      - Generic Rack Components
+      - Historians
+      - HMI
+      - HMI Panels
+      - Hotspots
+      - Household Appliances
+      - HVACs
+      - Hypervisor
+      - Imaging Workstations
+      - Industrial Managed Switches
+      - Industrial PC
+      - Industrial Robots
+      - Industrial Simulators
+      - Industrial Tools
+      - Infusion Docking Stations
+      - Infusion Pumps
+      - Infusion Pump Racks
+      - Integrated OR Systems
+      - Interactive Kiosks
+      - Intercoms
+      - Intraoral Sensors
+      - Intrusion Prevention Systems
+      - I/O
+      - IOT Gateways
+      - IP Cameras
+      - Kitchen Display Systems
+      - Keyboards
+      - Lab Equipment
+      - Laptops
+      - Laptops (by adapter)
+      - Life Supports
+      - Lightings
+      - Load Balancers
+      - Malicious
+      - Mammography
+      - Material Transport
+      - Measuring Instruments
+      - Media Controllers
+      - Media Players
+      - Media Writers
+      - Medication Dispensing Systems
+      - Mobile Phones
+      - Monitors
+      - Monitoring Equipment
+      - Motor Controllers
+      - Mouses
+      - MRIs
+      - Navigation Control Systems
+      - Network Video Recorders
+      - Nuclear Medicine
+      - Nurse Call
+      - Radiation Oncology Information Systems
+      - Out-of-band Management Systems
+      - Operator Workstations
+      - Optometry Systems
+      - PACSs
+      - Panels
+      - Panel PCs
+      - Patch Panels
+      - Patient Monitors
+      - Payment Terminals
+      - PDUs
+      - Pentests
+      - Personal Computers
+      - PET CTs
+      - PFT Systems
+      - Pill Counters
+      - Player Tracking Interfaces
+      - PLCs
+      - Pneumatic Tube Systems
+      - POC Diagnostics
+      - Points of Sale
+      - Postage Meters
+      - Power Monitors
+      - Printers
+      - Product Scanners
+      - Projectors
+      - Radiation Therapies
+      - Radiology Injection
+      - Radiology Systems
+      - Remote Console Managers
+      - Remote IO's
+      - Routers
+      - Safes
+      - Safe Deposit Boxes
+      - SCADA Clients
+      - SCADA Servers
+      - Scanners
+      - Security Equipment
+      - Sensors
+      - Servers
+      - Servo Drives
+      - Single-Board Computers
+      - Smart Cameras
+      - Smart Glasses
+      - Smart Switches
+      - Speakers
+      - Sterilizations
+      - Storage and Transport
+      - Storage Server
+      - Surgical Systems
+      - Switches
+      - Tablets
+      - Telehealth Systems
+      - Telephony Solutions
+      - Telephony Systems
+      - Terminal Servers
+      - Therapeutics
+      - Thermostats
+      - Thin Client
+      - 3D Printers
+      - Time Recording Terminals
+      - Treatment Equipment
+      - Triggers
+      - Trucks
+      - TVs
+      - Ultrasounds
+      - Unknown
+      - UPS
+      - VCs
+      - Ventilators
+      - Video Broadband Devices
+      - Video Surveillance
+      - Virtual Assistants
+      - Virtual Machines
+      - VLANs
+      - Voice Gateways
+      - Voice Picking Systems
+      - VoIPs
+      - VR Headsets
+      - Vulnerability Scanners
+      - WAN Optimizers
+      - Watches
+      - Weather Instruments
+      - Wireless Equipment
+      - Wireless Presentations
+      - WLCs
+      - Workstations
+      - XRYs
+      - X-Rays
+      title: DeviceType
+    AssetType:
+      type: string
+      enum:
+      - DEVICE
+      title: AssetType
+    FilterByType:
+      properties:
+        operator:
+          anyOf:
+          - $ref: '#/components/schemas/EqualityOperator'
+          - type: 'null'
+        filter_criteria:
+          type: string
+          const: TYPE
+          title: Filter Criteria
+          default: TYPE
+        types:
+          items:
+            $ref: '#/components/schemas/DeviceType'
+          type: array
+          maxItems: 1000
+          minItems: 1
+          title: Types
+        after:
+          type: integer
+          minimum: 0
+          title: After
+          description: Cursor for pagination
+          default: 0
+        limit:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          title: Limit
+          description: Number of items to return
+          default: 10
+      type: object
+      required:
+      - types
+      title: FilterByType
+      examples:
+      - filter_criteria: TYPE
+        types:
+        - Mobile Phones
+      - filter_criteria: TYPE
+        operator: NOT_EQUALS
+        types:
+        - Mobile Phones
+      - after: 100
+        filter_criteria: TYPE
+        limit: 50
+        types:
+        - Mobile Phones
+    BulkRequest:
+      properties:
+        asset_type:
+          $ref: '#/components/schemas/AssetType'
+          default: DEVICE
+        asset_id_source:
+          $ref: '#/components/schemas/AssetIdSource'
+          description: 'Some assets may have multiple unique identifiers.
+
+
+            For example, a device can have an Asset ID, a MAC Address, an IPv4, etc.
+
+
+            This field determines which field will be used to find the asset.'
+          default: ASSET_ID
+        items:
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/BulkItemSetRequest'
+            - $ref: '#/components/schemas/BulkItemUnsetRequest'
+            discriminator:
+              propertyName: operation
+              mapping:
+                SET: '#/components/schemas/BulkItemSetRequest'
+                UNSET: '#/components/schemas/BulkItemUnsetRequest'
+          type: array
+          maxItems: 1000
+          title: Items
+      type: object
+      required:
+      - items
+      title: BulkRequest
+      examples:
+      - items:
+        - asset_id: 1
+          key: custom.Size
+          operation: SET
+          value: small
+        - asset_id: 2
+          key: custom.Size
+          operation: UNSET
+      - asset_id_source: ASSET_ID
+        asset_type: DEVICE
+        items:
+        - asset_id: 1
+          key: custom.Size
+          operation: SET
+          value: small
+        - asset_id: 2
+          key: custom.Size
+          operation: UNSET
+      - asset_id_source: IPV4_ADDRESS
+        asset_type: DEVICE
+        items:
+        - asset_id: 1.2.3.4
+          key: custom.Size
+          operation: SET
+          value: small
+      - asset_id_source: IPV6_ADDRESS
+        asset_type: DEVICE
+        items:
+        - asset_id: ::ffff:1.2.3.4
+          key: custom.Size
+          operation: SET
+          value: small
+      - asset_id_source: MAC_ADDRESS
+        asset_type: DEVICE
+        items:
+        - asset_id: aa:bb:cc:dd:ee:ff
+          key: custom.Size
+          operation: SET
+          value: small
+      - asset_id_source: SERIAL_NUMBER
+        asset_type: DEVICE
+        items:
+        - asset_id: ABCDEF
+          key: custom.Size
+          operation: SET
+          value: small
+    FilterByName:
+      properties:
+        operator:
+          anyOf:
+          - $ref: '#/components/schemas/EqualityOperator'
+          - type: 'null'
+        filter_criteria:
+          type: string
+          const: NAME
+          title: Filter Criteria
+          default: NAME
+        names:
+          items:
+            type: string
+          type: array
+          maxItems: 1000
+          minItems: 1
+          title: Names
+        after:
+          type: integer
+          minimum: 0
+          title: After
+          description: Cursor for pagination
+          default: 0
+        limit:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          title: Limit
+          description: Number of items to return
+          default: 10
+      type: object
+      required:
+      - names
+      title: FilterByName
+      examples:
+      - filter_criteria: NAME
+        names:
+        - my-device
+      - filter_criteria: NAME
+        names:
+        - my-device
+        operator: NOT_EQUALS
+      - after: 100
+        filter_criteria: NAME
+        limit: 50
+        names:
+        - my-device
+        - other-device
+    FilterByLastSeen:
+      properties:
+        filter_criteria:
+          type: string
+          const: LAST_SEEN
+          title: Filter Criteria
+          default: LAST_SEEN
+        last_seen_ge:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Seen Ge
+          description: Last seen after (or exactly on) this date (in UTC).
+        last_seen_seconds:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Last Seen Seconds
+          description: Last seen in the last X seconds.
+        after:
+          type: integer
+          minimum: 0
+          title: After
+          description: Cursor for pagination
+          default: 0
+        limit:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          title: Limit
+          description: Number of items to return
+          default: 10
+      type: object
+      title: FilterByLastSeen
+      examples:
+      - filter_criteria: LAST_SEEN
+        last_seen_ge: '2025-09-01'
+      - filter_criteria: LAST_SEEN
+        last_seen_seconds: 3600
+      - after: 250
+        filter_criteria: LAST_SEEN
+        last_seen_ge: '2025-09-01'
+        limit: 50
+    FilterByBoundaryId:
+      properties:
+        operator:
+          anyOf:
+          - $ref: '#/components/schemas/EqualityOperator'
+          - type: 'null'
+        filter_criteria:
+          type: string
+          const: BOUNDARY_ID
+          title: Filter Criteria
+          default: BOUNDARY_ID
+        boundary_ids:
+          items:
+            anyOf:
+            - type: integer
+            - type: 'null'
+          type: array
+          maxItems: 1000
+          minItems: 1
+          title: Boundary Ids
+        after:
+          type: integer
+          minimum: 0
+          title: After
+          description: Cursor for pagination
+          default: 0
+        limit:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          title: Limit
+          description: Number of items to return
+          default: 10
+      type: object
+      required:
+      - boundary_ids
+      title: FilterByBoundaryId
+      examples:
+      - boundary_ids:
+        - 1
+        - 2
+        - 3
+        filter_criteria: BOUNDARY_ID
+      - boundary_ids:
+        - 1
+        - 2
+        - 3
+        filter_criteria: BOUNDARY_ID
+        operator: NOT_EQUALS
+      - after: 250
+        boundary_ids:
+        - 1
+        - 2
+        - 3
+        filter_criteria: BOUNDARY_ID
+        limit: 50
+      - boundary_ids:
+        - null
+        filter_criteria: BOUNDARY_ID
+    SearchAssetsResponse:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/AssetResponse'
+          type: array
+          title: Items
+        next:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Next
+      type: object
+      required:
+      - items
+      title: SearchAssetsResponse
+      examples:
+      - items:
+        - asset_id: 1
+          fields:
+            brand: Apple
+            custom.custom1: My Custom Value
+            device_id: 1
+            tags:
+            - Tag1
+            - Tag2
+            - Tag3
+        - asset_id: 2
+          fields:
+            brand: Samsung
+            custom.custom1: My Other Custom Value
+            device_id: 3
+            tags:
+            - Tag4
+            - Tag5
+            - Tag6
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    SearchFieldsResponse:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/FieldDescription'
+          type: array
+          title: Items
+      type: object
+      required:
+      - items
+      title: SearchFieldsResponse
+      examples:
+      - items:
+        - is_list: true
+          name: boundaries
+          type: object
+        - is_list: false
+          name: brand
+          type: string
+        - is_list: false
+          name: category
+          type: string
+        - is_list: false
+          name: device_id
+          type: integer
+        - is_list: false
+          name: display
+          type: string
+        - is_list: false
+          name: first_seen
+          type: timestamp
+        - is_list: true
+          name: ipv4_addresses
+          type: ipv4
+        - is_list: true
+          name: ipv6_addresses
+          type: ipv6
+        - is_list: false
+          name: last_seen
+          type: timestamp
+        - is_list: true
+          name: mac_addresses
+          type: macAddress
+        - is_list: false
+          name: model
+          type: string
+        - is_list: true
+          name: names
+          type: string
+        - is_list: true
+          name: network_interfaces
+          type: object
+        - is_list: false
+          name: os_name
+          type: string
+        - is_list: false
+          name: os_version
+          type: string
+        - is_list: false
+          name: purdue_level
+          type: float
+        - is_list: false
+          name: risk_level
+          type: integer
+        - is_list: true
+          name: serial_numbers
+          type: string
+        - is_list: false
+          name: site
+          type: object
+        - is_list: true
+          name: tags
+          type: string
+        - is_list: false
+          name: type
+          type: string
+        - is_list: false
+          name: visibility
+          type: string
+        - is_list: false
+          name: custom.custom1
+          type: string
+        - is_list: false
+          name: integration.gcp_image
+          type: string
+    SearchAssetsRequest:
+      properties:
+        asset_type:
+          $ref: '#/components/schemas/AssetType'
+          default: DEVICE
+        fields:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/AssetField'
+            - $ref: '#/components/schemas/CustomPropertyField-Input'
+            - $ref: '#/components/schemas/IntegrationPropertyField-Input'
+          type: array
+          title: Fields
+        filter:
+          oneOf:
+          - $ref: '#/components/schemas/FilterByAssetId'
+          - $ref: '#/components/schemas/FilterByBoundaryId'
+          - $ref: '#/components/schemas/FilterByBrand'
+          - $ref: '#/components/schemas/FilterByCategory'
+          - $ref: '#/components/schemas/FilterByLastSeen'
+          - $ref: '#/components/schemas/FilterByName'
+          - $ref: '#/components/schemas/FilterBySiteId'
+          - $ref: '#/components/schemas/FilterByTag'
+          - $ref: '#/components/schemas/FilterByType'
+          - $ref: '#/components/schemas/FilterByVisibility'
+          - $ref: '#/components/schemas/FilterByMultiple'
+          title: Filter
+          discriminator:
+            propertyName: filter_criteria
+            mapping:
+              ASSET_ID: '#/components/schemas/FilterByAssetId'
+              BOUNDARY_ID: '#/components/schemas/FilterByBoundaryId'
+              BRAND: '#/components/schemas/FilterByBrand'
+              CATEGORY: '#/components/schemas/FilterByCategory'
+              LAST_SEEN: '#/components/schemas/FilterByLastSeen'
+              MULTIPLE: '#/components/schemas/FilterByMultiple'
+              NAME: '#/components/schemas/FilterByName'
+              SITE_ID: '#/components/schemas/FilterBySiteId'
+              TAG: '#/components/schemas/FilterByTag'
+              TYPE: '#/components/schemas/FilterByType'
+              VISIBILITY: '#/components/schemas/FilterByVisibility'
+      type: object
+      required:
+      - fields
+      - filter
+      title: SearchAssetsRequest
+      examples:
+      - asset_type: DEVICE
+        fields:
+        - device_id
+        - brand
+        - tags
+        - custom.custom1
+        filter:
+          asset_ids:
+          - 1
+          filter_criteria: ASSET_ID
+      - asset_type: DEVICE
+        fields:
+        - device_id
+        - brand
+        - tags
+        - custom.custom1
+        filter:
+          filter_criteria: LAST_SEEN
+          last_seen_ge: '2025-09-01'
+      - asset_type: DEVICE
+        fields:
+        - device_id
+        - brand
+        - tags
+        - custom.custom1
+        filter:
+          filter_criteria: SITE_ID
+          site_ids:
+          - 1
+          - 2
+          - 3
+      - asset_type: DEVICE
+        fields:
+        - device_id
+        - brand
+        - tags
+        - custom.custom1
+        filter:
+          boundary_ids:
+          - 1
+          - 2
+          - 3
+          filter_criteria: BOUNDARY_ID
+      - asset_type: DEVICE
+        fields:
+        - device_id
+        - brand
+        - tags
+        - custom.custom1
+        filter:
+          filter_criteria: NAME
+          names:
+          - my-device
+      - asset_type: DEVICE
+        fields:
+        - device_id
+        - brand
+        - tags
+        - custom.custom1
+        filter:
+          filter_criteria: VISIBILITY
+          visibility: FULL
+      - asset_type: DEVICE
+        fields:
+        - device_id
+        - brand
+        - tags
+        - custom.custom1
+        filter:
+          filter_criteria: MULTIPLE
+          filters:
+          - filter_criteria: SITE_ID
+            site_ids:
+            - 1
+            - 2
+            - 3
+          - filter_criteria: LAST_SEEN
+            last_seen_ge: '2025-09-01'
+    FilterByAssetId:
+      properties:
+        filter_criteria:
+          type: string
+          const: ASSET_ID
+          title: Filter Criteria
+          default: ASSET_ID
+        asset_id_source:
+          $ref: '#/components/schemas/AssetIdSource'
+          description: 'Some assets may have multiple unique identifiers.
+
+
+            For example, a device can have an Asset ID, a MAC Address, an IPv4, etc.
+
+
+            This field determines which field will be used to find the asset.'
+          default: ASSET_ID
+        asset_ids:
+          items:
+            anyOf:
+            - type: integer
+            - type: string
+          type: array
+          maxItems: 1000
+          minItems: 1
+          title: Asset Ids
+      type: object
+      required:
+      - asset_ids
+      title: FilterByAssetId
+      examples:
+      - asset_ids:
+        - 1
+        filter_criteria: ASSET_ID
+      - asset_id_source: ASSET_ID
+        asset_ids:
+        - 1
+        filter_criteria: ASSET_ID
+      - asset_id_source: IPV4_ADDRESS
+        asset_ids:
+        - 1.2.3.4
+        filter_criteria: ASSET_ID
+      - asset_id_source: IPV6_ADDRESS
+        asset_ids:
+        - ::ffff:1.2.3.4
+        filter_criteria: ASSET_ID
+      - asset_id_source: MAC_ADDRESS
+        asset_ids:
+        - aa:bb:cc:dd:ee:ff
+        filter_criteria: ASSET_ID
+      - asset_id_source: SERIAL_NUMBER
+        asset_ids:
+        - ABCDEF
+        filter_criteria: ASSET_ID
+    CustomPropertyField-Output:
+      type: string
+    FilterByVisibility:
+      properties:
+        filter_criteria:
+          type: string
+          const: VISIBILITY
+          title: Filter Criteria
+          default: VISIBILITY
+        visibility:
+          $ref: '#/components/schemas/Visibility'
+        after:
+          type: integer
+          minimum: 0
+          title: After
+          description: Cursor for pagination
+          default: 0
+        limit:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          title: Limit
+          description: Number of items to return
+          default: 10
+      type: object
+      required:
+      - visibility
+      title: FilterByVisibility
+      examples:
+      - after: 0
+        filter_criteria: VISIBILITY
+        limit: 50
+        visibility: FULL
+      - after: 100
+        filter_criteria: VISIBILITY
+        limit: 50
+        visibility: LIMITED
+    FilterBySiteId:
+      properties:
+        operator:
+          anyOf:
+          - $ref: '#/components/schemas/EqualityOperator'
+          - type: 'null'
+        filter_criteria:
+          type: string
+          const: SITE_ID
+          title: Filter Criteria
+          default: SITE_ID
+        site_ids:
+          items:
+            anyOf:
+            - type: integer
+            - type: 'null'
+          type: array
+          maxItems: 1000
+          minItems: 1
+          title: Site Ids
+        after:
+          type: integer
+          minimum: 0
+          title: After
+          description: Cursor for pagination
+          default: 0
+        limit:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          title: Limit
+          description: Number of items to return
+          default: 10
+      type: object
+      required:
+      - site_ids
+      title: FilterBySiteId
+      examples:
+      - filter_criteria: SITE_ID
+        site_ids:
+        - 1
+        - 2
+        - 3
+      - filter_criteria: SITE_ID
+        operator: NOT_EQUALS
+        site_ids:
+        - 1
+        - 2
+        - 3
+      - after: 250
+        filter_criteria: SITE_ID
+        limit: 50
+        site_ids:
+        - 1
+        - 2
+        - 3
+      - filter_criteria: SITE_ID
+        site_ids:
+        - null
+    FilterByMultiple:
+      properties:
+        filter_criteria:
+          type: string
+          const: MULTIPLE
+          title: Filter Criteria
+          default: MULTIPLE
+        filters:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/FilterByBoundaryId'
+            - $ref: '#/components/schemas/FilterByBrand'
+            - $ref: '#/components/schemas/FilterByCategory'
+            - $ref: '#/components/schemas/FilterByLastSeen'
+            - $ref: '#/components/schemas/FilterByName'
+            - $ref: '#/components/schemas/FilterBySiteId'
+            - $ref: '#/components/schemas/FilterByTag'
+            - $ref: '#/components/schemas/FilterByType'
+            - $ref: '#/components/schemas/FilterByVisibility'
+          type: array
+          minItems: 1
+          title: Filters
+        after:
+          type: integer
+          minimum: 0
+          title: After
+          description: Cursor for pagination
+          default: 0
+        limit:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          title: Limit
+          description: Number of items to return
+          default: 10
+      type: object
+      required:
+      - filters
+      title: FilterByMultiple
+      examples:
+      - filter_criteria: MULTIPLE
+        filters:
+        - filter_criteria: SITE_ID
+          site_ids:
+          - 1
+          - 2
+          - 3
+        - filter_criteria: LAST_SEEN
+          last_seen_ge: '2025-09-01'
+    BulkResponse:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/BulkItemResponse'
+          type: array
+          title: Items
+      type: object
+      required:
+      - items
+      title: BulkResponse
+      examples:
+      - items:
+        - status: 200
+        - error: Bad Request
+          status: 400
+    IntegrationPropertyField-Output:
+      type: string
+    FilterByCategory:
+      properties:
+        operator:
+          anyOf:
+          - $ref: '#/components/schemas/EqualityOperator'
+          - type: 'null'
+        filter_criteria:
+          type: string
+          const: CATEGORY
+          title: Filter Criteria
+          default: CATEGORY
+        categories:
+          items:
+            $ref: '#/components/schemas/DeviceCategory'
+          type: array
+          maxItems: 1000
+          minItems: 1
+          title: Categories
+        after:
+          type: integer
+          minimum: 0
+          title: After
+          description: Cursor for pagination
+          default: 0
+        limit:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          title: Limit
+          description: Number of items to return
+          default: 10
+      type: object
+      required:
+      - categories
+      title: FilterByCategory
+      examples:
+      - categories:
+        - Computers
+        filter_criteria: CATEGORY
+      - categories:
+        - Computers
+        filter_criteria: CATEGORY
+        operator: NOT_EQUALS
+      - after: 100
+        categories:
+        - Computers
+        filter_criteria: CATEGORY
+        limit: 50
+    DeviceCategory:
+      type: string
+      enum:
+      - Automations
+      - Automotives
+      - Communications
+      - Computers
+      - Displays
+      - Gaming
+      - Generic IOTs
+      - Handhelds
+      - Imaging
+      - Inputs
+      - Instruments
+      - Manufacturing Equipment
+      - Medical
+      - Medical Diagnostic
+      - Medical Support
+      - Medical Therapeutic
+      - Multimedia
+      - Network Equipment
+      - Payments
+      - Security
+      - Server Rack Components
+      - Toys
+      - Unknown
+      - Wearables
+      title: DeviceCategory
+    Visibility:
+      type: string
+      enum:
+      - FULL
+      - LIMITED
+      title: Visibility
+    EqualityOperator:
+      type: string
+      enum:
+      - EQUALS
+      - NOT_EQUALS
+      title: EqualityOperator
+    FilterByBrand:
+      properties:
+        operator:
+          anyOf:
+          - $ref: '#/components/schemas/EqualityOperator'
+          - type: 'null'
+        filter_criteria:
+          type: string
+          const: BRAND
+          title: Filter Criteria
+          default: BRAND
+        brands:
+          items:
+            type: string
+          type: array
+          maxItems: 1000
+          minItems: 1
+          title: Brands
+        after:
+          type: integer
+          minimum: 0
+          title: After
+          description: Cursor for pagination
+          default: 0
+        limit:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          title: Limit
+          description: Number of items to return
+          default: 10
+      type: object
+      required:
+      - brands
+      title: FilterByBrand
+      examples:
+      - brands:
+        - Samsung
+        - Apple
+        filter_criteria: BRAND
+      - brands:
+        - Samsung
+        - Apple
+        filter_criteria: BRAND
+        operator: NOT_EQUALS
+      - after: 100
+        brands:
+        - Samsung
+        - Apple
+        filter_criteria: BRAND
+        limit: 50
+    FilterByTag:
+      properties:
+        operator:
+          anyOf:
+          - $ref: '#/components/schemas/EqualityOperator'
+          - type: 'null'
+        filter_criteria:
+          type: string
+          const: TAG
+          title: Filter Criteria
+          default: TAG
+        tags:
+          items:
+            type: string
+          type: array
+          maxItems: 1000
+          minItems: 1
+          title: Tags
+        after:
+          type: integer
+          minimum: 0
+          title: After
+          description: Cursor for pagination
+          default: 0
+        limit:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          title: Limit
+          description: Number of items to return
+          default: 10
+      type: object
+      required:
+      - tags
+      title: FilterByTag
+      examples:
+      - filter_criteria: TAG
+        tags:
+        - Corporate
+      - filter_criteria: TAG
+        operator: NOT_EQUALS
+        tags:
+        - Corporate
+      - after: 100
+        filter_criteria: TAG
+        limit: 50
+        tags:
+        - Corporate
+        - My Tag
+    FieldType:
+      type: string
+      enum:
+      - array
+      - boolean
+      - entityLink
+      - enum
+      - externalLink
+      - file
+      - float
+      - integer
+      - ipv4
+      - ipv6
+      - macAddress
+      - object
+      - publicFile
+      - string
+      - timestamp
+      title: FieldType
+    AssetField:
+      type: string
+      enum:
+      - access_switch
+      - article_number
+      - boundaries
+      - brand
+      - category
+      - data_sources
+      - device_id
+      - display
+      - eol_os
+      - eos_firmware
+      - eos_hardware
+      - eos_os
+      - firmware_version
+      - first_seen
+      - ipv4_addresses
+      - ipv6_addresses
+      - last_connected_ap_name
+      - last_seen
+      - mac_addresses
+      - model
+      - names
+      - network_interfaces
+      - os_build_number
+      - os_build_revision
+      - os_name
+      - os_version
+      - purdue_level
+      - risk_level
+      - sensor
+      - serial_numbers
+      - site
+      - tags
+      - type
+      - utilization_level
+      - utilization_rate
+      - visibility
+      title: AssetField
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-Armis-Client-Name
+x-provenance:
+  method: searched
+  source: https://dev.armis.com/reference
+  harvested: '2026-10-20'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://dev.armis.com/reference/delete_settings_boundaries__boundary_id__delete.md
+  - https://dev.armis.com/reference/delete_settings_device_custom_properties__config_id__delete.md
+  - https://dev.armis.com/reference/delete_settings_integrations__integration_id__delete.md
+  - https://dev.armis.com/reference/delete_settings_sites__site_id__delete.md
+  - https://dev.armis.com/reference/enable_data_export__entity___enable_post.md
+  - https://dev.armis.com/reference/fields_assets__search_fields_get.md
+  - https://dev.armis.com/reference/get_alerts__alert_id__get.md
+  - https://dev.armis.com/reference/get_collectors__collector_number__get.md
+  - https://dev.armis.com/reference/get_collectors__image_get.md
+  - https://dev.armis.com/reference/get_collectors_get.md
+  - https://dev.armis.com/reference/get_data_export__entity__get.md
+  - https://dev.armis.com/reference/get_policies_get.md
+  - https://dev.armis.com/reference/get_settings_boundaries__boundary_id__get.md
+  - https://dev.armis.com/reference/get_settings_boundaries_get.md
+  - https://dev.armis.com/reference/get_settings_device_custom_properties__config_id__get.md
+  - https://dev.armis.com/reference/get_settings_device_custom_properties_get.md
+  - https://dev.armis.com/reference/get_settings_integrations__integration_id__get.md
+  - https://dev.armis.com/reference/get_settings_integrations_get.md
+  - https://dev.armis.com/reference/get_settings_sites__site_id__get.md
+  - https://dev.armis.com/reference/get_settings_sites_get.md
+  - https://dev.armis.com/reference/patch_settings_boundaries__boundary_id__patch.md
+  - https://dev.armis.com/reference/patch_settings_device_custom_properties__config_id__patch.md
+  - https://dev.armis.com/reference/patch_settings_integrations__integration_id__patch.md
+  - https://dev.armis.com/reference/patch_settings_sites__site_id__patch.md
+  - https://dev.armis.com/reference/post_arps_post.md
+  - https://dev.armis.com/reference/post_assets__bulk_post.md
+  - https://dev.armis.com/reference/post_oauth_token_post.md
+  - https://dev.armis.com/reference/post_settings_boundaries_post.md
+  - https://dev.armis.com/reference/post_settings_device_custom_properties_post.md
+  - https://dev.armis.com/reference/post_settings_integrations_post.md
+  - https://dev.armis.com/reference/post_settings_sites_post.md
+  - https://dev.armis.com/reference/search_assets__search_post.md
+  - https://dev.armis.com/reference/search_settings_integrations__search_post.md
+  - https://dev.armis.com/reference/toggle_data_export__entity__patch.md
+  merge:
+    pages: 34
+    deduped: 206
+    conflicts_kept_first: 0

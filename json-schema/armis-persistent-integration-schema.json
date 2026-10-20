@@ -1,0 +1,651 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/armis/main/json-schema/armis-persistent-integration-schema.json",
+  "title": "PersistentIntegration",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/armis-api-v3-api-openapi.yml#/components/schemas/PersistentIntegration",
+  "properties": {
+    "name": {
+      "$ref": "#/$defs/IntegrationName",
+      "description": "The integration display name (e.g., 'CrowdStrike', 'Network Mapper')"
+    },
+    "instance_name": {
+      "type": "string",
+      "minLength": 1,
+      "title": "Instance Name",
+      "description": "The integration instance name"
+    },
+    "params": {
+      "type": "object",
+      "title": "Params",
+      "description": "Integration parameters"
+    },
+    "state": {
+      "$ref": "#/$defs/IntegrationState",
+      "description": "The integration state",
+      "default": "ACTIVE"
+    },
+    "collector_id": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Collector Id",
+      "description": "The ID of the collector associated with this integration"
+    },
+    "broker_id": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Broker Id",
+      "description": "The ID of the broker associated with this integration"
+    },
+    "id": {
+      "type": "integer",
+      "title": "Id",
+      "description": "The integration ID"
+    },
+    "creation_time": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Creation Time",
+      "description": "Creation time"
+    },
+    "params_change_time": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Params Change Time",
+      "description": "Last parameters change time"
+    },
+    "current_state": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/HealthState"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "The integration health state"
+    },
+    "statistics": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/IntegrationStatistics"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "The integration run statistics"
+    }
+  },
+  "type": "object",
+  "required": [
+    "name",
+    "instance_name",
+    "params",
+    "id",
+    "creation_time"
+  ],
+  "$defs": {
+    "HealthState": {
+      "type": "string",
+      "enum": [
+        "IDLE",
+        "INITIALIZING",
+        "RUNNING",
+        "SYNCING_CHANGES",
+        "WAITING_FOR_COLLECTOR"
+      ],
+      "title": "HealthState"
+    },
+    "IntegrationCycleStatistics": {
+      "properties": {
+        "entity_type": {
+          "type": "string",
+          "title": "Entity Type",
+          "description": "The entity type synced in the cycle"
+        },
+        "post_filter_amount": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Post Filter Amount",
+          "description": "Amount of records after filtering"
+        },
+        "sent_to_armis_amount": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Sent To Armis Amount",
+          "description": "Amount of records sent to Armis"
+        },
+        "unique_armis_records_amount": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Unique Armis Records Amount",
+          "description": "Amount of unique Armis records"
+        }
+      },
+      "type": "object",
+      "required": [
+        "entity_type"
+      ],
+      "title": "IntegrationCycleStatistics"
+    },
+    "IntegrationName": {
+      "type": "string",
+      "enum": [
+        "AWS",
+        "AWS Greengrass",
+        "AWS Security Hub",
+        "Absolute",
+        "Absolute Secure Access",
+        "Access Control Lists",
+        "Acronis Cyber Protect Cloud",
+        "Action1",
+        "Active Directory",
+        "Airgap",
+        "Airlock",
+        "Alaris",
+        "Alibaba Cloud",
+        "Apple Business Manager",
+        "Arista CloudVision",
+        "Armis Centrix",
+        "Armis Smart Scanner",
+        "ArmisPass",
+        "Aruba Central",
+        "Aruba ClearPass",
+        "Aruba Instant",
+        "Aruba MAC Address Filtering",
+        "Aruba Mobility Conductor",
+        "Aruba New Central",
+        "Aruba WLC",
+        "Automox",
+        "Axonius",
+        "Azure Cloud",
+        "Azure Devops",
+        "BMC CMDB",
+        "BMC Discovery",
+        "Baramundi",
+        "BeyondTrust Privileged Remote Access",
+        "BigFix",
+        "Bitbucket",
+        "Bitdefender",
+        "Black Duck",
+        "BlueCat DDI",
+        "Broker",
+        "Bugcrowd",
+        "Cambium cnMaestro",
+        "Carbon Black App Control",
+        "Carbon Black Defense",
+        "Cato Networks",
+        "Centrix Secure Remote Access",
+        "Centrix™ On-Prem",
+        "Check Point Harmony Endpoint",
+        "Check Point IoT Controller",
+        "Check Point IoT Protect",
+        "Check Point Quantum",
+        "Check Point vSEC",
+        "CheckMK",
+        "Checkmarx",
+        "Checkmarx One",
+        "Chef",
+        "Circle CI",
+        "Cisco ASA",
+        "Cisco Catalyst (3850/9800) WLC",
+        "Cisco CleanAir",
+        "Cisco Cyber Vision",
+        "Cisco DNA Center",
+        "Cisco Firepower",
+        "Cisco ISE",
+        "Cisco ISE Discovery",
+        "Cisco ISE REST API",
+        "Cisco Meraki",
+        "Cisco Meraki MDM",
+        "Cisco NDI",
+        "Cisco Secure Access",
+        "Cisco Secure Endpoint",
+        "Cisco Secure Workload",
+        "Cisco ThousandEyes",
+        "Cisco UCS",
+        "Cisco Umbrella",
+        "Cisco WLC",
+        "Cisco Webex Control Hub",
+        "Claroty CTD",
+        "CloudGuard Dome9",
+        "Code42 Incydr",
+        "ConnectWise Automate",
+        "ConnectWise RMM",
+        "ControlUp",
+        "Cortex XDR",
+        "Coverity",
+        "Cradlepoint NetCloud",
+        "Cribl",
+        "CrowdStrike",
+        "CrowdStrike RTR",
+        "Custom File",
+        "CyberArk",
+        "CyberArk EPM",
+        "CyberArk On Prem",
+        "CyberArk Pull",
+        "CyberArk Pull On Prem",
+        "Cybereason EDR",
+        "Cycode",
+        "CylancePROTECT",
+        "Cynet XDR",
+        "DICOM PACS",
+        "Darktrace",
+        "Datadog",
+        "Delinea Privilege Manager",
+        "Dell Wyse Management Suite",
+        "Device42",
+        "Draogs",
+        "Dropbox",
+        "Duo Beyond",
+        "Dynatrace",
+        "EASM",
+        "ESET Protect",
+        "EcoStruxure Building",
+        "EfficientIP SOLIDserver DDI",
+        "Elastic Defend",
+        "Email",
+        "Engineering Workstation - DeltaV",
+        "Engineering Workstation - Rockwell",
+        "Engineering Workstation - Siemens",
+        "Eracent ITMC",
+        "Eseye",
+        "ExtraHop RevealX 360",
+        "ExtremeCloud IQ",
+        "ExtremeCloud IQ Site Engine",
+        "ExtremeWireless WiNG",
+        "F5 BIG-IP iControl",
+        "FSI CMMS",
+        "FactoryTalk AssetCentre",
+        "FileWave MDM",
+        "FireEye Endpoint Protection",
+        "Fleet DM",
+        "Flexera One",
+        "Flexera Spider",
+        "Forcepoint DLP",
+        "Forescout",
+        "Forescout Enforcement",
+        "Forescout Enrichment",
+        "Forescout Syslog API",
+        "FortiClient EMS",
+        "FortiEDR",
+        "Fortinet FortiAnalyzer Log Forwarding",
+        "Fortinet FortiGate",
+        "Fortinet FortiGate Enforcement",
+        "Fortinet FortiGate Pull",
+        "Fortinet FortiManager Enforcement",
+        "Fortinet FortiManager Pull",
+        "Fortinet FortiNAC",
+        "Freshservice",
+        "GLPI CMDB",
+        "GitHub",
+        "GitHub Enterprise Server",
+        "GitLab",
+        "GitLab CICD",
+        "Google Chrome OS Device Management",
+        "Google Cloud Platform",
+        "Google Workspace",
+        "Guardicore",
+        "Gytpol",
+        "HCL Bigfix Inventory",
+        "HP WLC",
+        "Halcyon",
+        "Halo ITSM",
+        "IBM Cloud Services",
+        "IBM MaaS360",
+        "IBM Maximo Manage",
+        "IGEL Universal Management Suite",
+        "ISG AgileSec",
+        "Ignition",
+        "Illumio",
+        "IncidentIQ",
+        "Infinipoint",
+        "Infoblox BloxOne DDI (Cloud)",
+        "Infoblox DDI On-Prem",
+        "Infoblox DDI Syslog",
+        "Infoblox NetMRI",
+        "Invicti",
+        "Island Enterprise",
+        "Ivanti Connect Secure",
+        "Ivanti EPMM",
+        "Ivanti Endpoint Manager",
+        "Ivanti Neurons for ITAM",
+        "Ivanti Neurons for MDM",
+        "Ivanti Neurons for UEM",
+        "Jamf",
+        "Jamf Pro",
+        "Jira",
+        "Jira Assets Platform",
+        "JumpCloud",
+        "Juniper Mist",
+        "Juniper Mist (Webhooks)",
+        "Kandji",
+        "Kaseya VSA",
+        "Kaseya VSA X",
+        "Kenna",
+        "Keycloak",
+        "Lacework",
+        "Lansweeper",
+        "Lansweeper on-prem",
+        "Linear",
+        "Lmntrix",
+        "LogMeIn Resolve",
+        "MQTT",
+        "Malwarebytes",
+        "ManageEngine ADAudit Plus",
+        "ManageEngine Endpoint Central",
+        "ManageEngine OpManager",
+        "Matrix42 Unified Endpoint Management",
+        "McAfee ePO",
+        "Medusa By SoftPro",
+        "Microsoft Azure",
+        "Microsoft Azure Active Directory",
+        "Microsoft DHCP",
+        "Microsoft Defender MA",
+        "Microsoft Defender for Cloud",
+        "Microsoft Defender for Endpoint",
+        "Microsoft Defender for IoT",
+        "Microsoft Entra ID",
+        "Microsoft Hyper-V",
+        "Microsoft Intune",
+        "Microsoft System Center Operations Manager",
+        "Microsoft System Center Virtual Machine Manager",
+        "Microsoft WSUS",
+        "Monday",
+        "Morphisec",
+        "Mosyle",
+        "NVIDIA DOCA Argus",
+        "Nautobot",
+        "Nessus",
+        "NetApp Active IQ Unified Manager",
+        "NetBox",
+        "NetBrain",
+        "Netflow",
+        "Netskope",
+        "Network Mapper",
+        "Nexpose",
+        "NinjaOne",
+        "Nozomi Guardian and CMC",
+        "Nozomi Vantage",
+        "Nutanix Prism",
+        "Nuvolo",
+        "OCS Inventory",
+        "OTbase",
+        "OVHcloud",
+        "Okta",
+        "OneLogin",
+        "OpenStack",
+        "Optum SNMP API",
+        "Oracle Cloud Infrastructure",
+        "Orca Security",
+        "PANW Prisma",
+        "PCAP Reader",
+        "PDQ Connect",
+        "PDQ Inventory",
+        "Packet Capture",
+        "Palo Alto Networks Cortex",
+        "Palo Alto Networks Enrichment",
+        "Palo Alto Networks GlobalProtect",
+        "Palo Alto Networks List Management",
+        "Palo Alto Networks Panorama",
+        "Palo Alto Networks Prisma CSPM",
+        "Pevco Atlas",
+        "Phosphorus",
+        "Portnox CORE",
+        "Proxmox Virtual Environment (VE)",
+        "Puppet",
+        "QA Integration",
+        "Qualys",
+        "Qualys CSAM",
+        "Quest KACE",
+        "RMS Tunnel",
+        "RSA Archer",
+        "Radia",
+        "Rapid7 InsightVM",
+        "Rapid7 InsightVM Cloud",
+        "Rapid7 Nexpose Data Warehouse",
+        "Raw-data-intergation",
+        "Red Hat OpenShift",
+        "Red Hat Satellite",
+        "Remote Discovery File Uploader",
+        "Remote Execution (Windows)",
+        "Remote Switch",
+        "Rigado",
+        "Riverbed AppResponse",
+        "Rockwell AssetCentre",
+        "Ruckus Virtual SmartZone",
+        "Rudder",
+        "SCCM",
+        "SIEM",
+        "SOTI MobiControl",
+        "SPAN/TAP",
+        "STIX/TAXII",
+        "SUSE Manager",
+        "SailPoint IdentityIQ",
+        "Salt Security",
+        "SaltStack",
+        "Samsung",
+        "Saviynt",
+        "SecuriThings",
+        "SecurityScorecard",
+        "Semgrep",
+        "SentinelOne",
+        "ServiceDesk",
+        "ServiceDesk Plus",
+        "ServiceNow",
+        "ServiceNow IRM",
+        "ServiceNow Push",
+        "Siemens Industrial Asset Hub",
+        "Sigrid",
+        "Sinec NMS",
+        "Slack",
+        "Smart Active Querying",
+        "Snow Software Asset Management",
+        "Snowflake Data Warehouse",
+        "Snyk",
+        "SolarWinds Orion",
+        "SolarWinds Service Desk",
+        "SolarWinds Web Helpdesk",
+        "SonarQube",
+        "Sophos Endpoint Protection",
+        "Sophos Mobile",
+        "Splashtop Cloud",
+        "Splunk",
+        "Symantec Asset Management",
+        "Symantec Client Management Suite",
+        "Symantec Endpoint Protection",
+        "Symantec Endpoint Security",
+        "Sysmon",
+        "TOPdesk Enterprise Service Management",
+        "Taegis XDR",
+        "Tanium Asset",
+        "Tanium Comply",
+        "Tanium Discover",
+        "Tanium Interact",
+        "Tanium Interact MA",
+        "Team Dynamix ITAM",
+        "Tenable Nessus",
+        "Tenable OT",
+        "Tenable.io",
+        "Tenable.sc",
+        "ThinManager",
+        "Torq",
+        "Trellix ePO SaaS",
+        "Trello",
+        "Trend Micro Apex One",
+        "Trend Micro Cloud One",
+        "Trend Micro Deep Security",
+        "Trend Micro Vision One",
+        "TxOne ElementOne",
+        "UV Streamer",
+        "Ubiquiti UniFi Controller",
+        "Unmanaged Windows PowerShell",
+        "VA Optimus",
+        "Vectra",
+        "Veeam Backup",
+        "Veracode",
+        "Verve Security Center",
+        "Viakoo",
+        "Wazuh",
+        "WhatsUp Gold",
+        "Windows Autopilot",
+        "Wiz",
+        "Workday",
+        "Workspace ONE",
+        "Zabbix",
+        "Zendesk",
+        "Zimperium",
+        "Zscaler",
+        "Zscaler Deception",
+        "eMASS",
+        "orcharhino",
+        "runZero",
+        "vSphere vCenter"
+      ],
+      "title": "IntegrationName"
+    },
+    "IntegrationState": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "DRAFT",
+        "INACTIVE"
+      ],
+      "title": "IntegrationState"
+    },
+    "IntegrationStatistics": {
+      "properties": {
+        "status": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/IntegrationStatus"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The integration status"
+        },
+        "error_details": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Error Details",
+          "description": "Raw error details of the last run"
+        },
+        "last_successful_cycle_ended": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Last Successful Cycle Ended",
+          "description": "When the last successful cycle ended"
+        },
+        "status_created_at": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Status Created At",
+          "description": "When the status was first reported"
+        },
+        "status_changed_at": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Status Changed At",
+          "description": "When the status last changed"
+        },
+        "cycle_statistics": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/IntegrationCycleStatistics"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Cycle Statistics",
+          "description": "Per-entity-type statistics of the last cycle"
+        }
+      },
+      "type": "object",
+      "title": "IntegrationStatistics"
+    },
+    "IntegrationStatus": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "ERROR",
+        "SYNC",
+        "UNKNOWN",
+        "WARNING"
+      ],
+      "title": "IntegrationStatus"
+    }
+  }
+}

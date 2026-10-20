@@ -1,0 +1,494 @@
+openapi: 3.2.0
+info:
+  title: Armis API v3 Boundaries API
+  version: 0.13.0
+servers:
+- url: https://api.armis.com/v3
+tags:
+- name: Boundaries
+paths:
+  /settings/boundaries:
+    post:
+      tags:
+      - Boundaries
+      summary: Create a boundary
+      description: '### Required scopes:
+
+        * `PERMISSION.SETTINGS.BOUNDARY.MANAGE.CREATE`'
+      operationId: post_settings_boundaries_post
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BoundaryCreateRequest'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersistentBoundary'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Boundaries
+      summary: List boundaries
+      description: '### Required scopes:
+
+        * `PERMISSION.SETTINGS.BOUNDARY.READ`'
+      operationId: get_settings_boundaries_get
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: after
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: After
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 10
+          title: Limit
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersistentBoundaryItems'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /settings/boundaries/{boundary_id}:
+    delete:
+      tags:
+      - Boundaries
+      summary: Delete a boundary
+      description: '### Required scopes:
+
+        * `PERMISSION.SETTINGS.BOUNDARY.MANAGE.DELETE`'
+      operationId: delete_settings_boundaries__boundary_id__delete
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: boundary_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Boundary Id
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Boundaries
+      summary: Get a boundary
+      description: '### Required scopes:
+
+        * `PERMISSION.SETTINGS.BOUNDARY.READ`'
+      operationId: get_settings_boundaries__boundary_id__get
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: boundary_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Boundary Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersistentBoundary'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - Boundaries
+      summary: Update a boundary
+      description: '### Required scopes:
+
+        * `PERMISSION.SETTINGS.BOUNDARY.MANAGE.EDIT`'
+      operationId: patch_settings_boundaries__boundary_id__patch
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: boundary_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Boundary Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BoundaryUpdateRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersistentBoundary'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    AsqRule:
+      anyOf:
+      - $ref: '#/components/schemas/AndRule'
+      - $ref: '#/components/schemas/OrRule'
+      title: AsqRule
+      examples:
+      - and:
+        - category:Computers
+        - model:Mac
+      - or:
+        - category:Computers
+        - model:iPhone
+      - and:
+        - category:Computers
+        - or:
+          - category:Computers
+          - model:iPhone
+    PersistentBoundary:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+        asq_rule:
+          anyOf:
+          - $ref: '#/components/schemas/AsqRule'
+          - type: 'null'
+        sites:
+          items:
+            $ref: '#/components/schemas/PersistentSite'
+          type: array
+          title: Sites
+      type: object
+      required:
+      - id
+      - name
+      - asq_rule
+      - sites
+      title: PersistentBoundary
+    BoundaryCreateRequest:
+      properties:
+        name:
+          type: string
+          title: Name
+        asq_rule:
+          anyOf:
+          - $ref: '#/components/schemas/AsqRule'
+          - type: 'null'
+        site_ids:
+          anyOf:
+          - items:
+              type: integer
+            type: array
+          - type: 'null'
+          title: Site Ids
+      type: object
+      required:
+      - name
+      title: BoundaryCreateRequest
+    BoundaryUpdateRequest:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+        asq_rule:
+          anyOf:
+          - $ref: '#/components/schemas/AsqRule'
+          - type: 'null'
+        site_ids:
+          anyOf:
+          - items:
+              type: integer
+            type: array
+          - type: 'null'
+          title: Site Ids
+      type: object
+      title: BoundaryUpdateRequest
+    OrRule:
+      properties:
+        and:
+          items:
+            anyOf:
+            - type: string
+            - type: object
+              description: Another AsqRule
+          type: array
+          title: And
+      type: object
+      required:
+      - or
+      title: OrRule
+    AndRule:
+      properties:
+        or:
+          items:
+            anyOf:
+            - type: string
+            - type: object
+              description: Another AsqRule
+          type: array
+          title: Or
+      type: object
+      required:
+      - and
+      title: AndRule
+    PersistentSite:
+      properties:
+        name:
+          type: string
+          title: Name
+        location:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Location
+          description: The name of the location of the site, such as an address. When this field is set, the `lat` and `lng` are automatically derived from it.
+          examples:
+          - 548 Market Street Suite 97439 San Francisco, CA 94104-5401
+        parent_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Parent Id
+        tier:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tier
+        asq_rule:
+          anyOf:
+          - $ref: '#/components/schemas/AsqRule'
+          - type: 'null'
+          description: Devices matching this ASQ rule will be associated with this site.
+          examples:
+          - and:
+            - category:Computers
+        asq_rule_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Asq Rule Description
+        network_equipment_device_ids:
+          anyOf:
+          - items:
+              type: integer
+            type: array
+          - type: 'null'
+          title: Network Equipment Device Ids
+          description: Devices that are detected through these network equipment devices will be associated with this site.
+          examples:
+          - - 1
+            - 2
+            - 3
+        integration_ids:
+          anyOf:
+          - items:
+              type: integer
+            type: array
+          - type: 'null'
+          title: Integration Ids
+          description: Devices that are detected through these integration will be associated with this site.
+          examples:
+          - - 4
+            - 5
+            - 6
+        id:
+          type: integer
+          title: Id
+        lat:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Latitude
+          description: The latitude coordinate of the physical location of the site on earth. This field is read-only and is automatically derived from the `location` field.
+          examples:
+          - 37.79
+        lng:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Longitude
+          description: The longitude coordinate of the physical location of the site on earth. This field is read-only and is automatically derived from the `location` field.
+          examples:
+          - -122.4
+      type: object
+      required:
+      - name
+      - id
+      title: PersistentSite
+      examples:
+      - asq_rule:
+          and:
+          - category:Computers
+        id: 1
+        integration_ids:
+        - 4
+        - 5
+        - 6
+        lat: 37.79
+        lng: -122.4
+        location: 548 Market Street Suite 97439 San Francisco, CA 94104-5401
+        name: San Francisco HQ
+        network_equipment_device_ids:
+        - 1
+        - 2
+        - 3
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    PersistentBoundaryItems:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/PersistentBoundary'
+          type: array
+          title: Items
+        next:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Next
+      type: object
+      required:
+      - items
+      title: PersistentBoundaryItems
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-Armis-Client-Name
+x-provenance:
+  method: searched
+  source: https://dev.armis.com/reference
+  harvested: '2026-10-20'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://dev.armis.com/reference/delete_settings_boundaries__boundary_id__delete.md
+  - https://dev.armis.com/reference/delete_settings_device_custom_properties__config_id__delete.md
+  - https://dev.armis.com/reference/delete_settings_integrations__integration_id__delete.md
+  - https://dev.armis.com/reference/delete_settings_sites__site_id__delete.md
+  - https://dev.armis.com/reference/enable_data_export__entity___enable_post.md
+  - https://dev.armis.com/reference/fields_assets__search_fields_get.md
+  - https://dev.armis.com/reference/get_alerts__alert_id__get.md
+  - https://dev.armis.com/reference/get_collectors__collector_number__get.md
+  - https://dev.armis.com/reference/get_collectors__image_get.md
+  - https://dev.armis.com/reference/get_collectors_get.md
+  - https://dev.armis.com/reference/get_data_export__entity__get.md
+  - https://dev.armis.com/reference/get_policies_get.md
+  - https://dev.armis.com/reference/get_settings_boundaries__boundary_id__get.md
+  - https://dev.armis.com/reference/get_settings_boundaries_get.md
+  - https://dev.armis.com/reference/get_settings_device_custom_properties__config_id__get.md
+  - https://dev.armis.com/reference/get_settings_device_custom_properties_get.md
+  - https://dev.armis.com/reference/get_settings_integrations__integration_id__get.md
+  - https://dev.armis.com/reference/get_settings_integrations_get.md
+  - https://dev.armis.com/reference/get_settings_sites__site_id__get.md
+  - https://dev.armis.com/reference/get_settings_sites_get.md
+  - https://dev.armis.com/reference/patch_settings_boundaries__boundary_id__patch.md
+  - https://dev.armis.com/reference/patch_settings_device_custom_properties__config_id__patch.md
+  - https://dev.armis.com/reference/patch_settings_integrations__integration_id__patch.md
+  - https://dev.armis.com/reference/patch_settings_sites__site_id__patch.md
+  - https://dev.armis.com/reference/post_arps_post.md
+  - https://dev.armis.com/reference/post_assets__bulk_post.md
+  - https://dev.armis.com/reference/post_oauth_token_post.md
+  - https://dev.armis.com/reference/post_settings_boundaries_post.md
+  - https://dev.armis.com/reference/post_settings_device_custom_properties_post.md
+  - https://dev.armis.com/reference/post_settings_integrations_post.md
+  - https://dev.armis.com/reference/post_settings_sites_post.md
+  - https://dev.armis.com/reference/search_assets__search_post.md
+  - https://dev.armis.com/reference/search_settings_integrations__search_post.md
+  - https://dev.armis.com/reference/toggle_data_export__entity__patch.md
+  merge:
+    pages: 34
+    deduped: 206
+    conflicts_kept_first: 0

@@ -1,0 +1,252 @@
+openapi: 3.2.0
+info:
+  title: Armis API v3 ARP API
+  version: 0.13.0
+servers:
+- url: https://api.armis.com/v3
+tags:
+- name: ARP
+paths:
+  /arps:
+    post:
+      tags:
+      - ARP
+      summary: Upload a CSV of IP/MAC matches as user ARP records
+      description: 'The records are accepted for processing and are not queryable yet when this endpoint responds.
+
+
+        The file is validated as a whole: the first unusable line rejects the entire upload and no record is applied. If saving the records fails midway the upload may have been applied in part, in which case re-uploading the same file is safe and converges to the full result.
+
+
+        ### Required scopes:
+
+        * `PERMISSION.DEVICE.MANAGE`'
+      operationId: post_arps_post
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ArpUploadRequest'
+        required: true
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArpUploadResponse'
+        '400':
+          description: The file cannot be used. No record was applied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArpUploadError'
+        '413':
+          description: The file must be at most 10485760 bytes.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArpUploadError'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+        '502':
+          description: Failed to save the ARP records. The file was not applied in full; retry the upload.
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+components:
+  schemas:
+    ArpUploadResponse:
+      properties:
+        total_rows:
+          type: integer
+          title: Total Rows
+          description: The number of data rows in the file. Blank rows are not counted.
+        accepted_records:
+          type: integer
+          title: Accepted Records
+          description: The number of ARP records that were sent for processing.
+        duplicate_rows:
+          type: integer
+          title: Duplicate Rows
+          description: The number of rows that repeated an earlier IP/MAC match and were skipped.
+        expiration:
+          type: string
+          format: date-time
+          title: Expiration
+          description: The UTC time at which the uploaded records expire.
+      type: object
+      required:
+      - total_rows
+      - accepted_records
+      - duplicate_rows
+      - expiration
+      title: ArpUploadResponse
+      description: A summary of an accepted ARP records upload.
+    ArpUploadRequest:
+      properties:
+        file:
+          type: string
+          contentMediaType: application/octet-stream
+          title: File
+          description: A CSV file with the columns ip,mac.
+        expiration:
+          type: string
+          format: date-time
+          title: Expiration
+          description: The UTC time at which the uploaded records expire. Must be in the future and at most 30 days from now.
+          examples:
+          - '2026-12-31T00:00:00Z'
+        network_id:
+          type: string
+          minLength: 1
+          title: Network Id
+          description: Identifies the logical network segment the ARP data originates from. Used to disambiguate overlapping IP ranges across different network segments. When multiple networks share the same IP space, this field ensures MAC-to-IP bindings are resolved within the correct network context.
+          examples:
+          - L_621732956900298999
+      type: object
+      required:
+      - file
+      - expiration
+      - network_id
+      title: ArpUploadRequest
+      description: A CSV of IP/MAC matches to upload as user ARP records.
+    ArpUploadError:
+      properties:
+        message:
+          type: string
+          title: Message
+          description: A description of the problem.
+        line:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Line
+          description: The number of the line in the file that was rejected.
+        column:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Column
+          description: The name of the column that was rejected.
+        value:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Value
+          description: The value that was rejected.
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+          description: A description of the problem with the value.
+      type: object
+      required:
+      - message
+      title: ArpUploadError
+      description: 'The reason an ARP records upload was rejected.
+
+
+        The upload is rejected as a whole, so none of the records in the file were applied. Only problems
+
+        that are specific to a single line carry `line`, `column`, `value` and `error`.'
+      examples:
+      - message: The file must have a header row with the columns "ip" and "mac".
+      - column: ip
+        error: IPv6 addresses are not supported; only IPv4.
+        line: 4
+        message: Invalid ARP record.
+        value: 2001:db8::1
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-Armis-Client-Name
+x-provenance:
+  method: searched
+  source: https://dev.armis.com/reference
+  harvested: '2026-10-20'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://dev.armis.com/reference/delete_settings_boundaries__boundary_id__delete.md
+  - https://dev.armis.com/reference/delete_settings_device_custom_properties__config_id__delete.md
+  - https://dev.armis.com/reference/delete_settings_integrations__integration_id__delete.md
+  - https://dev.armis.com/reference/delete_settings_sites__site_id__delete.md
+  - https://dev.armis.com/reference/enable_data_export__entity___enable_post.md
+  - https://dev.armis.com/reference/fields_assets__search_fields_get.md
+  - https://dev.armis.com/reference/get_alerts__alert_id__get.md
+  - https://dev.armis.com/reference/get_collectors__collector_number__get.md
+  - https://dev.armis.com/reference/get_collectors__image_get.md
+  - https://dev.armis.com/reference/get_collectors_get.md
+  - https://dev.armis.com/reference/get_data_export__entity__get.md
+  - https://dev.armis.com/reference/get_policies_get.md
+  - https://dev.armis.com/reference/get_settings_boundaries__boundary_id__get.md
+  - https://dev.armis.com/reference/get_settings_boundaries_get.md
+  - https://dev.armis.com/reference/get_settings_device_custom_properties__config_id__get.md
+  - https://dev.armis.com/reference/get_settings_device_custom_properties_get.md
+  - https://dev.armis.com/reference/get_settings_integrations__integration_id__get.md
+  - https://dev.armis.com/reference/get_settings_integrations_get.md
+  - https://dev.armis.com/reference/get_settings_sites__site_id__get.md
+  - https://dev.armis.com/reference/get_settings_sites_get.md
+  - https://dev.armis.com/reference/patch_settings_boundaries__boundary_id__patch.md
+  - https://dev.armis.com/reference/patch_settings_device_custom_properties__config_id__patch.md
+  - https://dev.armis.com/reference/patch_settings_integrations__integration_id__patch.md
+  - https://dev.armis.com/reference/patch_settings_sites__site_id__patch.md
+  - https://dev.armis.com/reference/post_arps_post.md
+  - https://dev.armis.com/reference/post_assets__bulk_post.md
+  - https://dev.armis.com/reference/post_oauth_token_post.md
+  - https://dev.armis.com/reference/post_settings_boundaries_post.md
+  - https://dev.armis.com/reference/post_settings_device_custom_properties_post.md
+  - https://dev.armis.com/reference/post_settings_integrations_post.md
+  - https://dev.armis.com/reference/post_settings_sites_post.md
+  - https://dev.armis.com/reference/search_assets__search_post.md
+  - https://dev.armis.com/reference/search_settings_integrations__search_post.md
+  - https://dev.armis.com/reference/toggle_data_export__entity__patch.md
+  merge:
+    pages: 34
+    deduped: 206
+    conflicts_kept_first: 0

@@ -1,0 +1,383 @@
+openapi: 3.2.0
+info:
+  title: Armis API v3 Policies API
+  version: 0.13.0
+servers:
+- url: https://api.armis.com/v3
+tags:
+- name: Policies
+paths:
+  /policies:
+    get:
+      tags:
+      - Policies
+      summary: List policies
+      description: '### Required scopes:
+
+        * `PERMISSION.POLICY.READ`'
+      operationId: get_policies_get
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: after
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: After
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 10
+          title: Limit
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersistentPolicyItems'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    AsqRule:
+      anyOf:
+      - $ref: '#/components/schemas/AndRule'
+      - $ref: '#/components/schemas/OrRule'
+      title: AsqRule
+      examples:
+      - and:
+        - category:Computers
+        - model:Mac
+      - or:
+        - category:Computers
+        - model:iPhone
+      - and:
+        - category:Computers
+        - or:
+          - category:Computers
+          - model:iPhone
+    PolicyAction:
+      properties:
+        type:
+          $ref: '#/components/schemas/PolicyActionType'
+          description: The type of action to perform when the policy matches.
+          examples:
+          - alert
+        params:
+          type: object
+          title: Params
+          description: Parameters specific to the action type. The shape of this object varies by `type`. For example, an `alert` action contains `severity`, `title`, `endpoint`, and `consolidation`, while a `tag` action contains `tags` and `endpoint`. For a `risk_factor` action, the params include a `risk_factor_data` object describing the custom risk factor (`type`, `description`, `category`, `group`, `score`, `user`).
+          default: {}
+          examples:
+          - consolidation:
+              amount: 1
+              unit: Days
+            description: Credentials Exposed - HTTP
+            endpoint: ALL
+            severity: medium
+            title: Credentials Exposed - HTTP
+            type: Security - Other
+      type: object
+      required:
+      - type
+      title: PolicyAction
+      examples:
+      - params:
+          consolidation:
+            amount: 1
+            unit: Days
+          description: Credentials Exposed - HTTP
+          endpoint: ALL
+          severity: medium
+          title: Credentials Exposed - HTTP
+          type: Security - Other
+        type: alert
+    PersistentPolicyItems:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/PersistentPolicy'
+          type: array
+          title: Items
+        next:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Next
+      type: object
+      required:
+      - items
+      title: PersistentPolicyItems
+    PolicyRuleType:
+      type: string
+      enum:
+      - ACTIVITY
+      - DEVICE
+      - IP_CONNECTION
+      - VULNERABILITY
+      title: PolicyRuleType
+    OrRule:
+      properties:
+        and:
+          items:
+            anyOf:
+            - type: string
+            - type: object
+              description: Another AsqRule
+          type: array
+          title: And
+      type: object
+      required:
+      - or
+      title: OrRule
+    PersistentPolicy:
+      properties:
+        id:
+          type: integer
+          title: Id
+          description: Unique identifier of the policy.
+          examples:
+          - 266363
+        name:
+          type: string
+          title: Name
+          description: Display name of the policy.
+          examples:
+          - Credentials Exposed - HTTP
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Human-readable description of what the policy detects or enforces.
+          examples:
+          - Detects devices sending credentials over unencrypted HTTP connections.
+        is_enabled:
+          type: boolean
+          title: Is Enabled
+          description: Whether the policy is active and will trigger when its rules match.
+          default: false
+          examples:
+          - true
+        rule_type:
+          $ref: '#/components/schemas/PolicyRuleType'
+          description: The entity type that this policy's rules are evaluated against.
+          examples:
+          - ACTIVITY
+        asq_rule:
+          $ref: '#/components/schemas/AsqRule'
+          description: The ASQ rule expression that determines which entities the policy matches.
+          examples:
+          - and:
+            - type:Credentials
+        labels:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Labels
+          description: Labels associated with the policy for organization and filtering.
+          examples:
+          - - Encryption Gaps
+            - Value Pack
+        mitre_attack_labels:
+          anyOf:
+          - items:
+              type: object
+            type: array
+          - type: 'null'
+          title: Mitre Attack Labels
+          description: MITRE ATT&CK technique tags associated with the policy.
+          examples:
+          - - matrix: ICS
+              tactic: T1
+              technique: T2
+        actions:
+          items:
+            $ref: '#/components/schemas/PolicyAction'
+          type: array
+          title: Actions
+          description: The actions to perform when the policy's rules match.
+          default: []
+      type: object
+      required:
+      - id
+      - name
+      - rule_type
+      - asq_rule
+      title: PersistentPolicy
+      examples:
+      - actions:
+        - params:
+            consolidation:
+              amount: 1
+              unit: Days
+            description: Credentials Exposed - HTTP
+            endpoint: ALL
+            severity: medium
+            title: Credentials Exposed - HTTP
+            type: Security - Other
+          type: alert
+        asq_rule:
+          and:
+          - type:Credentials
+        description: Detects devices sending credentials over unencrypted HTTP connections.
+        id: 266363
+        is_enabled: true
+        labels:
+        - Encryption Gaps
+        - Value Pack
+        name: Credentials Exposed - HTTP
+        rule_type: ACTIVITY
+    AndRule:
+      properties:
+        or:
+          items:
+            anyOf:
+            - type: string
+            - type: object
+              description: Another AsqRule
+          type: array
+          title: Or
+      type: object
+      required:
+      - and
+      title: AndRule
+    PolicyActionType:
+      type: string
+      enum:
+      - ALERT
+      - ALERT_CRITICAL
+      - ALERT_HIGH
+      - ALERT_LOW
+      - ALERT_MEDIUM
+      - ARMIS_SCANNER_SCAN
+      - BLOCK
+      - BLOCK_FIREWALL
+      - BLOCK_PANW
+      - BLOCK_WLC
+      - BOUNDARY
+      - CREATE_TICKETS
+      - CUSTOM_ACTION
+      - CUSTOM_PROPERTY
+      - CUSTOM_RISK_FACTOR
+      - CVE_ASSOCIATION_STATUS
+      - DEVICE_GROUP_ASSIGNMENT
+      - ENFORCEMENT
+      - LINK_LAYER_SEGMENTATION
+      - MANAGE_SWITCH_PORT
+      - NETWORK_LAYER_SEGMENTATION
+      - NEXPOSE_SCAN
+      - ORG_PRIORITY
+      - QUALYS_SCAN
+      - RAPID7_INSIGHTVM_SCAN
+      - RISK_FACTOR
+      - SERVICE_NOW_PUSH
+      - TAG
+      - TENABLE_IO_SCAN
+      - TENABLE_SC_SCAN
+      - TORQ_TRIGGER
+      - UNTAG
+      title: PolicyActionType
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-Armis-Client-Name
+x-provenance:
+  method: searched
+  source: https://dev.armis.com/reference
+  harvested: '2026-10-20'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://dev.armis.com/reference/delete_settings_boundaries__boundary_id__delete.md
+  - https://dev.armis.com/reference/delete_settings_device_custom_properties__config_id__delete.md
+  - https://dev.armis.com/reference/delete_settings_integrations__integration_id__delete.md
+  - https://dev.armis.com/reference/delete_settings_sites__site_id__delete.md
+  - https://dev.armis.com/reference/enable_data_export__entity___enable_post.md
+  - https://dev.armis.com/reference/fields_assets__search_fields_get.md
+  - https://dev.armis.com/reference/get_alerts__alert_id__get.md
+  - https://dev.armis.com/reference/get_collectors__collector_number__get.md
+  - https://dev.armis.com/reference/get_collectors__image_get.md
+  - https://dev.armis.com/reference/get_collectors_get.md
+  - https://dev.armis.com/reference/get_data_export__entity__get.md
+  - https://dev.armis.com/reference/get_policies_get.md
+  - https://dev.armis.com/reference/get_settings_boundaries__boundary_id__get.md
+  - https://dev.armis.com/reference/get_settings_boundaries_get.md
+  - https://dev.armis.com/reference/get_settings_device_custom_properties__config_id__get.md
+  - https://dev.armis.com/reference/get_settings_device_custom_properties_get.md
+  - https://dev.armis.com/reference/get_settings_integrations__integration_id__get.md
+  - https://dev.armis.com/reference/get_settings_integrations_get.md
+  - https://dev.armis.com/reference/get_settings_sites__site_id__get.md
+  - https://dev.armis.com/reference/get_settings_sites_get.md
+  - https://dev.armis.com/reference/patch_settings_boundaries__boundary_id__patch.md
+  - https://dev.armis.com/reference/patch_settings_device_custom_properties__config_id__patch.md
+  - https://dev.armis.com/reference/patch_settings_integrations__integration_id__patch.md
+  - https://dev.armis.com/reference/patch_settings_sites__site_id__patch.md
+  - https://dev.armis.com/reference/post_arps_post.md
+  - https://dev.armis.com/reference/post_assets__bulk_post.md
+  - https://dev.armis.com/reference/post_oauth_token_post.md
+  - https://dev.armis.com/reference/post_settings_boundaries_post.md
+  - https://dev.armis.com/reference/post_settings_device_custom_properties_post.md
+  - https://dev.armis.com/reference/post_settings_integrations_post.md
+  - https://dev.armis.com/reference/post_settings_sites_post.md
+  - https://dev.armis.com/reference/search_assets__search_post.md
+  - https://dev.armis.com/reference/search_settings_integrations__search_post.md
+  - https://dev.armis.com/reference/toggle_data_export__entity__patch.md
+  merge:
+    pages: 34
+    deduped: 206
+    conflicts_kept_first: 0

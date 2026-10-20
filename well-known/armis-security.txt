@@ -1,0 +1,2 @@
+Contact: https://www.armis.com/report-a-bug/
+Expires: 2027-12-31T23:59:59z

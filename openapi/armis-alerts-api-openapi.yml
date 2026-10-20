@@ -1,0 +1,550 @@
+openapi: 3.2.0
+info:
+  title: Armis API v3 Alerts API
+  version: 0.13.0
+servers:
+- url: https://api.armis.com/v3
+tags:
+- name: Alerts
+paths:
+  /alerts/{alert_id}:
+    get:
+      tags:
+      - Alerts
+      summary: Get alert by ID
+      description: '### Required scopes:
+
+        * `PERMISSION.ALERT.READ`'
+      operationId: get_alerts__alert_id__get
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: alert_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Alert Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersistentAlert'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    AlertType:
+      type: string
+      enum:
+      - ANOMALY_DETECTION
+      - SYSTEM_POLICY_VIOLATION
+      - USER_POLICY_VIOLATION
+      title: AlertType
+    MitreMatrix:
+      type: string
+      enum:
+      - ENTERPRISE
+      - ICS
+      - MOBILE
+      title: MitreMatrix
+    DeviceEndpoint:
+      properties:
+        id:
+          type: integer
+          title: Id
+          description: Device identifier.
+          examples:
+          - 12345
+        name:
+          type: string
+          title: Name
+          description: Human-readable device label shown in the UI.
+          examples:
+          - mfg-printer-08
+        ipv4_addresses:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Ipv4 Addresses
+          description: IPv4 addresses of the device at the time of the alert.
+          examples:
+          - - 10.0.4.18
+        mac_addresses:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Mac Addresses
+          description: MAC addresses observed on the device.
+          examples:
+          - - 00:1A:2B:3C:4D:5E
+        risk_level:
+          anyOf:
+          - anyOf:
+            - type: integer
+            - type: string
+            ge: 0
+            le: 100
+          - type: 'null'
+          title: Risk Level
+          description: Overall risk score of the device, or mask string when redacted.
+          examples:
+          - 8
+        business_impact:
+          anyOf:
+          - $ref: '#/components/schemas/BusinessImpact'
+          - type: string
+          - type: 'null'
+          title: Business Impact
+          description: Business impact tier assigned to the device.
+          examples:
+          - HIGH
+        data_sources:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Data Sources
+          description: Data sources that contributed information about this device.
+          examples:
+          - - network
+            - agent
+        boundary_names:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Boundary Names
+          description: Boundary names the device belongs to.
+          examples:
+          - - Manufacturing
+        site_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Site Name
+          description: Site name the device is associated with.
+          examples:
+          - Boston HQ
+      type: object
+      required:
+      - id
+      - name
+      title: DeviceEndpoint
+      examples:
+      - boundary_names:
+        - Manufacturing
+        business_impact: HIGH
+        data_sources:
+        - network
+        - agent
+        id: 12345
+        ipv4_addresses:
+        - 10.0.4.18
+        mac_addresses:
+        - 00:1A:2B:3C:4D:5E
+        name: mfg-printer-08
+        risk_level: 8
+        site_name: Boston HQ
+    IpAddressEndpoint:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: IP address serving as the endpoint identifier.
+          examples:
+          - 10.0.4.18
+        name:
+          type: string
+          title: Name
+          description: IP address display name.
+          examples:
+          - 10.0.4.18
+        ipv4_address:
+          type: string
+          format: ipv4
+          title: Ipv4 Address
+          description: IPv4 address of the volatile endpoint.
+          examples:
+          - 10.0.4.18
+      type: object
+      required:
+      - id
+      - name
+      - ipv4_address
+      title: IpAddressEndpoint
+      examples:
+      - id: 10.0.4.18
+        ipv4_address: 10.0.4.18
+        name: 10.0.4.18
+    PersistentAlert:
+      properties:
+        id:
+          type: integer
+          title: Id
+          description: Unique identifier of the alert.
+          examples:
+          - 42
+        severity:
+          $ref: '#/components/schemas/AlertSeverity'
+          description: Severity bucket derived from the alert's calculated risk score.
+          examples:
+          - HIGH
+        type:
+          $ref: '#/components/schemas/AlertType'
+          description: Discriminator for how the alert was raised.
+          examples:
+          - SYSTEM_POLICY_VIOLATION
+        status:
+          $ref: '#/components/schemas/AlertStatus'
+          description: Current triage state of the alert.
+          examples:
+          - OPEN
+        activity_timestamp:
+          type: string
+          format: date-time
+          title: Activity Timestamp
+          description: UTC timestamp when the activity that triggered the alert was observed.
+          examples:
+          - '2026-05-13T08:30:00Z'
+        title:
+          type: string
+          title: Title
+          description: Headline rendered in the alerts list and notification surfaces.
+          examples:
+          - Suspicious outbound connection from manufacturing printer
+        classification:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Classification
+          description: Resolved name of the alert classification taxonomy node.
+          examples:
+          - Security > Threat
+        policy_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Policy Id
+          description: Identifier of the policy that raised the alert.
+          examples:
+          - 88
+        affected_devices_count:
+          type: integer
+          title: Affected Devices Count
+          description: Number of distinct devices implicated in the alert.
+          examples:
+          - 3
+        mitre_attack_labels:
+          items:
+            $ref: '#/components/schemas/MitreAttackLabel'
+          type: array
+          title: Mitre Attack Labels
+          description: MITRE ATT&CK technique annotations for the alert.
+          examples:
+          - - matrix: ENTERPRISE
+              tactic: Initial Access
+              technique: Phishing
+        status_change_time:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Status Change Time
+          description: UTC timestamp of the most recent status transition.
+          examples:
+          - '2026-05-13T09:15:00Z'
+        last_alert_update_time:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Alert Update Time
+          description: UTC timestamp of the most recent enrichment refresh on the alert.
+          examples:
+          - '2026-05-13T09:30:00Z'
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Long-form context describing what the alert means and why it triggered.
+          examples:
+          - Activity matches a known C2 beaconing pattern over port 443.
+        activity_uuids:
+          items:
+            type: string
+          type: array
+          title: Activity Uuids
+          description: UUIDs of the activities that contributed to the alert.
+          examples:
+          - - 7f1d2e0e-4c3b-4f9c-9b2d-1a2b3c4d5e6f
+        device_ids:
+          items:
+            type: integer
+          type: array
+          title: Device Ids
+          description: Device identifiers implicated in the alert.
+          examples:
+          - - 12345
+            - 12346
+        connection_ids:
+          items:
+            type: integer
+          type: array
+          title: Connection Ids
+          description: Connection (device-link) identifiers implicated in the alert.
+          examples:
+          - - 98765
+        source_endpoints:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/DeviceEndpoint'
+            - $ref: '#/components/schemas/IpAddressEndpoint'
+            - $ref: '#/components/schemas/HostEndpoint'
+          type: array
+          title: Source Endpoints
+          description: Source endpoints of the activities that triggered the alert.
+          examples:
+          - []
+        destination_endpoints:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/DeviceEndpoint'
+            - $ref: '#/components/schemas/IpAddressEndpoint'
+            - $ref: '#/components/schemas/HostEndpoint'
+          type: array
+          title: Destination Endpoints
+          description: Destination endpoints of the activities that triggered the alert.
+          examples:
+          - []
+      type: object
+      required:
+      - id
+      - severity
+      - type
+      - status
+      - activity_timestamp
+      - title
+      - affected_devices_count
+      - mitre_attack_labels
+      - activity_uuids
+      - device_ids
+      - connection_ids
+      - source_endpoints
+      - destination_endpoints
+      title: PersistentAlert
+      examples:
+      - activity_timestamp: '2026-05-13T08:30:00Z'
+        activity_uuids:
+        - 7f1d2e0e-4c3b-4f9c-9b2d-1a2b3c4d5e6f
+        affected_devices_count: 3
+        classification: Security > Threat
+        connection_ids:
+        - 98765
+        description: Activity matches a known C2 beaconing pattern over port 443.
+        destination_endpoints: []
+        device_ids:
+        - 12345
+        - 12346
+        id: 42
+        last_alert_update_time: '2026-05-13T09:30:00Z'
+        mitre_attack_labels:
+        - matrix: ENTERPRISE
+          tactic: Initial Access
+          technique: Phishing
+        policy_id: 88
+        severity: HIGH
+        source_endpoints: []
+        status: OPEN
+        status_change_time: '2026-05-13T09:15:00Z'
+        title: Suspicious outbound connection from manufacturing printer
+        type: SYSTEM_POLICY_VIOLATION
+    AlertSeverity:
+      type: string
+      enum:
+      - LOW
+      - MEDIUM
+      - HIGH
+      - CRITICAL
+      title: AlertSeverity
+    MitreAttackLabel:
+      properties:
+        matrix:
+          $ref: '#/components/schemas/MitreMatrix'
+          description: MITRE ATT&CK matrix family this label belongs to.
+          examples:
+          - ENTERPRISE
+        tactic:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tactic
+          description: High-level adversary objective from the MITRE matrix.
+          examples:
+          - Initial Access
+        technique:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Technique
+          description: Specific adversary technique used to achieve the tactic.
+          examples:
+          - Phishing
+        sub_technique:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sub Technique
+          description: Sub-technique under the parent technique, when applicable.
+          examples:
+          - Spearphishing Attachment
+      type: object
+      required:
+      - matrix
+      title: MitreAttackLabel
+      examples:
+      - matrix: ENTERPRISE
+        sub_technique: Spearphishing Attachment
+        tactic: Initial Access
+        technique: Phishing
+    AlertStatus:
+      type: string
+      enum:
+      - IGNORED
+      - OPEN
+      - RESOLVED
+      - SUPPRESSED
+      - UNHANDLED
+      title: AlertStatus
+    BusinessImpact:
+      type: string
+      enum:
+      - NONE
+      - CRITICAL
+      - HIGH
+      - UNASSIGNED
+      title: BusinessImpact
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    HostEndpoint:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Hostname serving as the endpoint identifier.
+          examples:
+          - smtp.example.com
+        name:
+          type: string
+          title: Name
+          description: Hostname display name.
+          examples:
+          - SMTP Server
+      type: object
+      required:
+      - id
+      - name
+      title: HostEndpoint
+      examples:
+      - id: smtp.example.com
+        name: SMTP Server
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-Armis-Client-Name
+x-provenance:
+  method: searched
+  source: https://dev.armis.com/reference
+  harvested: '2026-10-20'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://dev.armis.com/reference/delete_settings_boundaries__boundary_id__delete.md
+  - https://dev.armis.com/reference/delete_settings_device_custom_properties__config_id__delete.md
+  - https://dev.armis.com/reference/delete_settings_integrations__integration_id__delete.md
+  - https://dev.armis.com/reference/delete_settings_sites__site_id__delete.md
+  - https://dev.armis.com/reference/enable_data_export__entity___enable_post.md
+  - https://dev.armis.com/reference/fields_assets__search_fields_get.md
+  - https://dev.armis.com/reference/get_alerts__alert_id__get.md
+  - https://dev.armis.com/reference/get_collectors__collector_number__get.md
+  - https://dev.armis.com/reference/get_collectors__image_get.md
+  - https://dev.armis.com/reference/get_collectors_get.md
+  - https://dev.armis.com/reference/get_data_export__entity__get.md
+  - https://dev.armis.com/reference/get_policies_get.md
+  - https://dev.armis.com/reference/get_settings_boundaries__boundary_id__get.md
+  - https://dev.armis.com/reference/get_settings_boundaries_get.md
+  - https://dev.armis.com/reference/get_settings_device_custom_properties__config_id__get.md
+  - https://dev.armis.com/reference/get_settings_device_custom_properties_get.md
+  - https://dev.armis.com/reference/get_settings_integrations__integration_id__get.md
+  - https://dev.armis.com/reference/get_settings_integrations_get.md
+  - https://dev.armis.com/reference/get_settings_sites__site_id__get.md
+  - https://dev.armis.com/reference/get_settings_sites_get.md
+  - https://dev.armis.com/reference/patch_settings_boundaries__boundary_id__patch.md
+  - https://dev.armis.com/reference/patch_settings_device_custom_properties__config_id__patch.md
+  - https://dev.armis.com/reference/patch_settings_integrations__integration_id__patch.md
+  - https://dev.armis.com/reference/patch_settings_sites__site_id__patch.md
+  - https://dev.armis.com/reference/post_arps_post.md
+  - https://dev.armis.com/reference/post_assets__bulk_post.md
+  - https://dev.armis.com/reference/post_oauth_token_post.md
+  - https://dev.armis.com/reference/post_settings_boundaries_post.md
+  - https://dev.armis.com/reference/post_settings_device_custom_properties_post.md
+  - https://dev.armis.com/reference/post_settings_integrations_post.md
+  - https://dev.armis.com/reference/post_settings_sites_post.md
+  - https://dev.armis.com/reference/search_assets__search_post.md
+  - https://dev.armis.com/reference/search_settings_integrations__search_post.md
+  - https://dev.armis.com/reference/toggle_data_export__entity__patch.md
+  merge:
+    pages: 34
+    deduped: 206
+    conflicts_kept_first: 0

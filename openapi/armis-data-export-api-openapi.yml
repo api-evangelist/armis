@@ -1,0 +1,510 @@
+openapi: 3.2.0
+info:
+  title: Armis API v3 Data Export API
+  version: 0.13.0
+servers:
+- url: https://api.armis.com/v3
+tags:
+- name: Data Export
+paths:
+  /data-export/{entity}:
+    get:
+      tags:
+      - Data Export
+      summary: Get the URLs of the latest data exports of a particular entity
+      description: 'Each `time_frame_days` value of an entity is exported separately, so
+
+        `applications` with `time_frame_days=7` and `applications` with `time_frame_days=30` are two independent exports
+
+        that are enabled, disabled and read on their own. Omitting `time_frame_days` addresses the entity''s default window.
+
+
+        | Entity | Supported `time_frame_days` | Default | Notes |
+
+        | --- | --- | --- | --- |
+
+        | `applications` | 2, 7, 14, 30 | 30 | |
+
+        | `device-delete-events` | 2, 7, 14, 30, 90 | 14 | |
+
+        | `device-merge-events` | 2, 7, 14, 30, 90 | 14 | |
+
+        | `ip-connections` | 1-7 | - | accepted when reading, to pick the aggregation date; cannot be set when enabling the export |
+
+        | `risk-factors` | 2, 7, 14, 30 | 30 | |
+
+        | `vulnerabilities` | 2, 7, 14, 30 | 30 | |
+
+
+        ### Required scopes:
+
+        * `PERMISSION.REPORT.READ`
+
+        * `FULL_VISIBILITY`'
+      operationId: get_data_export__entity__get
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: entity
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/DataExportEntity'
+      - name: time_frame_days
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: 'Size of the exported time window, in days.
+
+
+            Supported values differ per entity. Omit to use the entity''s default.
+
+
+            | Entity | Supported `time_frame_days` | Default | Notes |
+
+            | --- | --- | --- | --- |
+
+            | `applications` | 2, 7, 14, 30 | 30 |  |
+
+            | `device-delete-events` | 2, 7, 14, 30, 90 | 14 |  |
+
+            | `device-merge-events` | 2, 7, 14, 30, 90 | 14 |  |
+
+            | `ip-connections` | 1-7 | - | accepted when reading, to pick the aggregation date; cannot be set when enabling the export |
+
+            | `risk-factors` | 2, 7, 14, 30 | 30 |  |
+
+            | `vulnerabilities` | 2, 7, 14, 30 | 30 |  |'
+          examples:
+          - 7
+          - 30
+          title: Time Frame Days
+        description: 'Size of the exported time window, in days.
+
+
+          Supported values differ per entity. Omit to use the entity''s default.
+
+
+          | Entity | Supported `time_frame_days` | Default | Notes |
+
+          | --- | --- | --- | --- |
+
+          | `applications` | 2, 7, 14, 30 | 30 |  |
+
+          | `device-delete-events` | 2, 7, 14, 30, 90 | 14 |  |
+
+          | `device-merge-events` | 2, 7, 14, 30, 90 | 14 |  |
+
+          | `ip-connections` | 1-7 | - | accepted when reading, to pick the aggregation date; cannot be set when enabling the export |
+
+          | `risk-factors` | 2, 7, 14, 30 | 30 |  |
+
+          | `vulnerabilities` | 2, 7, 14, 30 | 30 |  |'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataExportGetResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - Data Export
+      summary: Enable / disable export of entity
+      description: 'Each `time_frame_days` value of an entity is exported separately, so
+
+        `applications` with `time_frame_days=7` and `applications` with `time_frame_days=30` are two independent exports
+
+        that are enabled, disabled and read on their own. Omitting `time_frame_days` addresses the entity''s default window.
+
+
+        | Entity | Supported `time_frame_days` | Default | Notes |
+
+        | --- | --- | --- | --- |
+
+        | `applications` | 2, 7, 14, 30 | 30 | |
+
+        | `device-delete-events` | 2, 7, 14, 30, 90 | 14 | |
+
+        | `device-merge-events` | 2, 7, 14, 30, 90 | 14 | |
+
+        | `ip-connections` | 1-7 | - | accepted when reading, to pick the aggregation date; cannot be set when enabling the export |
+
+        | `risk-factors` | 2, 7, 14, 30 | 30 | |
+
+        | `vulnerabilities` | 2, 7, 14, 30 | 30 | |
+
+
+        ### Required scopes:
+
+        * `PERMISSION.REPORT.MANAGE.CREATE`
+
+        * `PERMISSION.REPORT.MANAGE.DELETE`'
+      operationId: toggle_data_export__entity__patch
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: entity
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/DataExportEntity'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataExportPatchRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataExportPatchResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /data-export/{entity}/_enable:
+    post:
+      tags:
+      - Data Export
+      summary: Enable export of entity
+      description: 'Each `time_frame_days` value of an entity is exported separately, so
+
+        `applications` with `time_frame_days=7` and `applications` with `time_frame_days=30` are two independent exports
+
+        that are enabled, disabled and read on their own. Omitting `time_frame_days` addresses the entity''s default window.
+
+
+        | Entity | Supported `time_frame_days` | Default | Notes |
+
+        | --- | --- | --- | --- |
+
+        | `applications` | 2, 7, 14, 30 | 30 | |
+
+        | `device-delete-events` | 2, 7, 14, 30, 90 | 14 | |
+
+        | `device-merge-events` | 2, 7, 14, 30, 90 | 14 | |
+
+        | `ip-connections` | 1-7 | - | accepted when reading, to pick the aggregation date; cannot be set when enabling the export |
+
+        | `risk-factors` | 2, 7, 14, 30 | 30 | |
+
+        | `vulnerabilities` | 2, 7, 14, 30 | 30 | |
+
+
+        ### Required scopes:
+
+        * `PERMISSION.REPORT.MANAGE.CREATE`'
+      operationId: enable_data_export__entity___enable_post
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: entity
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/DataExportEntity'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+              - $ref: '#/components/schemas/DataExportCreateRequest'
+              - type: 'null'
+              title: Body
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataExportPatchResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    DataExportPatchRequest:
+      properties:
+        enabled:
+          type: boolean
+          title: Enabled
+        time_frame_days:
+          anyOf:
+          - type: integer
+            maximum: 90
+            minimum: 1
+          - type: 'null'
+          title: Time Frame Days
+          description: 'Size of the exported time window, in days.
+
+
+            Supported values differ per entity. Omit to use the entity''s default.
+
+
+            | Entity | Supported `time_frame_days` | Default | Notes |
+
+            | --- | --- | --- | --- |
+
+            | `applications` | 2, 7, 14, 30 | 30 |  |
+
+            | `device-delete-events` | 2, 7, 14, 30, 90 | 14 |  |
+
+            | `device-merge-events` | 2, 7, 14, 30, 90 | 14 |  |
+
+            | `ip-connections` | 1-7 | - | accepted when reading, to pick the aggregation date; cannot be set when enabling the export |
+
+            | `risk-factors` | 2, 7, 14, 30 | 30 |  |
+
+            | `vulnerabilities` | 2, 7, 14, 30 | 30 |  |'
+          examples:
+          - 7
+          - 30
+      type: object
+      required:
+      - enabled
+      title: DataExportPatchRequest
+      examples:
+      - enabled: true
+      - enabled: false
+      - enabled: true
+        time_frame_days: 30
+    DataExportPatchResponse:
+      properties:
+        urls:
+          items:
+            type: string
+          type: array
+          title: Urls
+        urls_creation_time:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Urls Creation Time
+        enabled:
+          type: boolean
+          title: Enabled
+        file_format:
+          type: string
+          const: parquet
+          title: File Format
+          default: parquet
+        source_data_timestamp:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Source Data Timestamp
+          description: When the exported data was last refreshed at the source. Use it to tell how fresh the rows are, as opposed to `urls_creation_time`, which is when the export files themselves were produced. `null` when the export has not run yet or the source did not report a timestamp.
+      type: object
+      required:
+      - urls
+      - urls_creation_time
+      - enabled
+      title: DataExportPatchResponse
+      examples:
+      - enabled: true
+        file_format: parquet
+        source_data_timestamp: '2025-09-07T00:00:00'
+        urls:
+        - https://path/to/file1
+        - https://path/to/file2
+        urls_creation_time: '2025-09-08T00:00:00'
+    DataExportCreateRequest:
+      properties:
+        time_frame_days:
+          anyOf:
+          - type: integer
+            maximum: 90
+            minimum: 1
+          - type: 'null'
+          title: Time Frame Days
+          description: 'Size of the exported time window, in days.
+
+
+            Supported values differ per entity. Omit to use the entity''s default.
+
+
+            | Entity | Supported `time_frame_days` | Default | Notes |
+
+            | --- | --- | --- | --- |
+
+            | `applications` | 2, 7, 14, 30 | 30 |  |
+
+            | `device-delete-events` | 2, 7, 14, 30, 90 | 14 |  |
+
+            | `device-merge-events` | 2, 7, 14, 30, 90 | 14 |  |
+
+            | `ip-connections` | 1-7 | - | accepted when reading, to pick the aggregation date; cannot be set when enabling the export |
+
+            | `risk-factors` | 2, 7, 14, 30 | 30 |  |
+
+            | `vulnerabilities` | 2, 7, 14, 30 | 30 |  |'
+          examples:
+          - 7
+          - 30
+      type: object
+      title: DataExportCreateRequest
+      examples:
+      - time_frame_days: 30
+    DataExportEntity:
+      type: string
+      enum:
+      - applications
+      - device-delete-events
+      - device-merge-events
+      - ip-connections
+      - risk-factors
+      - vulnerabilities
+      title: DataExportEntity
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    DataExportGetResponse:
+      properties:
+        urls:
+          items:
+            type: string
+          type: array
+          title: Urls
+        urls_creation_time:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Urls Creation Time
+        enabled:
+          type: boolean
+          title: Enabled
+        file_format:
+          type: string
+          const: parquet
+          title: File Format
+          default: parquet
+        source_data_timestamp:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Source Data Timestamp
+          description: When the exported data was last refreshed at the source. Use it to tell how fresh the rows are, as opposed to `urls_creation_time`, which is when the export files themselves were produced. `null` when the export has not run yet or the source did not report a timestamp.
+      type: object
+      required:
+      - urls
+      - urls_creation_time
+      - enabled
+      title: DataExportGetResponse
+      examples:
+      - enabled: true
+        file_format: parquet
+        source_data_timestamp: '2025-09-07T00:00:00'
+        urls:
+        - https://path/to/file1
+        - https://path/to/file2
+        urls_creation_time: '2025-09-08T00:00:00'
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-Armis-Client-Name
+x-provenance:
+  method: searched
+  source: https://dev.armis.com/reference
+  harvested: '2026-10-20'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://dev.armis.com/reference/delete_settings_boundaries__boundary_id__delete.md
+  - https://dev.armis.com/reference/delete_settings_device_custom_properties__config_id__delete.md
+  - https://dev.armis.com/reference/delete_settings_integrations__integration_id__delete.md
+  - https://dev.armis.com/reference/delete_settings_sites__site_id__delete.md
+  - https://dev.armis.com/reference/enable_data_export__entity___enable_post.md
+  - https://dev.armis.com/reference/fields_assets__search_fields_get.md
+  - https://dev.armis.com/reference/get_alerts__alert_id__get.md
+  - https://dev.armis.com/reference/get_collectors__collector_number__get.md
+  - https://dev.armis.com/reference/get_collectors__image_get.md
+  - https://dev.armis.com/reference/get_collectors_get.md
+  - https://dev.armis.com/reference/get_data_export__entity__get.md
+  - https://dev.armis.com/reference/get_policies_get.md
+  - https://dev.armis.com/reference/get_settings_boundaries__boundary_id__get.md
+  - https://dev.armis.com/reference/get_settings_boundaries_get.md
+  - https://dev.armis.com/reference/get_settings_device_custom_properties__config_id__get.md
+  - https://dev.armis.com/reference/get_settings_device_custom_properties_get.md
+  - https://dev.armis.com/reference/get_settings_integrations__integration_id__get.md
+  - https://dev.armis.com/reference/get_settings_integrations_get.md
+  - https://dev.armis.com/reference/get_settings_sites__site_id__get.md
+  - https://dev.armis.com/reference/get_settings_sites_get.md
+  - https://dev.armis.com/reference/patch_settings_boundaries__boundary_id__patch.md
+  - https://dev.armis.com/reference/patch_settings_device_custom_properties__config_id__patch.md
+  - https://dev.armis.com/reference/patch_settings_integrations__integration_id__patch.md
+  - https://dev.armis.com/reference/patch_settings_sites__site_id__patch.md
+  - https://dev.armis.com/reference/post_arps_post.md
+  - https://dev.armis.com/reference/post_assets__bulk_post.md
+  - https://dev.armis.com/reference/post_oauth_token_post.md
+  - https://dev.armis.com/reference/post_settings_boundaries_post.md
+  - https://dev.armis.com/reference/post_settings_device_custom_properties_post.md
+  - https://dev.armis.com/reference/post_settings_integrations_post.md
+  - https://dev.armis.com/reference/post_settings_sites_post.md
+  - https://dev.armis.com/reference/search_assets__search_post.md
+  - https://dev.armis.com/reference/search_settings_integrations__search_post.md
+  - https://dev.armis.com/reference/toggle_data_export__entity__patch.md
+  merge:
+    pages: 34
+    deduped: 206
+    conflicts_kept_first: 0

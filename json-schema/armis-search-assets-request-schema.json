@@ -1,0 +1,964 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/armis/main/json-schema/armis-search-assets-request-schema.json",
+  "title": "SearchAssetsRequest",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/armis-api-v3-api-openapi.yml#/components/schemas/SearchAssetsRequest",
+  "properties": {
+    "asset_type": {
+      "$ref": "#/$defs/AssetType",
+      "default": "DEVICE"
+    },
+    "fields": {
+      "items": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/AssetField"
+          },
+          {
+            "$ref": "#/$defs/CustomPropertyField-Input"
+          },
+          {
+            "$ref": "#/$defs/IntegrationPropertyField-Input"
+          }
+        ]
+      },
+      "type": "array",
+      "title": "Fields"
+    },
+    "filter": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/FilterByAssetId"
+        },
+        {
+          "$ref": "#/$defs/FilterByBoundaryId"
+        },
+        {
+          "$ref": "#/$defs/FilterByBrand"
+        },
+        {
+          "$ref": "#/$defs/FilterByCategory"
+        },
+        {
+          "$ref": "#/$defs/FilterByLastSeen"
+        },
+        {
+          "$ref": "#/$defs/FilterByName"
+        },
+        {
+          "$ref": "#/$defs/FilterBySiteId"
+        },
+        {
+          "$ref": "#/$defs/FilterByTag"
+        },
+        {
+          "$ref": "#/$defs/FilterByType"
+        },
+        {
+          "$ref": "#/$defs/FilterByVisibility"
+        },
+        {
+          "$ref": "#/$defs/FilterByMultiple"
+        }
+      ],
+      "title": "Filter"
+    }
+  },
+  "type": "object",
+  "required": [
+    "fields",
+    "filter"
+  ],
+  "$defs": {
+    "AssetField": {
+      "type": "string",
+      "enum": [
+        "access_switch",
+        "article_number",
+        "boundaries",
+        "brand",
+        "category",
+        "data_sources",
+        "device_id",
+        "display",
+        "eol_os",
+        "eos_firmware",
+        "eos_hardware",
+        "eos_os",
+        "firmware_version",
+        "first_seen",
+        "ipv4_addresses",
+        "ipv6_addresses",
+        "last_connected_ap_name",
+        "last_seen",
+        "mac_addresses",
+        "model",
+        "names",
+        "network_interfaces",
+        "os_build_number",
+        "os_build_revision",
+        "os_name",
+        "os_version",
+        "purdue_level",
+        "risk_level",
+        "sensor",
+        "serial_numbers",
+        "site",
+        "tags",
+        "type",
+        "utilization_level",
+        "utilization_rate",
+        "visibility"
+      ],
+      "title": "AssetField"
+    },
+    "AssetIdSource": {
+      "type": "string",
+      "enum": [
+        "ASSET_ID",
+        "IPV4_ADDRESS",
+        "IPV6_ADDRESS",
+        "MAC_ADDRESS",
+        "SERIAL_NUMBER"
+      ],
+      "title": "AssetIdSource"
+    },
+    "AssetType": {
+      "type": "string",
+      "enum": [
+        "DEVICE"
+      ],
+      "title": "AssetType"
+    },
+    "CustomPropertyField-Input": {
+      "type": "string",
+      "pattern": "^custom\\..+$",
+      "title": "CustomPropertyField",
+      "description": "This model represents a device custom property field.\nIt makes sure that it has a prefix \"custom.\""
+    },
+    "DeviceCategory": {
+      "type": "string",
+      "enum": [
+        "Automations",
+        "Automotives",
+        "Communications",
+        "Computers",
+        "Displays",
+        "Gaming",
+        "Generic IOTs",
+        "Handhelds",
+        "Imaging",
+        "Inputs",
+        "Instruments",
+        "Manufacturing Equipment",
+        "Medical",
+        "Medical Diagnostic",
+        "Medical Support",
+        "Medical Therapeutic",
+        "Multimedia",
+        "Network Equipment",
+        "Payments",
+        "Security",
+        "Server Rack Components",
+        "Toys",
+        "Unknown",
+        "Wearables"
+      ],
+      "title": "DeviceCategory"
+    },
+    "DeviceType": {
+      "type": "string",
+      "enum": [
+        "Access Controls",
+        "Access Points",
+        "Access Readers",
+        "Access Solutions",
+        "Acute Cares",
+        "AC Drives",
+        "Alarms",
+        "Alarm Systems",
+        "Amplifiers",
+        "Analog Gateways",
+        "Anesthesia Machines",
+        "Angiography",
+        "Appliances",
+        "ATA Boxes",
+        "ATMs",
+        "Attendance Systems",
+        "Audio Headsets",
+        "Automatic Counters",
+        "AV Transmitters",
+        "Barcode Readers",
+        "Beacons",
+        "Biometric Scanners",
+        "Biopsy Systems",
+        "Body Cameras",
+        "Building Control Systems",
+        "Cabinets",
+        "Cable Managers",
+        "Cars",
+        "Carts",
+        "Cash Deposit Machines",
+        "Central Stations",
+        "Charging Stations",
+        "Chassis",
+        "Communication Adapter",
+        "Conference Control Systems",
+        "Connectivity Hubs",
+        "Controllers",
+        "Cooling Units",
+        "Credit Card Reader",
+        "CR Systems",
+        "CTs",
+        "Dash Cams",
+        "Defibrillators",
+        "Dental CAD/CAMs",
+        "Dental CBCTs",
+        "Desktops",
+        "Diagnostics",
+        "Dialysis Machines",
+        "Digital Cameras",
+        "Doorbells",
+        "Door Control Modules",
+        "Driver Terminals",
+        "Drive Thru Equipment",
+        "Drones",
+        "DSPs",
+        "DVRs",
+        "ECGs",
+        "EEGs",
+        "Electric Scooters",
+        "Elevator Panels",
+        "Emergency Response",
+        "Endoscopy",
+        "Engineering Stations",
+        "Engineering Workstations",
+        "Ereaders",
+        "Field Devices",
+        "Fillers",
+        "Firewalls",
+        "Fitness",
+        "Fluoroscopy",
+        "Frames",
+        "Franking Machines",
+        "Game Consoles",
+        "Game Machines",
+        "Gaming",
+        "Gateways",
+        "General Imaging",
+        "Generic IO's",
+        "Generic OT's",
+        "Generic Rack Components",
+        "Historians",
+        "HMI",
+        "HMI Panels",
+        "Hotspots",
+        "Household Appliances",
+        "HVACs",
+        "Hypervisor",
+        "Imaging Workstations",
+        "Industrial Managed Switches",
+        "Industrial PC",
+        "Industrial Robots",
+        "Industrial Simulators",
+        "Industrial Tools",
+        "Infusion Docking Stations",
+        "Infusion Pumps",
+        "Infusion Pump Racks",
+        "Integrated OR Systems",
+        "Interactive Kiosks",
+        "Intercoms",
+        "Intraoral Sensors",
+        "Intrusion Prevention Systems",
+        "I/O",
+        "IOT Gateways",
+        "IP Cameras",
+        "Kitchen Display Systems",
+        "Keyboards",
+        "Lab Equipment",
+        "Laptops",
+        "Laptops (by adapter)",
+        "Life Supports",
+        "Lightings",
+        "Load Balancers",
+        "Malicious",
+        "Mammography",
+        "Material Transport",
+        "Measuring Instruments",
+        "Media Controllers",
+        "Media Players",
+        "Media Writers",
+        "Medication Dispensing Systems",
+        "Mobile Phones",
+        "Monitors",
+        "Monitoring Equipment",
+        "Motor Controllers",
+        "Mouses",
+        "MRIs",
+        "Navigation Control Systems",
+        "Network Video Recorders",
+        "Nuclear Medicine",
+        "Nurse Call",
+        "Radiation Oncology Information Systems",
+        "Out-of-band Management Systems",
+        "Operator Workstations",
+        "Optometry Systems",
+        "PACSs",
+        "Panels",
+        "Panel PCs",
+        "Patch Panels",
+        "Patient Monitors",
+        "Payment Terminals",
+        "PDUs",
+        "Pentests",
+        "Personal Computers",
+        "PET CTs",
+        "PFT Systems",
+        "Pill Counters",
+        "Player Tracking Interfaces",
+        "PLCs",
+        "Pneumatic Tube Systems",
+        "POC Diagnostics",
+        "Points of Sale",
+        "Postage Meters",
+        "Power Monitors",
+        "Printers",
+        "Product Scanners",
+        "Projectors",
+        "Radiation Therapies",
+        "Radiology Injection",
+        "Radiology Systems",
+        "Remote Console Managers",
+        "Remote IO's",
+        "Routers",
+        "Safes",
+        "Safe Deposit Boxes",
+        "SCADA Clients",
+        "SCADA Servers",
+        "Scanners",
+        "Security Equipment",
+        "Sensors",
+        "Servers",
+        "Servo Drives",
+        "Single-Board Computers",
+        "Smart Cameras",
+        "Smart Glasses",
+        "Smart Switches",
+        "Speakers",
+        "Sterilizations",
+        "Storage and Transport",
+        "Storage Server",
+        "Surgical Systems",
+        "Switches",
+        "Tablets",
+        "Telehealth Systems",
+        "Telephony Solutions",
+        "Telephony Systems",
+        "Terminal Servers",
+        "Therapeutics",
+        "Thermostats",
+        "Thin Client",
+        "3D Printers",
+        "Time Recording Terminals",
+        "Treatment Equipment",
+        "Triggers",
+        "Trucks",
+        "TVs",
+        "Ultrasounds",
+        "Unknown",
+        "UPS",
+        "VCs",
+        "Ventilators",
+        "Video Broadband Devices",
+        "Video Surveillance",
+        "Virtual Assistants",
+        "Virtual Machines",
+        "VLANs",
+        "Voice Gateways",
+        "Voice Picking Systems",
+        "VoIPs",
+        "VR Headsets",
+        "Vulnerability Scanners",
+        "WAN Optimizers",
+        "Watches",
+        "Weather Instruments",
+        "Wireless Equipment",
+        "Wireless Presentations",
+        "WLCs",
+        "Workstations",
+        "XRYs",
+        "X-Rays"
+      ],
+      "title": "DeviceType"
+    },
+    "EqualityOperator": {
+      "type": "string",
+      "enum": [
+        "EQUALS",
+        "NOT_EQUALS"
+      ],
+      "title": "EqualityOperator"
+    },
+    "FilterByAssetId": {
+      "properties": {
+        "filter_criteria": {
+          "type": "string",
+          "const": "ASSET_ID",
+          "title": "Filter Criteria",
+          "default": "ASSET_ID"
+        },
+        "asset_id_source": {
+          "$ref": "#/$defs/AssetIdSource",
+          "description": "Some assets may have multiple unique identifiers.\n\nFor example, a device can have an Asset ID, a MAC Address, an IPv4, etc.\n\nThis field determines which field will be used to find the asset.",
+          "default": "ASSET_ID"
+        },
+        "asset_ids": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "type": "array",
+          "maxItems": 1000,
+          "minItems": 1,
+          "title": "Asset Ids"
+        }
+      },
+      "type": "object",
+      "required": [
+        "asset_ids"
+      ],
+      "title": "FilterByAssetId"
+    },
+    "FilterByBoundaryId": {
+      "properties": {
+        "operator": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EqualityOperator"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "filter_criteria": {
+          "type": "string",
+          "const": "BOUNDARY_ID",
+          "title": "Filter Criteria",
+          "default": "BOUNDARY_ID"
+        },
+        "boundary_ids": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "type": "array",
+          "maxItems": 1000,
+          "minItems": 1,
+          "title": "Boundary Ids"
+        },
+        "after": {
+          "type": "integer",
+          "minimum": 0,
+          "title": "After",
+          "description": "Cursor for pagination",
+          "default": 0
+        },
+        "limit": {
+          "type": "integer",
+          "maximum": 1000,
+          "minimum": 1,
+          "title": "Limit",
+          "description": "Number of items to return",
+          "default": 10
+        }
+      },
+      "type": "object",
+      "required": [
+        "boundary_ids"
+      ],
+      "title": "FilterByBoundaryId"
+    },
+    "FilterByBrand": {
+      "properties": {
+        "operator": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EqualityOperator"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "filter_criteria": {
+          "type": "string",
+          "const": "BRAND",
+          "title": "Filter Criteria",
+          "default": "BRAND"
+        },
+        "brands": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "maxItems": 1000,
+          "minItems": 1,
+          "title": "Brands"
+        },
+        "after": {
+          "type": "integer",
+          "minimum": 0,
+          "title": "After",
+          "description": "Cursor for pagination",
+          "default": 0
+        },
+        "limit": {
+          "type": "integer",
+          "maximum": 1000,
+          "minimum": 1,
+          "title": "Limit",
+          "description": "Number of items to return",
+          "default": 10
+        }
+      },
+      "type": "object",
+      "required": [
+        "brands"
+      ],
+      "title": "FilterByBrand"
+    },
+    "FilterByCategory": {
+      "properties": {
+        "operator": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EqualityOperator"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "filter_criteria": {
+          "type": "string",
+          "const": "CATEGORY",
+          "title": "Filter Criteria",
+          "default": "CATEGORY"
+        },
+        "categories": {
+          "items": {
+            "$ref": "#/$defs/DeviceCategory"
+          },
+          "type": "array",
+          "maxItems": 1000,
+          "minItems": 1,
+          "title": "Categories"
+        },
+        "after": {
+          "type": "integer",
+          "minimum": 0,
+          "title": "After",
+          "description": "Cursor for pagination",
+          "default": 0
+        },
+        "limit": {
+          "type": "integer",
+          "maximum": 1000,
+          "minimum": 1,
+          "title": "Limit",
+          "description": "Number of items to return",
+          "default": 10
+        }
+      },
+      "type": "object",
+      "required": [
+        "categories"
+      ],
+      "title": "FilterByCategory"
+    },
+    "FilterByLastSeen": {
+      "properties": {
+        "filter_criteria": {
+          "type": "string",
+          "const": "LAST_SEEN",
+          "title": "Filter Criteria",
+          "default": "LAST_SEEN"
+        },
+        "last_seen_ge": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Last Seen Ge",
+          "description": "Last seen after (or exactly on) this date (in UTC)."
+        },
+        "last_seen_seconds": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Last Seen Seconds",
+          "description": "Last seen in the last X seconds."
+        },
+        "after": {
+          "type": "integer",
+          "minimum": 0,
+          "title": "After",
+          "description": "Cursor for pagination",
+          "default": 0
+        },
+        "limit": {
+          "type": "integer",
+          "maximum": 1000,
+          "minimum": 1,
+          "title": "Limit",
+          "description": "Number of items to return",
+          "default": 10
+        }
+      },
+      "type": "object",
+      "title": "FilterByLastSeen"
+    },
+    "FilterByMultiple": {
+      "properties": {
+        "filter_criteria": {
+          "type": "string",
+          "const": "MULTIPLE",
+          "title": "Filter Criteria",
+          "default": "MULTIPLE"
+        },
+        "filters": {
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/FilterByBoundaryId"
+              },
+              {
+                "$ref": "#/$defs/FilterByBrand"
+              },
+              {
+                "$ref": "#/$defs/FilterByCategory"
+              },
+              {
+                "$ref": "#/$defs/FilterByLastSeen"
+              },
+              {
+                "$ref": "#/$defs/FilterByName"
+              },
+              {
+                "$ref": "#/$defs/FilterBySiteId"
+              },
+              {
+                "$ref": "#/$defs/FilterByTag"
+              },
+              {
+                "$ref": "#/$defs/FilterByType"
+              },
+              {
+                "$ref": "#/$defs/FilterByVisibility"
+              }
+            ]
+          },
+          "type": "array",
+          "minItems": 1,
+          "title": "Filters"
+        },
+        "after": {
+          "type": "integer",
+          "minimum": 0,
+          "title": "After",
+          "description": "Cursor for pagination",
+          "default": 0
+        },
+        "limit": {
+          "type": "integer",
+          "maximum": 1000,
+          "minimum": 1,
+          "title": "Limit",
+          "description": "Number of items to return",
+          "default": 10
+        }
+      },
+      "type": "object",
+      "required": [
+        "filters"
+      ],
+      "title": "FilterByMultiple"
+    },
+    "FilterByName": {
+      "properties": {
+        "operator": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EqualityOperator"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "filter_criteria": {
+          "type": "string",
+          "const": "NAME",
+          "title": "Filter Criteria",
+          "default": "NAME"
+        },
+        "names": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "maxItems": 1000,
+          "minItems": 1,
+          "title": "Names"
+        },
+        "after": {
+          "type": "integer",
+          "minimum": 0,
+          "title": "After",
+          "description": "Cursor for pagination",
+          "default": 0
+        },
+        "limit": {
+          "type": "integer",
+          "maximum": 1000,
+          "minimum": 1,
+          "title": "Limit",
+          "description": "Number of items to return",
+          "default": 10
+        }
+      },
+      "type": "object",
+      "required": [
+        "names"
+      ],
+      "title": "FilterByName"
+    },
+    "FilterBySiteId": {
+      "properties": {
+        "operator": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EqualityOperator"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "filter_criteria": {
+          "type": "string",
+          "const": "SITE_ID",
+          "title": "Filter Criteria",
+          "default": "SITE_ID"
+        },
+        "site_ids": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "type": "array",
+          "maxItems": 1000,
+          "minItems": 1,
+          "title": "Site Ids"
+        },
+        "after": {
+          "type": "integer",
+          "minimum": 0,
+          "title": "After",
+          "description": "Cursor for pagination",
+          "default": 0
+        },
+        "limit": {
+          "type": "integer",
+          "maximum": 1000,
+          "minimum": 1,
+          "title": "Limit",
+          "description": "Number of items to return",
+          "default": 10
+        }
+      },
+      "type": "object",
+      "required": [
+        "site_ids"
+      ],
+      "title": "FilterBySiteId"
+    },
+    "FilterByTag": {
+      "properties": {
+        "operator": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EqualityOperator"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "filter_criteria": {
+          "type": "string",
+          "const": "TAG",
+          "title": "Filter Criteria",
+          "default": "TAG"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "maxItems": 1000,
+          "minItems": 1,
+          "title": "Tags"
+        },
+        "after": {
+          "type": "integer",
+          "minimum": 0,
+          "title": "After",
+          "description": "Cursor for pagination",
+          "default": 0
+        },
+        "limit": {
+          "type": "integer",
+          "maximum": 1000,
+          "minimum": 1,
+          "title": "Limit",
+          "description": "Number of items to return",
+          "default": 10
+        }
+      },
+      "type": "object",
+      "required": [
+        "tags"
+      ],
+      "title": "FilterByTag"
+    },
+    "FilterByType": {
+      "properties": {
+        "operator": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EqualityOperator"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "filter_criteria": {
+          "type": "string",
+          "const": "TYPE",
+          "title": "Filter Criteria",
+          "default": "TYPE"
+        },
+        "types": {
+          "items": {
+            "$ref": "#/$defs/DeviceType"
+          },
+          "type": "array",
+          "maxItems": 1000,
+          "minItems": 1,
+          "title": "Types"
+        },
+        "after": {
+          "type": "integer",
+          "minimum": 0,
+          "title": "After",
+          "description": "Cursor for pagination",
+          "default": 0
+        },
+        "limit": {
+          "type": "integer",
+          "maximum": 1000,
+          "minimum": 1,
+          "title": "Limit",
+          "description": "Number of items to return",
+          "default": 10
+        }
+      },
+      "type": "object",
+      "required": [
+        "types"
+      ],
+      "title": "FilterByType"
+    },
+    "FilterByVisibility": {
+      "properties": {
+        "filter_criteria": {
+          "type": "string",
+          "const": "VISIBILITY",
+          "title": "Filter Criteria",
+          "default": "VISIBILITY"
+        },
+        "visibility": {
+          "$ref": "#/$defs/Visibility"
+        },
+        "after": {
+          "type": "integer",
+          "minimum": 0,
+          "title": "After",
+          "description": "Cursor for pagination",
+          "default": 0
+        },
+        "limit": {
+          "type": "integer",
+          "maximum": 1000,
+          "minimum": 1,
+          "title": "Limit",
+          "description": "Number of items to return",
+          "default": 10
+        }
+      },
+      "type": "object",
+      "required": [
+        "visibility"
+      ],
+      "title": "FilterByVisibility"
+    },
+    "IntegrationPropertyField-Input": {
+      "type": "string",
+      "pattern": "^integration\\..+$",
+      "title": "IntegrationPropertyField",
+      "description": "This model represents a device integration property field.\nIt makes sure that it has a prefix \"integration.<something>.\""
+    },
+    "Visibility": {
+      "type": "string",
+      "enum": [
+        "FULL",
+        "LIMITED"
+      ],
+      "title": "Visibility"
+    }
+  }
+}

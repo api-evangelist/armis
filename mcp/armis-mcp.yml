@@ -1,8 +1,32 @@
-generated: '2026-07-18'
+generated: '2026-10-20'
 method: searched
 status: published
 source: https://github.com/ArmisSecurity
 servers:
+- name: armis-developers-portal
+  status: published
+  transport: streamable-http
+  url: https://dev.armis.com/mcp
+  docs: https://dev.armis.com/docs/mcp
+  note: ReadMe-hosted developer-portal MCP server; tools/list answered anonymously 2026-10-20 (HTTP 200, text/event-stream),
+    saved verbatim at mcp/armis-dev-portal-mcp-tools-list.sse
+  tools:
+  - name: list-endpoints
+    description: Lists all API paths and their HTTP methods with summaries, organized by path. Results can be passed
+      directly into 'get-endpoint'.
+  - name: get-endpoint
+    description: Gets detailed information about a specific API endpoint, including security schemes and servers
+  - name: search-endpoints
+    description: Performs a deep search through paths, operations, and parameters to discover relevant API endpoints.
+      Use this tool to find specific API capabilities, required parameters, or data models based on search keywords.
+      Results can be passed directly into 'get-endpoint'.
+  - name: execute-request
+    description: Executes an API request with a given HAR request object.
+  - name: authenticate
+    description: '"Exchanges Armis Centrix™ credentials (Secret Key, Client ID, Vendor ID, and Tenant URL) for a
+      short-lived OAuth2 Bearer token. This tool implements the Client Credentials flow to authorize subsequent
+      requests to the Armis v3 API. The resulting token is valid for 15 minutes (900 seconds) and must be included
+      in the ''Authorization'' header as a Bearer token of all API calls."'
 - name: armis-knowledge
   status: published
   transport: streamable-http
@@ -32,10 +56,10 @@ servers:
     - ARMIS_CLIENT_ID
     - ARMIS_CLIENT_SECRET
     token_endpoint: POST /api/v1/auth/token
-    note: Exchanges client credentials for a short-lived JWT; tenant resolved server-side. Bridge proxies
-      stdio to the remote streamable-HTTP MCP endpoint.
-  description: Armis Knowledge — AppSec guidance MCP/skills bundle for Claude Code, Claude Desktop, Cursor.
-    Answers security questions, CWE fixes, framework/tech guidance from Armis knowledge base (data server-side).
+    note: Exchanges client credentials for a short-lived JWT; tenant resolved server-side. Bridge proxies stdio
+      to the remote streamable-HTTP MCP endpoint.
+  description: Armis Knowledge — AppSec guidance MCP/skills bundle for Claude Code, Claude Desktop, Cursor. Answers
+    security questions, CWE fixes, framework/tech guidance from Armis knowledge base (data server-side).
 - name: armis-appsec
   status: published
   transport: stdio
@@ -68,14 +92,14 @@ servers:
     description: Check scanner configuration status.
   slash_commands:
   - /security-scan
-  description: AI-powered real-time security scanning MCP plugin — scans code, files, and git diffs for
-    vulnerabilities via the Armis scanning API; includes a git pre-commit gate.
+  description: AI-powered real-time security scanning MCP plugin — scans code, files, and git diffs for vulnerabilities
+    via the Armis scanning API; includes a git pre-commit gate.
 deployment:
-  mode: none
-  endpoint: https://knowledge-mcp.moose.armis.com
+  mode: remote
+  endpoint: https://dev.armis.com/mcp
+  auth: none
   verified: probed
-  probe: dead
-  note: the endpoint this manifest claimed did not answer; recorded as none rather than deleted so the
-    claim stays auditable
-  checked: '2026-08-12'
-  source: catalog MCP census
+  checked: '2026-10-20'
+  source: https://dev.armis.com/docs/mcp
+  note: tools/list returned 5 tools without credentials; execute-request calls the tenant API, which needs an Armis
+    OAuth access token. The earlier knowledge-mcp.moose.armis.com endpoint answers 401 (opaque).

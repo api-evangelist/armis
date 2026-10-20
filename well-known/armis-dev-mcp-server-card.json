@@ -1,0 +1,1 @@
+{"$schema":"https://static.modelcontextprotocol.io/schemas/v1/server-card.schema.json","name":"com.readme/armis-developers-portal","version":"0.13.0","title":"Armis Developer Portal","description":"MCP server for Armis Developer Portal. Lets AI agents explore this project's API reference and documentation.","remotes":[{"type":"streamable-http","url":"https://dev.armis.com/mcp"}]}

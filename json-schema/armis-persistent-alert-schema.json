@@ -1,0 +1,465 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/armis/main/json-schema/armis-persistent-alert-schema.json",
+  "title": "PersistentAlert",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/armis-api-v3-api-openapi.yml#/components/schemas/PersistentAlert",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "title": "Id",
+      "description": "Unique identifier of the alert."
+    },
+    "severity": {
+      "$ref": "#/$defs/AlertSeverity",
+      "description": "Severity bucket derived from the alert's calculated risk score."
+    },
+    "type": {
+      "$ref": "#/$defs/AlertType",
+      "description": "Discriminator for how the alert was raised."
+    },
+    "status": {
+      "$ref": "#/$defs/AlertStatus",
+      "description": "Current triage state of the alert."
+    },
+    "activity_timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Activity Timestamp",
+      "description": "UTC timestamp when the activity that triggered the alert was observed."
+    },
+    "title": {
+      "type": "string",
+      "title": "Title",
+      "description": "Headline rendered in the alerts list and notification surfaces."
+    },
+    "classification": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Classification",
+      "description": "Resolved name of the alert classification taxonomy node."
+    },
+    "policy_id": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Policy Id",
+      "description": "Identifier of the policy that raised the alert."
+    },
+    "affected_devices_count": {
+      "type": "integer",
+      "title": "Affected Devices Count",
+      "description": "Number of distinct devices implicated in the alert."
+    },
+    "mitre_attack_labels": {
+      "items": {
+        "$ref": "#/$defs/MitreAttackLabel"
+      },
+      "type": "array",
+      "title": "Mitre Attack Labels",
+      "description": "MITRE ATT&CK technique annotations for the alert."
+    },
+    "status_change_time": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Status Change Time",
+      "description": "UTC timestamp of the most recent status transition."
+    },
+    "last_alert_update_time": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Last Alert Update Time",
+      "description": "UTC timestamp of the most recent enrichment refresh on the alert."
+    },
+    "description": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Description",
+      "description": "Long-form context describing what the alert means and why it triggered."
+    },
+    "activity_uuids": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "title": "Activity Uuids",
+      "description": "UUIDs of the activities that contributed to the alert."
+    },
+    "device_ids": {
+      "items": {
+        "type": "integer"
+      },
+      "type": "array",
+      "title": "Device Ids",
+      "description": "Device identifiers implicated in the alert."
+    },
+    "connection_ids": {
+      "items": {
+        "type": "integer"
+      },
+      "type": "array",
+      "title": "Connection Ids",
+      "description": "Connection (device-link) identifiers implicated in the alert."
+    },
+    "source_endpoints": {
+      "items": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/DeviceEndpoint"
+          },
+          {
+            "$ref": "#/$defs/IpAddressEndpoint"
+          },
+          {
+            "$ref": "#/$defs/HostEndpoint"
+          }
+        ]
+      },
+      "type": "array",
+      "title": "Source Endpoints",
+      "description": "Source endpoints of the activities that triggered the alert."
+    },
+    "destination_endpoints": {
+      "items": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/DeviceEndpoint"
+          },
+          {
+            "$ref": "#/$defs/IpAddressEndpoint"
+          },
+          {
+            "$ref": "#/$defs/HostEndpoint"
+          }
+        ]
+      },
+      "type": "array",
+      "title": "Destination Endpoints",
+      "description": "Destination endpoints of the activities that triggered the alert."
+    }
+  },
+  "type": "object",
+  "required": [
+    "id",
+    "severity",
+    "type",
+    "status",
+    "activity_timestamp",
+    "title",
+    "affected_devices_count",
+    "mitre_attack_labels",
+    "activity_uuids",
+    "device_ids",
+    "connection_ids",
+    "source_endpoints",
+    "destination_endpoints"
+  ],
+  "$defs": {
+    "AlertSeverity": {
+      "type": "string",
+      "enum": [
+        "LOW",
+        "MEDIUM",
+        "HIGH",
+        "CRITICAL"
+      ],
+      "title": "AlertSeverity"
+    },
+    "AlertStatus": {
+      "type": "string",
+      "enum": [
+        "IGNORED",
+        "OPEN",
+        "RESOLVED",
+        "SUPPRESSED",
+        "UNHANDLED"
+      ],
+      "title": "AlertStatus"
+    },
+    "AlertType": {
+      "type": "string",
+      "enum": [
+        "ANOMALY_DETECTION",
+        "SYSTEM_POLICY_VIOLATION",
+        "USER_POLICY_VIOLATION"
+      ],
+      "title": "AlertType"
+    },
+    "BusinessImpact": {
+      "type": "string",
+      "enum": [
+        "NONE",
+        "CRITICAL",
+        "HIGH",
+        "UNASSIGNED"
+      ],
+      "title": "BusinessImpact"
+    },
+    "DeviceEndpoint": {
+      "properties": {
+        "id": {
+          "type": "integer",
+          "title": "Id",
+          "description": "Device identifier."
+        },
+        "name": {
+          "type": "string",
+          "title": "Name",
+          "description": "Human-readable device label shown in the UI."
+        },
+        "ipv4_addresses": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Ipv4 Addresses",
+          "description": "IPv4 addresses of the device at the time of the alert."
+        },
+        "mac_addresses": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Mac Addresses",
+          "description": "MAC addresses observed on the device."
+        },
+        "risk_level": {
+          "anyOf": [
+            {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "ge": 0,
+              "le": 100
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Risk Level",
+          "description": "Overall risk score of the device, or mask string when redacted."
+        },
+        "business_impact": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/BusinessImpact"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Business Impact",
+          "description": "Business impact tier assigned to the device."
+        },
+        "data_sources": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Data Sources",
+          "description": "Data sources that contributed information about this device."
+        },
+        "boundary_names": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Boundary Names",
+          "description": "Boundary names the device belongs to."
+        },
+        "site_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Site Name",
+          "description": "Site name the device is associated with."
+        }
+      },
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ],
+      "title": "DeviceEndpoint"
+    },
+    "HostEndpoint": {
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "Id",
+          "description": "Hostname serving as the endpoint identifier."
+        },
+        "name": {
+          "type": "string",
+          "title": "Name",
+          "description": "Hostname display name."
+        }
+      },
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ],
+      "title": "HostEndpoint"
+    },
+    "IpAddressEndpoint": {
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "Id",
+          "description": "IP address serving as the endpoint identifier."
+        },
+        "name": {
+          "type": "string",
+          "title": "Name",
+          "description": "IP address display name."
+        },
+        "ipv4_address": {
+          "type": "string",
+          "format": "ipv4",
+          "title": "Ipv4 Address",
+          "description": "IPv4 address of the volatile endpoint."
+        }
+      },
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "ipv4_address"
+      ],
+      "title": "IpAddressEndpoint"
+    },
+    "MitreAttackLabel": {
+      "properties": {
+        "matrix": {
+          "$ref": "#/$defs/MitreMatrix",
+          "description": "MITRE ATT&CK matrix family this label belongs to."
+        },
+        "tactic": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Tactic",
+          "description": "High-level adversary objective from the MITRE matrix."
+        },
+        "technique": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Technique",
+          "description": "Specific adversary technique used to achieve the tactic."
+        },
+        "sub_technique": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Sub Technique",
+          "description": "Sub-technique under the parent technique, when applicable."
+        }
+      },
+      "type": "object",
+      "required": [
+        "matrix"
+      ],
+      "title": "MitreAttackLabel"
+    },
+    "MitreMatrix": {
+      "type": "string",
+      "enum": [
+        "ENTERPRISE",
+        "ICS",
+        "MOBILE"
+      ],
+      "title": "MitreMatrix"
+    }
+  }
+}

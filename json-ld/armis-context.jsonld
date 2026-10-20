@@ -1,0 +1,636 @@
+{
+  "@context": {
+    "@vocab": "https://armis.com/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "armis": "https://armis.com/schema#",
+    "AuthRequest": "armis:AuthRequest",
+    "audience": {
+      "@id": "armis:audience",
+      "@type": "xsd:string"
+    },
+    "grant_type": {
+      "@id": "armis:grant_type",
+      "@type": "xsd:string"
+    },
+    "client_id": {
+      "@id": "armis:client_id",
+      "@type": "xsd:string"
+    },
+    "client_secret": {
+      "@id": "armis:client_secret",
+      "@type": "xsd:string"
+    },
+    "vendor_id": {
+      "@id": "armis:vendor_id",
+      "@type": "xsd:string"
+    },
+    "scopes": {
+      "@id": "armis:scopes",
+      "@container": "@list"
+    },
+    "AuthResponse": "armis:AuthResponse",
+    "access_token": {
+      "@id": "armis:access_token",
+      "@type": "xsd:string"
+    },
+    "token_type": {
+      "@id": "armis:token_type",
+      "@type": "xsd:string"
+    },
+    "expires_in": {
+      "@id": "armis:expires_in",
+      "@type": "xsd:integer"
+    },
+    "HTTPValidationError": "armis:HTTPValidationError",
+    "detail": {
+      "@id": "armis:detail",
+      "@container": "@list"
+    },
+    "ValidationError": "armis:ValidationError",
+    "loc": {
+      "@id": "armis:loc",
+      "@container": "@list"
+    },
+    "msg": {
+      "@id": "armis:msg",
+      "@type": "xsd:string"
+    },
+    "type": {
+      "@id": "armis:type",
+      "@type": "xsd:string"
+    },
+    "input": {
+      "@id": "armis:input"
+    },
+    "ctx": {
+      "@id": "armis:ctx"
+    },
+    "AlertSeverity": "armis:AlertSeverity",
+    "AlertStatus": "armis:AlertStatus",
+    "AlertType": "armis:AlertType",
+    "BusinessImpact": "armis:BusinessImpact",
+    "DeviceEndpoint": "armis:DeviceEndpoint",
+    "id": {
+      "@id": "armis:id",
+      "@type": "xsd:integer"
+    },
+    "name": {
+      "@id": "armis:name",
+      "@type": "xsd:string"
+    },
+    "ipv4_addresses": {
+      "@id": "armis:ipv4_addresses"
+    },
+    "mac_addresses": {
+      "@id": "armis:mac_addresses"
+    },
+    "risk_level": {
+      "@id": "armis:risk_level"
+    },
+    "business_impact": {
+      "@id": "armis:business_impact"
+    },
+    "data_sources": {
+      "@id": "armis:data_sources"
+    },
+    "boundary_names": {
+      "@id": "armis:boundary_names"
+    },
+    "site_name": {
+      "@id": "armis:site_name"
+    },
+    "HostEndpoint": "armis:HostEndpoint",
+    "IpAddressEndpoint": "armis:IpAddressEndpoint",
+    "ipv4_address": {
+      "@id": "armis:ipv4_address",
+      "@type": "xsd:string"
+    },
+    "MitreAttackLabel": "armis:MitreAttackLabel",
+    "matrix": {
+      "@id": "armis:matrix",
+      "@type": "@id"
+    },
+    "tactic": {
+      "@id": "armis:tactic"
+    },
+    "technique": {
+      "@id": "armis:technique"
+    },
+    "sub_technique": {
+      "@id": "armis:sub_technique"
+    },
+    "MitreMatrix": "armis:MitreMatrix",
+    "PersistentAlert": "armis:PersistentAlert",
+    "severity": {
+      "@id": "armis:severity",
+      "@type": "@id"
+    },
+    "status": {
+      "@id": "armis:status",
+      "@type": "@id"
+    },
+    "activity_timestamp": {
+      "@id": "armis:activity_timestamp",
+      "@type": "xsd:dateTime"
+    },
+    "title": {
+      "@id": "armis:title",
+      "@type": "xsd:string"
+    },
+    "classification": {
+      "@id": "armis:classification"
+    },
+    "policy_id": {
+      "@id": "armis:policy_id"
+    },
+    "affected_devices_count": {
+      "@id": "armis:affected_devices_count",
+      "@type": "xsd:integer"
+    },
+    "mitre_attack_labels": {
+      "@id": "armis:mitre_attack_labels",
+      "@container": "@list"
+    },
+    "status_change_time": {
+      "@id": "armis:status_change_time"
+    },
+    "last_alert_update_time": {
+      "@id": "armis:last_alert_update_time"
+    },
+    "description": {
+      "@id": "armis:description"
+    },
+    "activity_uuids": {
+      "@id": "armis:activity_uuids",
+      "@container": "@list"
+    },
+    "device_ids": {
+      "@id": "armis:device_ids",
+      "@container": "@list"
+    },
+    "connection_ids": {
+      "@id": "armis:connection_ids",
+      "@container": "@list"
+    },
+    "source_endpoints": {
+      "@id": "armis:source_endpoints",
+      "@container": "@list"
+    },
+    "destination_endpoints": {
+      "@id": "armis:destination_endpoints",
+      "@container": "@list"
+    },
+    "ArpUploadError": "armis:ArpUploadError",
+    "message": {
+      "@id": "armis:message",
+      "@type": "xsd:string"
+    },
+    "line": {
+      "@id": "armis:line"
+    },
+    "column": {
+      "@id": "armis:column"
+    },
+    "value": {
+      "@id": "armis:value"
+    },
+    "error": {
+      "@id": "armis:error"
+    },
+    "ArpUploadRequest": "armis:ArpUploadRequest",
+    "file": {
+      "@id": "armis:file",
+      "@type": "xsd:string"
+    },
+    "expiration": {
+      "@id": "armis:expiration",
+      "@type": "xsd:dateTime"
+    },
+    "network_id": {
+      "@id": "armis:network_id",
+      "@type": "xsd:string"
+    },
+    "ArpUploadResponse": "armis:ArpUploadResponse",
+    "total_rows": {
+      "@id": "armis:total_rows",
+      "@type": "xsd:integer"
+    },
+    "accepted_records": {
+      "@id": "armis:accepted_records",
+      "@type": "xsd:integer"
+    },
+    "duplicate_rows": {
+      "@id": "armis:duplicate_rows",
+      "@type": "xsd:integer"
+    },
+    "AssetIdSource": "armis:AssetIdSource",
+    "AssetType": "armis:AssetType",
+    "BulkItemResponse": "armis:BulkItemResponse",
+    "BulkItemSetRequest": "armis:BulkItemSetRequest",
+    "asset_id": {
+      "@id": "armis:asset_id"
+    },
+    "operation": {
+      "@id": "armis:operation",
+      "@type": "xsd:string"
+    },
+    "key": {
+      "@id": "armis:key",
+      "@type": "xsd:string"
+    },
+    "BulkItemUnsetRequest": "armis:BulkItemUnsetRequest",
+    "BulkRequest": "armis:BulkRequest",
+    "asset_type": {
+      "@id": "armis:asset_type",
+      "@type": "@id"
+    },
+    "asset_id_source": {
+      "@id": "armis:asset_id_source",
+      "@type": "@id"
+    },
+    "items": {
+      "@id": "armis:items",
+      "@container": "@list"
+    },
+    "BulkResponse": "armis:BulkResponse",
+    "AssetField": "armis:AssetField",
+    "AssetResponse": "armis:AssetResponse",
+    "fields": {
+      "@id": "armis:fields"
+    },
+    "DeviceCategory": "armis:DeviceCategory",
+    "DeviceType": "armis:DeviceType",
+    "EqualityOperator": "armis:EqualityOperator",
+    "FilterByAssetId": "armis:FilterByAssetId",
+    "filter_criteria": {
+      "@id": "armis:filter_criteria",
+      "@type": "xsd:string"
+    },
+    "asset_ids": {
+      "@id": "armis:asset_ids",
+      "@container": "@list"
+    },
+    "FilterByBoundaryId": "armis:FilterByBoundaryId",
+    "operator": {
+      "@id": "armis:operator"
+    },
+    "boundary_ids": {
+      "@id": "armis:boundary_ids",
+      "@container": "@list"
+    },
+    "after": {
+      "@id": "armis:after",
+      "@type": "xsd:integer"
+    },
+    "limit": {
+      "@id": "armis:limit",
+      "@type": "xsd:integer"
+    },
+    "FilterByBrand": "armis:FilterByBrand",
+    "brands": {
+      "@id": "armis:brands",
+      "@container": "@list"
+    },
+    "FilterByCategory": "armis:FilterByCategory",
+    "categories": {
+      "@id": "armis:categories",
+      "@container": "@list"
+    },
+    "FilterByLastSeen": "armis:FilterByLastSeen",
+    "last_seen_ge": {
+      "@id": "armis:last_seen_ge"
+    },
+    "last_seen_seconds": {
+      "@id": "armis:last_seen_seconds"
+    },
+    "FilterByMultiple": "armis:FilterByMultiple",
+    "filters": {
+      "@id": "armis:filters",
+      "@container": "@list"
+    },
+    "FilterByName": "armis:FilterByName",
+    "names": {
+      "@id": "armis:names",
+      "@container": "@list"
+    },
+    "FilterBySiteId": "armis:FilterBySiteId",
+    "site_ids": {
+      "@id": "armis:site_ids",
+      "@container": "@list"
+    },
+    "FilterByTag": "armis:FilterByTag",
+    "tags": {
+      "@id": "armis:tags",
+      "@container": "@list"
+    },
+    "FilterByType": "armis:FilterByType",
+    "types": {
+      "@id": "armis:types",
+      "@container": "@list"
+    },
+    "FilterByVisibility": "armis:FilterByVisibility",
+    "visibility": {
+      "@id": "armis:visibility",
+      "@type": "@id"
+    },
+    "SearchAssetsRequest": "armis:SearchAssetsRequest",
+    "filter": {
+      "@id": "armis:filter"
+    },
+    "SearchAssetsResponse": "armis:SearchAssetsResponse",
+    "next": {
+      "@id": "armis:next"
+    },
+    "Visibility": "armis:Visibility",
+    "FieldDescription": "armis:FieldDescription",
+    "is_list": {
+      "@id": "armis:is_list",
+      "@type": "xsd:boolean"
+    },
+    "FieldType": "armis:FieldType",
+    "SearchFieldsResponse": "armis:SearchFieldsResponse",
+    "AndRule": "armis:AndRule",
+    "or": {
+      "@id": "armis:or",
+      "@container": "@list"
+    },
+    "BoundaryCreateRequest": "armis:BoundaryCreateRequest",
+    "asq_rule": {
+      "@id": "armis:asq_rule"
+    },
+    "OrRule": "armis:OrRule",
+    "and": {
+      "@id": "armis:and",
+      "@container": "@list"
+    },
+    "PersistentBoundary": "armis:PersistentBoundary",
+    "sites": {
+      "@id": "armis:sites",
+      "@container": "@list"
+    },
+    "PersistentSite": "armis:PersistentSite",
+    "location": {
+      "@id": "armis:location"
+    },
+    "parent_id": {
+      "@id": "armis:parent_id"
+    },
+    "tier": {
+      "@id": "armis:tier"
+    },
+    "asq_rule_description": {
+      "@id": "armis:asq_rule_description"
+    },
+    "network_equipment_device_ids": {
+      "@id": "armis:network_equipment_device_ids"
+    },
+    "integration_ids": {
+      "@id": "armis:integration_ids"
+    },
+    "lat": {
+      "@id": "armis:lat"
+    },
+    "lng": {
+      "@id": "armis:lng"
+    },
+    "PersistentBoundaryItems": "armis:PersistentBoundaryItems",
+    "BoundaryUpdateRequest": "armis:BoundaryUpdateRequest",
+    "HealthState": "armis:HealthState",
+    "IntegrationCycleStatistics": "armis:IntegrationCycleStatistics",
+    "entity_type": {
+      "@id": "armis:entity_type",
+      "@type": "xsd:string"
+    },
+    "post_filter_amount": {
+      "@id": "armis:post_filter_amount"
+    },
+    "sent_to_armis_amount": {
+      "@id": "armis:sent_to_armis_amount"
+    },
+    "unique_armis_records_amount": {
+      "@id": "armis:unique_armis_records_amount"
+    },
+    "IntegrationName": "armis:IntegrationName",
+    "IntegrationState": "armis:IntegrationState",
+    "IntegrationStatistics": "armis:IntegrationStatistics",
+    "error_details": {
+      "@id": "armis:error_details"
+    },
+    "last_successful_cycle_ended": {
+      "@id": "armis:last_successful_cycle_ended"
+    },
+    "status_created_at": {
+      "@id": "armis:status_created_at"
+    },
+    "status_changed_at": {
+      "@id": "armis:status_changed_at"
+    },
+    "cycle_statistics": {
+      "@id": "armis:cycle_statistics"
+    },
+    "IntegrationStatus": "armis:IntegrationStatus",
+    "PersistentIntegration": "armis:PersistentIntegration",
+    "instance_name": {
+      "@id": "armis:instance_name",
+      "@type": "xsd:string"
+    },
+    "params": {
+      "@id": "armis:params"
+    },
+    "state": {
+      "@id": "armis:state",
+      "@type": "@id"
+    },
+    "collector_id": {
+      "@id": "armis:collector_id"
+    },
+    "broker_id": {
+      "@id": "armis:broker_id"
+    },
+    "creation_time": {
+      "@id": "armis:creation_time",
+      "@type": "xsd:dateTime"
+    },
+    "params_change_time": {
+      "@id": "armis:params_change_time"
+    },
+    "current_state": {
+      "@id": "armis:current_state"
+    },
+    "statistics": {
+      "@id": "armis:statistics"
+    },
+    "PersistentIntegrationItems": "armis:PersistentIntegrationItems",
+    "IntegrationCreateRequest": "armis:IntegrationCreateRequest",
+    "IntegrationUpdateRequest": "armis:IntegrationUpdateRequest",
+    "IntegrationSearchFilter": "armis:IntegrationSearchFilter",
+    "ids": {
+      "@id": "armis:ids"
+    },
+    "states": {
+      "@id": "armis:states"
+    },
+    "collector_ids": {
+      "@id": "armis:collector_ids"
+    },
+    "broker_ids": {
+      "@id": "armis:broker_ids"
+    },
+    "IntegrationSearchRequest": "armis:IntegrationSearchRequest",
+    "SiteCreateRequest": "armis:SiteCreateRequest",
+    "PersistentSiteItems": "armis:PersistentSiteItems",
+    "SiteUpdateRequest": "armis:SiteUpdateRequest",
+    "PersistentPolicy": "armis:PersistentPolicy",
+    "is_enabled": {
+      "@id": "armis:is_enabled",
+      "@type": "xsd:boolean"
+    },
+    "rule_type": {
+      "@id": "armis:rule_type",
+      "@type": "@id"
+    },
+    "labels": {
+      "@id": "armis:labels"
+    },
+    "actions": {
+      "@id": "armis:actions",
+      "@container": "@list"
+    },
+    "PersistentPolicyItems": "armis:PersistentPolicyItems",
+    "PolicyAction": "armis:PolicyAction",
+    "PolicyActionType": "armis:PolicyActionType",
+    "PolicyRuleType": "armis:PolicyRuleType",
+    "Config": "armis:Config",
+    "allowed_values": {
+      "@id": "armis:allowed_values"
+    },
+    "PersistentConfig": "armis:PersistentConfig",
+    "created_by": {
+      "@id": "armis:created_by",
+      "@type": "xsd:string"
+    },
+    "PersistentConfigItems": "armis:PersistentConfigItems",
+    "PartialConfigRequest": "armis:PartialConfigRequest",
+    "CollectorImageDetails": "armis:CollectorImageDetails",
+    "image_password": {
+      "@id": "armis:image_password",
+      "@type": "xsd:string"
+    },
+    "image_type": {
+      "@id": "armis:image_type",
+      "@type": "@id"
+    },
+    "url": {
+      "@id": "armis:url",
+      "@type": "xsd:string"
+    },
+    "url_expiration_date": {
+      "@id": "armis:url_expiration_date",
+      "@type": "xsd:dateTime"
+    },
+    "ImageType": "armis:ImageType",
+    "ApplicationUpdateStatus": "armis:ApplicationUpdateStatus",
+    "CollectorRuntime": "armis:CollectorRuntime",
+    "CollectorStatus": "armis:CollectorStatus",
+    "CollectorType": "armis:CollectorType",
+    "PersistentCollector": "armis:PersistentCollector",
+    "collector_number": {
+      "@id": "armis:collector_number",
+      "@type": "xsd:integer"
+    },
+    "ip_address": {
+      "@id": "armis:ip_address"
+    },
+    "last_seen": {
+      "@id": "armis:last_seen"
+    },
+    "mac_address": {
+      "@id": "armis:mac_address"
+    },
+    "subnet": {
+      "@id": "armis:subnet"
+    },
+    "default_gateway": {
+      "@id": "armis:default_gateway"
+    },
+    "cluster_id": {
+      "@id": "armis:cluster_id"
+    },
+    "https_proxy_redacted": {
+      "@id": "armis:https_proxy_redacted"
+    },
+    "system_vendor": {
+      "@id": "armis:system_vendor"
+    },
+    "k8s_namespace": {
+      "@id": "armis:k8s_namespace"
+    },
+    "serial_number": {
+      "@id": "armis:serial_number"
+    },
+    "source_deployment_type": {
+      "@id": "armis:source_deployment_type"
+    },
+    "last_boot_time": {
+      "@id": "armis:last_boot_time"
+    },
+    "creation_date": {
+      "@id": "armis:creation_date"
+    },
+    "tracking_number": {
+      "@id": "armis:tracking_number"
+    },
+    "order_status_update": {
+      "@id": "armis:order_status_update"
+    },
+    "configui_password_expiry_date": {
+      "@id": "armis:configui_password_expiry_date"
+    },
+    "collector_runtime": {
+      "@id": "armis:collector_runtime"
+    },
+    "application_version": {
+      "@id": "armis:application_version"
+    },
+    "application_update": {
+      "@id": "armis:application_update"
+    },
+    "PersistentCollectorItems": "armis:PersistentCollectorItems",
+    "SourceDeploymentType": "armis:SourceDeploymentType",
+    "DataExportEntity": "armis:DataExportEntity",
+    "DataExportGetResponse": "armis:DataExportGetResponse",
+    "urls": {
+      "@id": "armis:urls",
+      "@container": "@list"
+    },
+    "urls_creation_time": {
+      "@id": "armis:urls_creation_time"
+    },
+    "enabled": {
+      "@id": "armis:enabled",
+      "@type": "xsd:boolean"
+    },
+    "file_format": {
+      "@id": "armis:file_format",
+      "@type": "xsd:string"
+    },
+    "source_data_timestamp": {
+      "@id": "armis:source_data_timestamp"
+    },
+    "DataExportPatchRequest": "armis:DataExportPatchRequest",
+    "time_frame_days": {
+      "@id": "armis:time_frame_days"
+    },
+    "DataExportPatchResponse": "armis:DataExportPatchResponse",
+    "DataExportCreateRequest": "armis:DataExportCreateRequest"
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "Armis API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects Armis's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-20) from openapi/armis-api-v3-api-openapi.yml.",
+  "dcterms:created": "2026-10-20",
+  "dcterms:source": [
+    "openapi/armis-api-v3-api-openapi.yml"
+  ]
+}

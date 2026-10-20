@@ -1,0 +1,16 @@
+name: Armis rate limits
+generated: '2026-10-20'
+method: searched
+source: https://dev.armis.com/docs/rate-limiting
+limit_count: 1
+limits:
+- name: All API endpoints
+  limit_text: 200 requests per 5 minutes
+  max: 200
+  window: 5 minutes
+  scope: per-sender (all endpoints collectively)
+exhaustion:
+  status: 429
+  text: 429 Too Many Requests
+headers: []
+note: Docs do not name rate-limit response headers; they recommend exponential backoff.

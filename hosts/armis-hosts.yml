@@ -1,0 +1,156 @@
+generated: '2026-10-20'
+method: derived
+source: the pre-flight dossier, apis.yml pointers, spec servers, well-known, vendors -- nothing fetched here
+generator: derive-hosts.py
+summary:
+  hosts: 11
+  own: 9
+  other_domain: 0
+  platform: 2
+  roles:
+  - api
+  - docs
+  - other
+  - portal
+  - source
+  - support
+  - website
+hosts:
+- host: api.armis.com
+  found_by:
+  - apis[]
+  - contract-discovery
+  types: []
+  serves:
+  - api
+  registrable_domain: armis.com
+  role: api
+  relation: own
+- host: armis-python-sdk.readthedocs.io
+  found_by:
+  - pointer
+  types:
+  - Documentation
+  serves: []
+  registrable_domain: readthedocs.io
+  role: docs
+  relation: platform
+- host: cve.armis.com
+  found_by:
+  - probed
+  - site-links
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: armis.com
+  role: other
+  relation: own
+- host: dev.armis.com
+  found_by:
+  - pointer
+  - apis[]
+  - probed
+  - site-links
+  - namespace-probe
+  - docs-index
+  - well-known
+  types:
+  - Documentation
+  - APIReference
+  - ChangeLog
+  serves:
+  - docs
+  - api
+  title: Welcome to the Armis Developer Portal
+  status: 200
+  registrable_domain: armis.com
+  role: docs
+  relation: own
+- host: developers.armis.com
+  found_by:
+  - pointer
+  - probed
+  - site-links
+  - docs-index
+  - contract-discovery
+  - well-known
+  types:
+  - DeveloperPortal
+  serves:
+  - docs
+  registrable_domain: armis.com
+  role: portal
+  relation: own
+- host: github.com
+  found_by:
+  - pointer
+  types:
+  - GitHubOrganization
+  serves: []
+  registrable_domain: github.com
+  role: source
+  relation: platform
+- host: knowledge-mcp.moose.armis.com
+  found_by:
+  - probed
+  - contract-discovery
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: armis.com
+  role: other
+  relation: own
+- host: partnerportal.armis.com
+  found_by:
+  - probed
+  - site-links
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: armis.com
+  role: other
+  relation: own
+- host: support.armis.com
+  found_by:
+  - pointer
+  - probed
+  - site-links
+  - contract-discovery
+  - well-known
+  types:
+  - Support
+  serves: []
+  registrable_domain: armis.com
+  role: support
+  relation: own
+- host: trust.armis.com
+  found_by:
+  - pointer
+  - probed
+  - site-links
+  - well-known
+  types:
+  - Compliance
+  serves: []
+  platform: app.safebase.io
+  registrable_domain: armis.com
+  role: other
+  relation: own
+- host: www.armis.com
+  found_by:
+  - pointer
+  - probed
+  - contract-discovery
+  - well-known
+  - vendor-detect
+  types:
+  - Newsroom
+  - Website
+  - Blog
+  serves:
+  - cdn
+  - hosting
+  vendor: cloudflare
+  registrable_domain: armis.com
+  role: website
+  relation: own

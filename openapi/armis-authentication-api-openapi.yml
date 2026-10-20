@@ -1,0 +1,227 @@
+openapi: 3.2.0
+info:
+  title: Armis API v3 Authentication API
+  version: 0.13.0
+  description: Manage authentication of the API.
+servers:
+- url: https://api.armis.com/v3
+tags:
+- name: Authentication
+  description: Manage authentication of the API.
+paths:
+  /oauth/token:
+    post:
+      tags:
+      - Authentication
+      summary: Create an access token for consuming the API
+      description: 'Use this endpoint to create an access token.
+
+
+        You then authorize calls to the other endpoints by adding the header: "Authorization: Bearer ".'
+      operationId: post_oauth_token_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    AuthRequest:
+      properties:
+        audience:
+          type: string
+          title: Audience
+          description: Value has to be the full tenant's domain with scheme and trailing slash
+          examples:
+          - https://acme.armis.com/
+        grant_type:
+          type: string
+          const: client_credentials
+          title: Grant Type
+        client_id:
+          type: string
+          title: Client Id
+          description: Use email of the user that created the 'client_secret'
+        client_secret:
+          type: string
+          title: Client Secret
+          description: To obtain the secret, go to https://<tenant>.armis.com/settings/api-management
+        vendor_id:
+          type: string
+          title: Vendor Id
+          description: The Vendor ID you received upon singing up to the developer portal
+        scopes:
+          items:
+            type: string
+            enum:
+            - FULL_VISIBILITY
+            - PERMISSION.ALERT.READ
+            - PERMISSION.DEVICE.MANAGE
+            - PERMISSION.DEVICE.MANAGE.EDIT
+            - PERMISSION.DEVICE.READ
+            - PERMISSION.PII.DEVICE
+            - PERMISSION.POLICY.READ
+            - PERMISSION.REPORT.MANAGE.CREATE
+            - PERMISSION.REPORT.MANAGE.DELETE
+            - PERMISSION.REPORT.READ
+            - PERMISSION.SETTINGS.BOUNDARY.MANAGE.CREATE
+            - PERMISSION.SETTINGS.BOUNDARY.MANAGE.DELETE
+            - PERMISSION.SETTINGS.BOUNDARY.MANAGE.EDIT
+            - PERMISSION.SETTINGS.BOUNDARY.READ
+            - PERMISSION.SETTINGS.COLLECTOR.READ
+            - PERMISSION.SETTINGS.CUSTOM_PROPERTIES.MANAGE
+            - PERMISSION.SETTINGS.CUSTOM_PROPERTIES.READ
+            - PERMISSION.SETTINGS.INTEGRATION.MANAGE
+            - PERMISSION.SETTINGS.INTEGRATION.READ
+            - PERMISSION.SETTINGS.SITES_AND_SENSORS.MANAGE.SITES
+            - PERMISSION.SETTINGS.SITES_AND_SENSORS.READ
+            - PERMISSION.VMDR
+            - PERMISSION.VMDR.READ
+          type: array
+          title: Scopes
+          description: A list of scopes to grant access to
+          examples:
+          - - PERMISSION.DEVICE.READ
+            - PERMISSION.REPORT.READ
+      type: object
+      required:
+      - audience
+      - grant_type
+      - client_id
+      - client_secret
+      - vendor_id
+      title: AuthRequest
+      examples:
+      - audience: https://acme.armis.com/
+        client_id: foo@acme.com
+        client_secret: 4b8d7e47f49e6bbfffc3d681a08062f42bd46d08b851c23081891338b83ed8cb
+        grant_type: client_credentials
+        scopes:
+        - PERMISSION.DEVICE.READ
+        - PERMISSION.REPORT.READ
+        vendor_id: my-vendor-id
+    AuthResponse:
+      properties:
+        access_token:
+          type: string
+          title: Access Token
+        token_type:
+          type: string
+          const: Bearer
+          title: Token Type
+        expires_in:
+          type: integer
+          title: Expires In
+          description: Expiration time in seconds
+      type: object
+      required:
+      - access_token
+      - token_type
+      - expires_in
+      title: AuthResponse
+      examples:
+      - access_token: 8fad727f618d916e7750ba18721dea21d9d5a0fe3c3f3711ac86c2207bb13c9a
+        expires_in: 900
+        token_type: Bearer
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-Armis-Client-Name
+x-provenance:
+  method: searched
+  source: https://dev.armis.com/reference
+  harvested: '2026-10-20'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://dev.armis.com/reference/delete_settings_boundaries__boundary_id__delete.md
+  - https://dev.armis.com/reference/delete_settings_device_custom_properties__config_id__delete.md
+  - https://dev.armis.com/reference/delete_settings_integrations__integration_id__delete.md
+  - https://dev.armis.com/reference/delete_settings_sites__site_id__delete.md
+  - https://dev.armis.com/reference/enable_data_export__entity___enable_post.md
+  - https://dev.armis.com/reference/fields_assets__search_fields_get.md
+  - https://dev.armis.com/reference/get_alerts__alert_id__get.md
+  - https://dev.armis.com/reference/get_collectors__collector_number__get.md
+  - https://dev.armis.com/reference/get_collectors__image_get.md
+  - https://dev.armis.com/reference/get_collectors_get.md
+  - https://dev.armis.com/reference/get_data_export__entity__get.md
+  - https://dev.armis.com/reference/get_policies_get.md
+  - https://dev.armis.com/reference/get_settings_boundaries__boundary_id__get.md
+  - https://dev.armis.com/reference/get_settings_boundaries_get.md
+  - https://dev.armis.com/reference/get_settings_device_custom_properties__config_id__get.md
+  - https://dev.armis.com/reference/get_settings_device_custom_properties_get.md
+  - https://dev.armis.com/reference/get_settings_integrations__integration_id__get.md
+  - https://dev.armis.com/reference/get_settings_integrations_get.md
+  - https://dev.armis.com/reference/get_settings_sites__site_id__get.md
+  - https://dev.armis.com/reference/get_settings_sites_get.md
+  - https://dev.armis.com/reference/patch_settings_boundaries__boundary_id__patch.md
+  - https://dev.armis.com/reference/patch_settings_device_custom_properties__config_id__patch.md
+  - https://dev.armis.com/reference/patch_settings_integrations__integration_id__patch.md
+  - https://dev.armis.com/reference/patch_settings_sites__site_id__patch.md
+  - https://dev.armis.com/reference/post_arps_post.md
+  - https://dev.armis.com/reference/post_assets__bulk_post.md
+  - https://dev.armis.com/reference/post_oauth_token_post.md
+  - https://dev.armis.com/reference/post_settings_boundaries_post.md
+  - https://dev.armis.com/reference/post_settings_device_custom_properties_post.md
+  - https://dev.armis.com/reference/post_settings_integrations_post.md
+  - https://dev.armis.com/reference/post_settings_sites_post.md
+  - https://dev.armis.com/reference/search_assets__search_post.md
+  - https://dev.armis.com/reference/search_settings_integrations__search_post.md
+  - https://dev.armis.com/reference/toggle_data_export__entity__patch.md
+  merge:
+    pages: 34
+    deduped: 206
+    conflicts_kept_first: 0

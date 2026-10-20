@@ -1,5 +1,15 @@
-generated: '2026-10-13'
+generated: '2026-10-20'
 method: searched
+source:
+- crowdstrike/integrations/crowdstrike-integration-edges.yml
+- microsoft-sentinel/integrations/microsoft-sentinel-integration-edges.yml
+- okta/integrations/okta-integration-edges.yml
+- palo-alto-networks/integrations/palo-alto-networks-integration-edges.yml
+- splunk/integrations/splunk-integration-edges.yml
+- https://zapier.com/apps/armis/integrations
+- https://n8n.io/integrations/armis/
+- https://composio.dev/toolkits/armis
+- https://monid.ai/tools/armis
 checked:
 - crowdstrike/integrations/crowdstrike-integration-edges.yml
 - https://aws.amazon.com/marketplace/
@@ -10,6 +20,11 @@ checked:
 - okta/integrations/okta-integration-edges.yml
 - palo-alto-networks/integrations/palo-alto-networks-integration-edges.yml
 - splunk/integrations/splunk-integration-edges.yml
+- https://composio.dev/toolkits/armis
+- https://monid.ai/tools/armis
+- https://n8n.io/integrations/armis/
+- https://zapier.com/apps/armis/integrations
+summary: null
 marketplace_apps: []
 edges:
 - partner_name: AWS Marketplace
@@ -172,9 +187,4 @@ edges:
     detected: '2026-10-20'
   detected_by: sweep-compliance-assurance.py
   first_seen: '2026-10-20'
-source:
-- crowdstrike/integrations/crowdstrike-integration-edges.yml
-- microsoft-sentinel/integrations/microsoft-sentinel-integration-edges.yml
-- okta/integrations/okta-integration-edges.yml
-- palo-alto-networks/integrations/palo-alto-networks-integration-edges.yml
-- splunk/integrations/splunk-integration-edges.yml
+templates: []

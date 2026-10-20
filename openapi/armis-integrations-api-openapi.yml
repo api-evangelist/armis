@@ -1,0 +1,1083 @@
+openapi: 3.2.0
+info:
+  title: Armis API v3 Integrations API
+  version: 0.13.0
+servers:
+- url: https://api.armis.com/v3
+tags:
+- name: Integrations
+paths:
+  /settings/integrations:
+    get:
+      tags:
+      - Integrations
+      summary: List integrations
+      description: '### Required scopes:
+
+        * `PERMISSION.SETTINGS.INTEGRATION.READ`'
+      operationId: get_settings_integrations_get
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: after
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: After
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 10
+          title: Limit
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersistentIntegrationItems'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Integrations
+      summary: Create a new integration
+      description: '### Required scopes:
+
+        * `PERMISSION.SETTINGS.INTEGRATION.MANAGE`'
+      operationId: post_settings_integrations_post
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntegrationCreateRequest'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersistentIntegration'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /settings/integrations/_search:
+    post:
+      tags:
+      - Integrations
+      summary: Search integrations that match a certain criteria
+      description: '### Required scopes:
+
+        * `PERMISSION.SETTINGS.INTEGRATION.READ`'
+      operationId: search_settings_integrations__search_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntegrationSearchRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersistentIntegrationItems'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+  /settings/integrations/{integration_id}:
+    get:
+      tags:
+      - Integrations
+      summary: Get an integration
+      description: '### Required scopes:
+
+        * `PERMISSION.SETTINGS.INTEGRATION.READ`'
+      operationId: get_settings_integrations__integration_id__get
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: integration_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Integration Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersistentIntegration'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Integrations
+      summary: Delete an integration
+      description: '### Required scopes:
+
+        * `PERMISSION.SETTINGS.INTEGRATION.MANAGE`'
+      operationId: delete_settings_integrations__integration_id__delete
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: integration_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Integration Id
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - Integrations
+      summary: Update an integration
+      description: '### Required scopes:
+
+        * `PERMISSION.SETTINGS.INTEGRATION.MANAGE`'
+      operationId: patch_settings_integrations__integration_id__patch
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: integration_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Integration Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntegrationUpdateRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersistentIntegration'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    IntegrationSearchFilter:
+      properties:
+        ids:
+          anyOf:
+          - items:
+              type: integer
+            type: array
+          - type: 'null'
+          title: Ids
+          description: Filter by integration IDs
+        names:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/IntegrationName'
+            type: array
+          - type: 'null'
+          title: Names
+          description: Filter by integration display name (e.g., 'Cisco Meraki', 'Network Mapper')
+        states:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/IntegrationState'
+            type: array
+          - type: 'null'
+          title: States
+          description: Filter by integration state
+        collector_ids:
+          anyOf:
+          - items:
+              type: integer
+            type: array
+          - type: 'null'
+          title: Collector Ids
+          description: Filter by associated collector IDs
+        broker_ids:
+          anyOf:
+          - items:
+              type: integer
+            type: array
+          - type: 'null'
+          title: Broker Ids
+          description: Filter by associated broker IDs
+      type: object
+      title: IntegrationSearchFilter
+    IntegrationCreateRequest:
+      properties:
+        name:
+          $ref: '#/components/schemas/IntegrationName'
+          description: The integration display name (e.g., 'CrowdStrike', 'Network Mapper')
+        instance_name:
+          type: string
+          minLength: 1
+          title: Instance Name
+          description: The integration instance name
+        params:
+          type: object
+          title: Params
+          description: Integration parameters
+        state:
+          $ref: '#/components/schemas/IntegrationState'
+          description: The integration state
+          default: ACTIVE
+        collector_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Collector Id
+          description: The ID of the collector associated with this integration
+        broker_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Broker Id
+          description: The ID of the broker associated with this integration
+      type: object
+      required:
+      - name
+      - instance_name
+      - params
+      title: IntegrationCreateRequest
+      examples:
+      - collector_id: 10
+        instance_name: Network-Mapper-HQ
+        name: Network Mapper
+        params:
+          crawler_device_enrichment: true
+          ip_list: 10.199.0.10, 10.199.0.2
+          mapper_query_method: snmp
+          mapper_snmp_credentials: '***'
+          scope: all_nodes
+          site_scope:
+            enabled: false
+    IntegrationState:
+      type: string
+      enum:
+      - ACTIVE
+      - DRAFT
+      - INACTIVE
+      title: IntegrationState
+    IntegrationCycleStatistics:
+      properties:
+        entity_type:
+          type: string
+          title: Entity Type
+          description: The entity type synced in the cycle
+        post_filter_amount:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Post Filter Amount
+          description: Amount of records after filtering
+        sent_to_armis_amount:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Sent To Armis Amount
+          description: Amount of records sent to Armis
+        unique_armis_records_amount:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Unique Armis Records Amount
+          description: Amount of unique Armis records
+      type: object
+      required:
+      - entity_type
+      title: IntegrationCycleStatistics
+    PersistentIntegrationItems:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/PersistentIntegration'
+          type: array
+          title: Items
+        next:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next
+      type: object
+      required:
+      - items
+      title: PersistentIntegrationItems
+      examples:
+      - items:
+        - creation_time: '2026-06-17T10:34:17.418146Z'
+          current_state: IDLE
+          id: 73902
+          instance_name: new central
+          name: Aruba New Central
+          params:
+            aruba_new_central_base_url: de1.api.central.arubanetworks.com
+            aruba_new_central_client_id: 8cd0c007-0956-4f19-b648-343a5156c0a3
+            aruba_new_central_client_secret: '********'
+            integration_schedule:
+              crontab: 0 */8 * * *
+          params_change_time: '2026-06-17T10:35:43.531745Z'
+          state: ACTIVE
+          statistics:
+            cycle_statistics:
+            - entity_type: Access Points
+              post_filter_amount: 2
+              sent_to_armis_amount: 2
+              unique_armis_records_amount: 2
+            - entity_type: Switches
+              post_filter_amount: 1
+              sent_to_armis_amount: 1
+              unique_armis_records_amount: 1
+            last_successful_cycle_ended: '2026-06-24T07:23:04.342905Z'
+            status: ACTIVE
+            status_changed_at: '2026-06-24T07:23:07.680339Z'
+            status_created_at: '2026-06-17T10:34:17.447885Z'
+        next: NzM0MzI=
+    IntegrationStatistics:
+      properties:
+        status:
+          anyOf:
+          - $ref: '#/components/schemas/IntegrationStatus'
+          - type: 'null'
+          description: The integration status
+        error_details:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error Details
+          description: Raw error details of the last run
+        last_successful_cycle_ended:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Successful Cycle Ended
+          description: When the last successful cycle ended
+        status_created_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Status Created At
+          description: When the status was first reported
+        status_changed_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Status Changed At
+          description: When the status last changed
+        cycle_statistics:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/IntegrationCycleStatistics'
+            type: array
+          - type: 'null'
+          title: Cycle Statistics
+          description: Per-entity-type statistics of the last cycle
+      type: object
+      title: IntegrationStatistics
+    HealthState:
+      type: string
+      enum:
+      - IDLE
+      - INITIALIZING
+      - RUNNING
+      - SYNCING_CHANGES
+      - WAITING_FOR_COLLECTOR
+      title: HealthState
+    IntegrationUpdateRequest:
+      properties:
+        instance_name:
+          anyOf:
+          - type: string
+            minLength: 1
+          - type: 'null'
+          title: Instance Name
+          description: The integration instance name
+        params:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Params
+          description: Integration parameters
+        state:
+          anyOf:
+          - $ref: '#/components/schemas/IntegrationState'
+          - type: 'null'
+          description: The integration state
+        collector_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Collector Id
+          description: The ID of the collector associated with this integration
+        broker_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Broker Id
+          description: The ID of the broker associated with this integration
+      type: object
+      title: IntegrationUpdateRequest
+      examples:
+      - collector_id: 10
+        instance_name: Network-Mapper-HQ
+        params:
+          crawler_device_enrichment: true
+          ip_list: 10.199.0.10, 10.199.0.2
+          mapper_query_method: snmp
+          mapper_snmp_credentials: '***'
+          scope: all_nodes
+          site_scope:
+            enabled: false
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    IntegrationName:
+      type: string
+      enum:
+      - AWS
+      - AWS Greengrass
+      - AWS Security Hub
+      - Absolute
+      - Absolute Secure Access
+      - Access Control Lists
+      - Acronis Cyber Protect Cloud
+      - Action1
+      - Active Directory
+      - Airgap
+      - Airlock
+      - Alaris
+      - Alibaba Cloud
+      - Apple Business Manager
+      - Arista CloudVision
+      - Armis Centrix
+      - Armis Smart Scanner
+      - ArmisPass
+      - Aruba Central
+      - Aruba ClearPass
+      - Aruba Instant
+      - Aruba MAC Address Filtering
+      - Aruba Mobility Conductor
+      - Aruba New Central
+      - Aruba WLC
+      - Automox
+      - Axonius
+      - Azure Cloud
+      - Azure Devops
+      - BMC CMDB
+      - BMC Discovery
+      - Baramundi
+      - BeyondTrust Privileged Remote Access
+      - BigFix
+      - Bitbucket
+      - Bitdefender
+      - Black Duck
+      - BlueCat DDI
+      - Broker
+      - Bugcrowd
+      - Cambium cnMaestro
+      - Carbon Black App Control
+      - Carbon Black Defense
+      - Cato Networks
+      - Centrix Secure Remote Access
+      - Centrix™ On-Prem
+      - Check Point Harmony Endpoint
+      - Check Point IoT Controller
+      - Check Point IoT Protect
+      - Check Point Quantum
+      - Check Point vSEC
+      - CheckMK
+      - Checkmarx
+      - Checkmarx One
+      - Chef
+      - Circle CI
+      - Cisco ASA
+      - Cisco Catalyst (3850/9800) WLC
+      - Cisco CleanAir
+      - Cisco Cyber Vision
+      - Cisco DNA Center
+      - Cisco Firepower
+      - Cisco ISE
+      - Cisco ISE Discovery
+      - Cisco ISE REST API
+      - Cisco Meraki
+      - Cisco Meraki MDM
+      - Cisco NDI
+      - Cisco Secure Access
+      - Cisco Secure Endpoint
+      - Cisco Secure Workload
+      - Cisco ThousandEyes
+      - Cisco UCS
+      - Cisco Umbrella
+      - Cisco WLC
+      - Cisco Webex Control Hub
+      - Claroty CTD
+      - CloudGuard Dome9
+      - Code42 Incydr
+      - ConnectWise Automate
+      - ConnectWise RMM
+      - ControlUp
+      - Cortex XDR
+      - Coverity
+      - Cradlepoint NetCloud
+      - Cribl
+      - CrowdStrike
+      - CrowdStrike RTR
+      - Custom File
+      - CyberArk
+      - CyberArk EPM
+      - CyberArk On Prem
+      - CyberArk Pull
+      - CyberArk Pull On Prem
+      - Cybereason EDR
+      - Cycode
+      - CylancePROTECT
+      - Cynet XDR
+      - DICOM PACS
+      - Darktrace
+      - Datadog
+      - Delinea Privilege Manager
+      - Dell Wyse Management Suite
+      - Device42
+      - Draogs
+      - Dropbox
+      - Duo Beyond
+      - Dynatrace
+      - EASM
+      - ESET Protect
+      - EcoStruxure Building
+      - EfficientIP SOLIDserver DDI
+      - Elastic Defend
+      - Email
+      - Engineering Workstation - DeltaV
+      - Engineering Workstation - Rockwell
+      - Engineering Workstation - Siemens
+      - Eracent ITMC
+      - Eseye
+      - ExtraHop RevealX 360
+      - ExtremeCloud IQ
+      - ExtremeCloud IQ Site Engine
+      - ExtremeWireless WiNG
+      - F5 BIG-IP iControl
+      - FSI CMMS
+      - FactoryTalk AssetCentre
+      - FileWave MDM
+      - FireEye Endpoint Protection
+      - Fleet DM
+      - Flexera One
+      - Flexera Spider
+      - Forcepoint DLP
+      - Forescout
+      - Forescout Enforcement
+      - Forescout Enrichment
+      - Forescout Syslog API
+      - FortiClient EMS
+      - FortiEDR
+      - Fortinet FortiAnalyzer Log Forwarding
+      - Fortinet FortiGate
+      - Fortinet FortiGate Enforcement
+      - Fortinet FortiGate Pull
+      - Fortinet FortiManager Enforcement
+      - Fortinet FortiManager Pull
+      - Fortinet FortiNAC
+      - Freshservice
+      - GLPI CMDB
+      - GitHub
+      - GitHub Enterprise Server
+      - GitLab
+      - GitLab CICD
+      - Google Chrome OS Device Management
+      - Google Cloud Platform
+      - Google Workspace
+      - Guardicore
+      - Gytpol
+      - HCL Bigfix Inventory
+      - HP WLC
+      - Halcyon
+      - Halo ITSM
+      - IBM Cloud Services
+      - IBM MaaS360
+      - IBM Maximo Manage
+      - IGEL Universal Management Suite
+      - ISG AgileSec
+      - Ignition
+      - Illumio
+      - IncidentIQ
+      - Infinipoint
+      - Infoblox BloxOne DDI (Cloud)
+      - Infoblox DDI On-Prem
+      - Infoblox DDI Syslog
+      - Infoblox NetMRI
+      - Invicti
+      - Island Enterprise
+      - Ivanti Connect Secure
+      - Ivanti EPMM
+      - Ivanti Endpoint Manager
+      - Ivanti Neurons for ITAM
+      - Ivanti Neurons for MDM
+      - Ivanti Neurons for UEM
+      - Jamf
+      - Jamf Pro
+      - Jira
+      - Jira Assets Platform
+      - JumpCloud
+      - Juniper Mist
+      - Juniper Mist (Webhooks)
+      - Kandji
+      - Kaseya VSA
+      - Kaseya VSA X
+      - Kenna
+      - Keycloak
+      - Lacework
+      - Lansweeper
+      - Lansweeper on-prem
+      - Linear
+      - Lmntrix
+      - LogMeIn Resolve
+      - MQTT
+      - Malwarebytes
+      - ManageEngine ADAudit Plus
+      - ManageEngine Endpoint Central
+      - ManageEngine OpManager
+      - Matrix42 Unified Endpoint Management
+      - McAfee ePO
+      - Medusa By SoftPro
+      - Microsoft Azure
+      - Microsoft Azure Active Directory
+      - Microsoft DHCP
+      - Microsoft Defender MA
+      - Microsoft Defender for Cloud
+      - Microsoft Defender for Endpoint
+      - Microsoft Defender for IoT
+      - Microsoft Entra ID
+      - Microsoft Hyper-V
+      - Microsoft Intune
+      - Microsoft System Center Operations Manager
+      - Microsoft System Center Virtual Machine Manager
+      - Microsoft WSUS
+      - Monday
+      - Morphisec
+      - Mosyle
+      - NVIDIA DOCA Argus
+      - Nautobot
+      - Nessus
+      - NetApp Active IQ Unified Manager
+      - NetBox
+      - NetBrain
+      - Netflow
+      - Netskope
+      - Network Mapper
+      - Nexpose
+      - NinjaOne
+      - Nozomi Guardian and CMC
+      - Nozomi Vantage
+      - Nutanix Prism
+      - Nuvolo
+      - OCS Inventory
+      - OTbase
+      - OVHcloud
+      - Okta
+      - OneLogin
+      - OpenStack
+      - Optum SNMP API
+      - Oracle Cloud Infrastructure
+      - Orca Security
+      - PANW Prisma
+      - PCAP Reader
+      - PDQ Connect
+      - PDQ Inventory
+      - Packet Capture
+      - Palo Alto Networks Cortex
+      - Palo Alto Networks Enrichment
+      - Palo Alto Networks GlobalProtect
+      - Palo Alto Networks List Management
+      - Palo Alto Networks Panorama
+      - Palo Alto Networks Prisma CSPM
+      - Pevco Atlas
+      - Phosphorus
+      - Portnox CORE
+      - Proxmox Virtual Environment (VE)
+      - Puppet
+      - QA Integration
+      - Qualys
+      - Qualys CSAM
+      - Quest KACE
+      - RMS Tunnel
+      - RSA Archer
+      - Radia
+      - Rapid7 InsightVM
+      - Rapid7 InsightVM Cloud
+      - Rapid7 Nexpose Data Warehouse
+      - Raw-data-intergation
+      - Red Hat OpenShift
+      - Red Hat Satellite
+      - Remote Discovery File Uploader
+      - Remote Execution (Windows)
+      - Remote Switch
+      - Rigado
+      - Riverbed AppResponse
+      - Rockwell AssetCentre
+      - Ruckus Virtual SmartZone
+      - Rudder
+      - SCCM
+      - SIEM
+      - SOTI MobiControl
+      - SPAN/TAP
+      - STIX/TAXII
+      - SUSE Manager
+      - SailPoint IdentityIQ
+      - Salt Security
+      - SaltStack
+      - Samsung
+      - Saviynt
+      - SecuriThings
+      - SecurityScorecard
+      - Semgrep
+      - SentinelOne
+      - ServiceDesk
+      - ServiceDesk Plus
+      - ServiceNow
+      - ServiceNow IRM
+      - ServiceNow Push
+      - Siemens Industrial Asset Hub
+      - Sigrid
+      - Sinec NMS
+      - Slack
+      - Smart Active Querying
+      - Snow Software Asset Management
+      - Snowflake Data Warehouse
+      - Snyk
+      - SolarWinds Orion
+      - SolarWinds Service Desk
+      - SolarWinds Web Helpdesk
+      - SonarQube
+      - Sophos Endpoint Protection
+      - Sophos Mobile
+      - Splashtop Cloud
+      - Splunk
+      - Symantec Asset Management
+      - Symantec Client Management Suite
+      - Symantec Endpoint Protection
+      - Symantec Endpoint Security
+      - Sysmon
+      - TOPdesk Enterprise Service Management
+      - Taegis XDR
+      - Tanium Asset
+      - Tanium Comply
+      - Tanium Discover
+      - Tanium Interact
+      - Tanium Interact MA
+      - Team Dynamix ITAM
+      - Tenable Nessus
+      - Tenable OT
+      - Tenable.io
+      - Tenable.sc
+      - ThinManager
+      - Torq
+      - Trellix ePO SaaS
+      - Trello
+      - Trend Micro Apex One
+      - Trend Micro Cloud One
+      - Trend Micro Deep Security
+      - Trend Micro Vision One
+      - TxOne ElementOne
+      - UV Streamer
+      - Ubiquiti UniFi Controller
+      - Unmanaged Windows PowerShell
+      - VA Optimus
+      - Vectra
+      - Veeam Backup
+      - Veracode
+      - Verve Security Center
+      - Viakoo
+      - Wazuh
+      - WhatsUp Gold
+      - Windows Autopilot
+      - Wiz
+      - Workday
+      - Workspace ONE
+      - Zabbix
+      - Zendesk
+      - Zimperium
+      - Zscaler
+      - Zscaler Deception
+      - eMASS
+      - orcharhino
+      - runZero
+      - vSphere vCenter
+      title: IntegrationName
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    PersistentIntegration:
+      properties:
+        name:
+          $ref: '#/components/schemas/IntegrationName'
+          description: The integration display name (e.g., 'CrowdStrike', 'Network Mapper')
+        instance_name:
+          type: string
+          minLength: 1
+          title: Instance Name
+          description: The integration instance name
+        params:
+          type: object
+          title: Params
+          description: Integration parameters
+        state:
+          $ref: '#/components/schemas/IntegrationState'
+          description: The integration state
+          default: ACTIVE
+        collector_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Collector Id
+          description: The ID of the collector associated with this integration
+        broker_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Broker Id
+          description: The ID of the broker associated with this integration
+        id:
+          type: integer
+          title: Id
+          description: The integration ID
+        creation_time:
+          type: string
+          format: date-time
+          title: Creation Time
+          description: Creation time
+        params_change_time:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Params Change Time
+          description: Last parameters change time
+        current_state:
+          anyOf:
+          - $ref: '#/components/schemas/HealthState'
+          - type: 'null'
+          description: The integration health state
+        statistics:
+          anyOf:
+          - $ref: '#/components/schemas/IntegrationStatistics'
+          - type: 'null'
+          description: The integration run statistics
+      type: object
+      required:
+      - name
+      - instance_name
+      - params
+      - id
+      - creation_time
+      title: PersistentIntegration
+      examples:
+      - creation_time: '2026-06-17T10:34:17.418146Z'
+        current_state: IDLE
+        id: 73902
+        instance_name: new central
+        name: Aruba New Central
+        params:
+          aruba_new_central_base_url: de1.api.central.arubanetworks.com
+          aruba_new_central_client_id: 8cd0c007-0956-4f19-b648-343a5156c0a3
+          aruba_new_central_client_secret: '********'
+          integration_schedule:
+            crontab: 0 */8 * * *
+        params_change_time: '2026-06-17T10:35:43.531745Z'
+        state: ACTIVE
+        statistics:
+          cycle_statistics:
+          - entity_type: Access Points
+            post_filter_amount: 2
+            sent_to_armis_amount: 2
+            unique_armis_records_amount: 2
+          - entity_type: Switches
+            post_filter_amount: 1
+            sent_to_armis_amount: 1
+            unique_armis_records_amount: 1
+          last_successful_cycle_ended: '2026-06-24T07:23:04.342905Z'
+          status: ACTIVE
+          status_changed_at: '2026-06-24T07:23:07.680339Z'
+          status_created_at: '2026-06-17T10:34:17.447885Z'
+    IntegrationStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - ERROR
+      - SYNC
+      - UNKNOWN
+      - WARNING
+      title: IntegrationStatus
+    IntegrationSearchRequest:
+      properties:
+        filter:
+          $ref: '#/components/schemas/IntegrationSearchFilter'
+          description: Filter criteria. At least one field is required; fields are combined with AND.
+        after:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: After
+          description: Pagination cursor from a previous response's 'next'.
+        limit:
+          type: integer
+          maximum: 100
+          minimum: 1
+          title: Limit
+          description: Maximum number of integrations to return.
+          default: 10
+      type: object
+      required:
+      - filter
+      title: IntegrationSearchRequest
+      examples:
+      - filter:
+          names:
+          - Cisco Meraki
+          states:
+          - ACTIVE
+        limit: 50
+      - filter:
+          collector_ids:
+          - 10
+          states:
+          - ACTIVE
+          - INACTIVE
+      - filter:
+          ids:
+          - 73902
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-Armis-Client-Name
+x-provenance:
+  method: searched
+  source: https://dev.armis.com/reference
+  harvested: '2026-10-20'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://dev.armis.com/reference/delete_settings_boundaries__boundary_id__delete.md
+  - https://dev.armis.com/reference/delete_settings_device_custom_properties__config_id__delete.md
+  - https://dev.armis.com/reference/delete_settings_integrations__integration_id__delete.md
+  - https://dev.armis.com/reference/delete_settings_sites__site_id__delete.md
+  - https://dev.armis.com/reference/enable_data_export__entity___enable_post.md
+  - https://dev.armis.com/reference/fields_assets__search_fields_get.md
+  - https://dev.armis.com/reference/get_alerts__alert_id__get.md
+  - https://dev.armis.com/reference/get_collectors__collector_number__get.md
+  - https://dev.armis.com/reference/get_collectors__image_get.md
+  - https://dev.armis.com/reference/get_collectors_get.md
+  - https://dev.armis.com/reference/get_data_export__entity__get.md
+  - https://dev.armis.com/reference/get_policies_get.md
+  - https://dev.armis.com/reference/get_settings_boundaries__boundary_id__get.md
+  - https://dev.armis.com/reference/get_settings_boundaries_get.md
+  - https://dev.armis.com/reference/get_settings_device_custom_properties__config_id__get.md
+  - https://dev.armis.com/reference/get_settings_device_custom_properties_get.md
+  - https://dev.armis.com/reference/get_settings_integrations__integration_id__get.md
+  - https://dev.armis.com/reference/get_settings_integrations_get.md
+  - https://dev.armis.com/reference/get_settings_sites__site_id__get.md
+  - https://dev.armis.com/reference/get_settings_sites_get.md
+  - https://dev.armis.com/reference/patch_settings_boundaries__boundary_id__patch.md
+  - https://dev.armis.com/reference/patch_settings_device_custom_properties__config_id__patch.md
+  - https://dev.armis.com/reference/patch_settings_integrations__integration_id__patch.md
+  - https://dev.armis.com/reference/patch_settings_sites__site_id__patch.md
+  - https://dev.armis.com/reference/post_arps_post.md
+  - https://dev.armis.com/reference/post_assets__bulk_post.md
+  - https://dev.armis.com/reference/post_oauth_token_post.md
+  - https://dev.armis.com/reference/post_settings_boundaries_post.md
+  - https://dev.armis.com/reference/post_settings_device_custom_properties_post.md
+  - https://dev.armis.com/reference/post_settings_integrations_post.md
+  - https://dev.armis.com/reference/post_settings_sites_post.md
+  - https://dev.armis.com/reference/search_assets__search_post.md
+  - https://dev.armis.com/reference/search_settings_integrations__search_post.md
+  - https://dev.armis.com/reference/toggle_data_export__entity__patch.md
+  merge:
+    pages: 34
+    deduped: 206
+    conflicts_kept_first: 0

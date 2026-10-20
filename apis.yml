@@ -1,18 +1,14 @@
 aid: armis
 name: Armis
-description: >-
-  Armis is a cyber exposure management and asset intelligence company. Its Armis
-  Centrix platform discovers, protects, and manages every physical and virtual
-  asset in an enterprise environment — IT, OT, ICS, IoT, IoMT, medical devices,
-  cloud workloads, and applications — giving security teams real-time visibility,
-  risk prioritization, and threat detection across the full attack surface. Armis
-  exposes this intelligence through a tenant-scoped REST API secured with OAuth2
-  client-credentials, an official Python SDK (armis-sdk), a Go application-security
-  scanning CLI (armis-cli), and two published Model Context Protocol servers
-  (armis-knowledge-mcp and armis-appsec-mcp) for agent-native AppSec workflows.
-  The company was surfaced as a portfolio company of General Catalyst and Insight
-  Partners and enriched by the API Evangelist pipeline from its public developer
-  surface.
+description: Armis is a cyber exposure management and asset intelligence company. Its Armis Centrix platform
+  discovers, protects, and manages every physical and virtual asset in an enterprise environment — IT,
+  OT, ICS, IoT, IoMT, medical devices, cloud workloads, and applications — giving security teams real-time
+  visibility, risk prioritization, and threat detection across the full attack surface. Armis exposes
+  this intelligence through a tenant-scoped REST API secured with OAuth2 client-credentials, an official
+  Python SDK (armis-sdk), a Go application-security scanning CLI (armis-cli), and two published Model
+  Context Protocol servers (armis-knowledge-mcp and armis-appsec-mcp) for agent-native AppSec workflows.
+  The company was surfaced as a portfolio company of General Catalyst and Insight Partners and enriched
+  by the API Evangelist pipeline from its public developer surface.
 url: https://raw.githubusercontent.com/api-evangelist/armis/refs/heads/main/apis.yml
 deliveryModel:
   model: library
@@ -43,11 +39,11 @@ x-source: vc-portfolio
 x-backed-by:
 - general-catalyst
 - insight-partners
-x-tier: stub
-x-tier-reason: portfolio-lead
+x-tier: profiled
+x-tier-reason: enrichment pass 2026-10-20 (local-v5; was portfolio-lead)
 specificationVersion: '0.23'
 created: '2026-07-17'
-modified: '2026-07-18'
+modified: '2026-10-20'
 tags:
 - Company
 - Defense Government
@@ -59,13 +55,40 @@ tags:
 - OT Security
 - Vulnerability Management
 - Developer Tools
-apis: []
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: AgenticAccess
+  url: agentic-access/armis-agentic-access.yml
+- type: Spectral
+  url: rules/armis-rules.yml
+- type: JSONLD
+  url: json-ld/armis-context.jsonld
+- type: Vocabulary
+  url: vocabulary/armis-vocabulary.yml
+- type: DataModel
+  url: data-model/armis-data-model.yml
+- type: Security
+  url: security/armis-vulnerability-disclosure.yml
+- type: ErrorCatalog
+  url: errors/armis-problem-types.yml
+- type: SecurityTxt
+  url: well-known/armis-security.txt
+- type: WellKnown
+  url: well-known/armis-well-known.yml
+- type: Hosts
+  url: hosts/armis-hosts.yml
+- type: IntegrationEdges
+  url: integrations/armis-integration-edges.yml
+- type: Vendors
+  url: vendors/armis-vendors.yml
+- type: Newsroom
+  url: https://www.armis.com/about/newsroom/
+- type: VulnerabilityDisclosure
+  url: security/armis-vulnerability-disclosure.yml
 - type: Conformance
   url: conformance/armis-conformance.yml
 - type: Conventions
@@ -102,8 +125,363 @@ common:
   url: security/armis-domain-security.yml
 - type: LLMsTxt
   url: llms/armis-llms.txt
+- type: Documentation
+  url: https://dev.armis.com/docs/your-guide-to-building-with-armis-apis
+- type: APIReference
+  url: https://dev.armis.com/reference
+- type: ChangeLog
+  url: https://dev.armis.com/docs/migration-from-api-v1
+apis:
+- aid: armis:armis-developer-portal-mcp
+  name: Armis Developer Portal MCP Server
+  description: >-
+    Remote MCP server hosted on the Armis developer portal exposing endpoint discovery, endpoint detail,
+    search, authentication and request execution against the Armis API.
+  humanURL: https://dev.armis.com/docs/mcp
+  baseURL: https://dev.armis.com/mcp
+  tags:
+  - MCP
+  - Agents
+  - Security
+  properties:
+  - type: MCPServer
+    url: mcp/armis-mcp.yml
+  - type: Documentation
+    url: https://dev.armis.com/docs/mcp
+  image: https://avatars.githubusercontent.com/u/32813597?v=4
+- aid: armis:armis-alerts-api
+  name: Armis Alerts API
+  description: The Alerts API from Armis — 1 operation(s) for alerts.
+  humanURL: https://dev.armis.com/docs/your-guide-to-building-with-armis-apis
+  baseURL: https://api.armis.com/v3
+  tags:
+  - Alerts
+  properties:
+  - type: OpenAPI
+    url: openapi/armis-alerts-api-openapi.yml
+  - type: Documentation
+    url: https://dev.armis.com/docs/your-guide-to-building-with-armis-apis
+  - type: APIReference
+    url: https://dev.armis.com/reference
+  - type: Authentication
+    url: https://dev.armis.com/docs/authentication
+  - type: RateLimits
+    url: rate-limits/armis-rate-limits.yml
+  - type: JSONSchema
+    url: json-schema/armis-persistent-alert-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-collector-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-search-assets-request-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-integration-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-site-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-auth-request-schema.json
+- aid: armis:armis-arp-api
+  name: Armis ARP API
+  description: The ARP API from Armis — 1 operation(s) for arp.
+  humanURL: https://dev.armis.com/docs/your-guide-to-building-with-armis-apis
+  baseURL: https://api.armis.com/v3
+  tags:
+  - ARP
+  properties:
+  - type: OpenAPI
+    url: openapi/armis-arp-api-openapi.yml
+  - type: Documentation
+    url: https://dev.armis.com/docs/your-guide-to-building-with-armis-apis
+  - type: APIReference
+    url: https://dev.armis.com/reference
+  - type: Authentication
+    url: https://dev.armis.com/docs/authentication
+  - type: RateLimits
+    url: rate-limits/armis-rate-limits.yml
+  - type: JSONSchema
+    url: json-schema/armis-persistent-alert-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-collector-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-search-assets-request-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-integration-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-site-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-auth-request-schema.json
+- aid: armis:armis-assets-api
+  name: Armis Assets API
+  description: The Assets API from Armis — 3 operation(s) for assets.
+  humanURL: https://dev.armis.com/docs/your-guide-to-building-with-armis-apis
+  baseURL: https://api.armis.com/v3
+  tags:
+  - Assets
+  properties:
+  - type: OpenAPI
+    url: openapi/armis-assets-api-openapi.yml
+  - type: Documentation
+    url: https://dev.armis.com/docs/your-guide-to-building-with-armis-apis
+  - type: APIReference
+    url: https://dev.armis.com/reference
+  - type: Authentication
+    url: https://dev.armis.com/docs/authentication
+  - type: RateLimits
+    url: rate-limits/armis-rate-limits.yml
+  - type: JSONSchema
+    url: json-schema/armis-persistent-alert-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-collector-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-search-assets-request-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-integration-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-site-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-auth-request-schema.json
+- aid: armis:armis-authentication-api
+  name: Armis Authentication API
+  description: Manage authentication of the API.
+  humanURL: https://dev.armis.com/docs/your-guide-to-building-with-armis-apis
+  baseURL: https://api.armis.com/v3
+  tags:
+  - Authentication
+  properties:
+  - type: OpenAPI
+    url: openapi/armis-authentication-api-openapi.yml
+  - type: Documentation
+    url: https://dev.armis.com/docs/your-guide-to-building-with-armis-apis
+  - type: APIReference
+    url: https://dev.armis.com/reference
+  - type: Authentication
+    url: https://dev.armis.com/docs/authentication
+  - type: RateLimits
+    url: rate-limits/armis-rate-limits.yml
+  - type: JSONSchema
+    url: json-schema/armis-persistent-alert-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-collector-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-search-assets-request-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-integration-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-site-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-auth-request-schema.json
+- aid: armis:armis-boundaries-api
+  name: Armis Boundaries API
+  description: The Boundaries API from Armis — 2 operation(s) for boundaries.
+  humanURL: https://dev.armis.com/docs/your-guide-to-building-with-armis-apis
+  baseURL: https://api.armis.com/v3
+  tags:
+  - Boundaries
+  properties:
+  - type: OpenAPI
+    url: openapi/armis-boundaries-api-openapi.yml
+  - type: Documentation
+    url: https://dev.armis.com/docs/your-guide-to-building-with-armis-apis
+  - type: APIReference
+    url: https://dev.armis.com/reference
+  - type: Authentication
+    url: https://dev.armis.com/docs/authentication
+  - type: RateLimits
+    url: rate-limits/armis-rate-limits.yml
+  - type: JSONSchema
+    url: json-schema/armis-persistent-alert-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-collector-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-search-assets-request-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-integration-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-site-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-auth-request-schema.json
+- aid: armis:armis-collectors-api
+  name: Armis Collectors API
+  description: The Collectors API from Armis — 3 operation(s) for collectors.
+  humanURL: https://dev.armis.com/docs/your-guide-to-building-with-armis-apis
+  baseURL: https://api.armis.com/v3
+  tags:
+  - Collectors
+  properties:
+  - type: OpenAPI
+    url: openapi/armis-collectors-api-openapi.yml
+  - type: Documentation
+    url: https://dev.armis.com/docs/your-guide-to-building-with-armis-apis
+  - type: APIReference
+    url: https://dev.armis.com/reference
+  - type: Authentication
+    url: https://dev.armis.com/docs/authentication
+  - type: RateLimits
+    url: rate-limits/armis-rate-limits.yml
+  - type: JSONSchema
+    url: json-schema/armis-persistent-alert-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-collector-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-search-assets-request-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-integration-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-site-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-auth-request-schema.json
+- aid: armis:armis-data-export-api
+  name: Armis Data Export API
+  description: The Data Export API from Armis — 2 operation(s) for data export.
+  humanURL: https://dev.armis.com/docs/your-guide-to-building-with-armis-apis
+  baseURL: https://api.armis.com/v3
+  tags:
+  - Data Export
+  properties:
+  - type: OpenAPI
+    url: openapi/armis-data-export-api-openapi.yml
+  - type: Documentation
+    url: https://dev.armis.com/docs/your-guide-to-building-with-armis-apis
+  - type: APIReference
+    url: https://dev.armis.com/reference
+  - type: Authentication
+    url: https://dev.armis.com/docs/authentication
+  - type: RateLimits
+    url: rate-limits/armis-rate-limits.yml
+  - type: JSONSchema
+    url: json-schema/armis-persistent-alert-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-collector-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-search-assets-request-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-integration-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-site-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-auth-request-schema.json
+- aid: armis:armis-device-custom-properties-api
+  name: Armis Device Custom Properties API
+  description: >-
+    The Device Custom Properties API from Armis — 2 operation(s) for device custom properties.
+  humanURL: https://dev.armis.com/docs/your-guide-to-building-with-armis-apis
+  baseURL: https://api.armis.com/v3
+  tags:
+  - Device Custom Properties
+  properties:
+  - type: OpenAPI
+    url: openapi/armis-device-custom-properties-api-openapi.yml
+  - type: Documentation
+    url: https://dev.armis.com/docs/your-guide-to-building-with-armis-apis
+  - type: APIReference
+    url: https://dev.armis.com/reference
+  - type: Authentication
+    url: https://dev.armis.com/docs/authentication
+  - type: RateLimits
+    url: rate-limits/armis-rate-limits.yml
+  - type: JSONSchema
+    url: json-schema/armis-persistent-alert-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-collector-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-search-assets-request-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-integration-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-site-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-auth-request-schema.json
+- aid: armis:armis-integrations-api
+  name: Armis Integrations API
+  description: The Integrations API from Armis — 3 operation(s) for integrations.
+  humanURL: https://dev.armis.com/docs/your-guide-to-building-with-armis-apis
+  baseURL: https://api.armis.com/v3
+  tags:
+  - Integrations
+  properties:
+  - type: OpenAPI
+    url: openapi/armis-integrations-api-openapi.yml
+  - type: Documentation
+    url: https://dev.armis.com/docs/your-guide-to-building-with-armis-apis
+  - type: APIReference
+    url: https://dev.armis.com/reference
+  - type: Authentication
+    url: https://dev.armis.com/docs/authentication
+  - type: RateLimits
+    url: rate-limits/armis-rate-limits.yml
+  - type: JSONSchema
+    url: json-schema/armis-persistent-alert-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-collector-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-search-assets-request-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-integration-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-site-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-auth-request-schema.json
+- aid: armis:armis-policies-api
+  name: Armis Policies API
+  description: The Policies API from Armis — 1 operation(s) for policies.
+  humanURL: https://dev.armis.com/docs/your-guide-to-building-with-armis-apis
+  baseURL: https://api.armis.com/v3
+  tags:
+  - Policies
+  properties:
+  - type: OpenAPI
+    url: openapi/armis-policies-api-openapi.yml
+  - type: Documentation
+    url: https://dev.armis.com/docs/your-guide-to-building-with-armis-apis
+  - type: APIReference
+    url: https://dev.armis.com/reference
+  - type: Authentication
+    url: https://dev.armis.com/docs/authentication
+  - type: RateLimits
+    url: rate-limits/armis-rate-limits.yml
+  - type: JSONSchema
+    url: json-schema/armis-persistent-alert-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-collector-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-search-assets-request-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-integration-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-site-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-auth-request-schema.json
+- aid: armis:armis-sites-api
+  name: Armis Sites API
+  description: The Sites API from Armis — 2 operation(s) for sites.
+  humanURL: https://dev.armis.com/docs/your-guide-to-building-with-armis-apis
+  baseURL: https://api.armis.com/v3
+  tags:
+  - Sites
+  properties:
+  - type: OpenAPI
+    url: openapi/armis-sites-api-openapi.yml
+  - type: Documentation
+    url: https://dev.armis.com/docs/your-guide-to-building-with-armis-apis
+  - type: APIReference
+    url: https://dev.armis.com/reference
+  - type: Authentication
+    url: https://dev.armis.com/docs/authentication
+  - type: RateLimits
+    url: rate-limits/armis-rate-limits.yml
+  - type: JSONSchema
+    url: json-schema/armis-persistent-alert-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-collector-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-search-assets-request-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-integration-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-persistent-site-schema.json
+  - type: JSONSchema
+    url: json-schema/armis-auth-request-schema.json
 x-enrichment:
-  date: '2026-07-19'
-  status: backfilled
-  pass: local-v1
-  note: backfilled from .gitignore signal + verified work evidence
+  date: '2026-10-20'
+  status: enriched
+  artifacts_added: 3
+  pass: local-v5

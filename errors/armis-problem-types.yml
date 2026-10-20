@@ -1,0 +1,40 @@
+generated: '2026-10-20'
+method: derived
+generator: derive-problem-types.py
+source:
+- openapi/armis-api-v3-api-openapi.yml
+format: custom
+envelope:
+  media_type: application/json
+  schema: HTTPValidationError
+coverage:
+  operations: 34
+  statuses_declared: 4
+problems:
+- status: 400
+  title: Bad Request
+  description: The file cannot be used. No record was applied.
+  operations: 1
+  media_types:
+  - application/json
+  schema: ArpUploadError
+- status: 413
+  title: Content Too Large
+  description: The file must be at most 10485760 bytes.
+  operations: 1
+  media_types:
+  - application/json
+  schema: ArpUploadError
+- status: 422
+  title: Unprocessable Content
+  description: Validation Error
+  operations: 33
+  media_types:
+  - application/json
+  schema: HTTPValidationError
+- status: 502
+  title: Bad Gateway
+  description: Failed to save the ARP records. The file was not applied in full; retry the upload.
+  operations: 1
+  media_types: []
+  schema: null

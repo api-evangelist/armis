@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/armis/main/json-schema/armis-auth-request-schema.json",
+  "title": "AuthRequest",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/armis-api-v3-api-openapi.yml#/components/schemas/AuthRequest",
+  "properties": {
+    "audience": {
+      "type": "string",
+      "title": "Audience",
+      "description": "Value has to be the full tenant's domain with scheme and trailing slash"
+    },
+    "grant_type": {
+      "type": "string",
+      "const": "client_credentials",
+      "title": "Grant Type"
+    },
+    "client_id": {
+      "type": "string",
+      "title": "Client Id",
+      "description": "Use email of the user that created the 'client_secret'"
+    },
+    "client_secret": {
+      "type": "string",
+      "title": "Client Secret",
+      "description": "To obtain the secret, go to https://<tenant>.armis.com/settings/api-management"
+    },
+    "vendor_id": {
+      "type": "string",
+      "title": "Vendor Id",
+      "description": "The Vendor ID you received upon singing up to the developer portal"
+    },
+    "scopes": {
+      "items": {
+        "type": "string",
+        "enum": [
+          "FULL_VISIBILITY",
+          "PERMISSION.ALERT.READ",
+          "PERMISSION.DEVICE.MANAGE",
+          "PERMISSION.DEVICE.MANAGE.EDIT",
+          "PERMISSION.DEVICE.READ",
+          "PERMISSION.PII.DEVICE",
+          "PERMISSION.POLICY.READ",
+          "PERMISSION.REPORT.MANAGE.CREATE",
+          "PERMISSION.REPORT.MANAGE.DELETE",
+          "PERMISSION.REPORT.READ",
+          "PERMISSION.SETTINGS.BOUNDARY.MANAGE.CREATE",
+          "PERMISSION.SETTINGS.BOUNDARY.MANAGE.DELETE",
+          "PERMISSION.SETTINGS.BOUNDARY.MANAGE.EDIT",
+          "PERMISSION.SETTINGS.BOUNDARY.READ",
+          "PERMISSION.SETTINGS.COLLECTOR.READ",
+          "PERMISSION.SETTINGS.CUSTOM_PROPERTIES.MANAGE",
+          "PERMISSION.SETTINGS.CUSTOM_PROPERTIES.READ",
+          "PERMISSION.SETTINGS.INTEGRATION.MANAGE",
+          "PERMISSION.SETTINGS.INTEGRATION.READ",
+          "PERMISSION.SETTINGS.SITES_AND_SENSORS.MANAGE.SITES",
+          "PERMISSION.SETTINGS.SITES_AND_SENSORS.READ",
+          "PERMISSION.VMDR",
+          "PERMISSION.VMDR.READ"
+        ]
+      },
+      "type": "array",
+      "title": "Scopes",
+      "description": "A list of scopes to grant access to"
+    }
+  },
+  "type": "object",
+  "required": [
+    "audience",
+    "grant_type",
+    "client_id",
+    "client_secret",
+    "vendor_id"
+  ]
+}

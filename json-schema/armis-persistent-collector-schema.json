@@ -1,0 +1,349 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/armis/main/json-schema/armis-persistent-collector-schema.json",
+  "title": "PersistentCollector",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/armis-api-v3-api-openapi.yml#/components/schemas/PersistentCollector",
+  "properties": {
+    "collector_number": {
+      "type": "integer",
+      "title": "Collector Number",
+      "description": "The tenant-scoped sequential number identifying this collector."
+    },
+    "name": {
+      "type": "string",
+      "title": "Name",
+      "description": "The display name of the collector."
+    },
+    "status": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/CollectorStatus"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "The current status of the collector."
+    },
+    "type": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/CollectorType"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "The collector type (e.g., Physical, Virtual)."
+    },
+    "ip_address": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "ipv4"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Ip Address",
+      "description": "The default IPv4 address of the collector."
+    },
+    "last_seen": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Last Seen",
+      "description": "The last time the collector was seen."
+    },
+    "mac_address": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Mac Address",
+      "description": "The default MAC address of the collector."
+    },
+    "subnet": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Subnet",
+      "description": "The default IPv4 CIDR subnet of the collector."
+    },
+    "default_gateway": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "ipv4"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Default Gateway",
+      "description": "The default IPv4 gateway of the collector."
+    },
+    "cluster_id": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Cluster Id",
+      "description": "The cluster ID the collector belongs to."
+    },
+    "https_proxy_redacted": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Https Proxy Redacted",
+      "description": "The HTTPS proxy configured on the collector (redacted)."
+    },
+    "system_vendor": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "System Vendor",
+      "description": "The system vendor of the collector hardware."
+    },
+    "k8s_namespace": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "K8S Namespace",
+      "description": "The Kubernetes namespace of the collector."
+    },
+    "serial_number": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Serial Number",
+      "description": "The product serial number of the collector."
+    },
+    "source_deployment_type": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SourceDeploymentType"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "The deployment type used to provision the collector."
+    },
+    "last_boot_time": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Last Boot Time",
+      "description": "The last boot time of the collector."
+    },
+    "creation_date": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Creation Date",
+      "description": "The creation date of the collector."
+    },
+    "tracking_number": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Tracking Number",
+      "description": "The tracking number for the collector shipment."
+    },
+    "order_status_update": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Order Status Update",
+      "description": "The last order status update time."
+    },
+    "configui_password_expiry_date": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Configui Password Expiry Date",
+      "description": "The expiry date of the collector's configuration UI password."
+    },
+    "collector_runtime": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/CollectorRuntime"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "The runtime type of the collector."
+    },
+    "application_version": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Application Version",
+      "description": "The application software version."
+    },
+    "application_update": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ApplicationUpdateStatus"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "The application update status."
+    }
+  },
+  "type": "object",
+  "required": [
+    "collector_number",
+    "name"
+  ],
+  "$defs": {
+    "ApplicationUpdateStatus": {
+      "type": "string",
+      "enum": [
+        "Automatic",
+        "Disabled",
+        "Manual"
+      ],
+      "title": "ApplicationUpdateStatus"
+    },
+    "CollectorRuntime": {
+      "type": "string",
+      "enum": [
+        "COLLECTOR_RUNTIME_HOST",
+        "COLLECTOR_RUNTIME_CONTAINER",
+        "COLLECTOR_RUNTIME_K8S",
+        "COLLECTOR_RUNTIME_BROKER"
+      ],
+      "title": "CollectorRuntime"
+    },
+    "CollectorStatus": {
+      "type": "string",
+      "enum": [
+        "Active",
+        "Collector Received",
+        "Critical",
+        "Inactive",
+        "Initializing",
+        "In Shipping",
+        "Offline",
+        "Pending activation",
+        "Warning"
+      ],
+      "title": "CollectorStatus"
+    },
+    "CollectorType": {
+      "type": "string",
+      "enum": [
+        "Application",
+        "Broker",
+        "Physical",
+        "Unknown",
+        "Virtual"
+      ],
+      "title": "CollectorType"
+    },
+    "SourceDeploymentType": {
+      "type": "string",
+      "enum": [
+        "DEPLOYMENT_TYPE_AMI",
+        "DEPLOYMENT_TYPE_QCOW2",
+        "DEPLOYMENT_TYPE_RPM",
+        "DEPLOYMENT_TYPE_OVA",
+        "DEPLOYMENT_TYPE_DEB",
+        "DEPLOYMENT_TYPE_VHD",
+        "DEPLOYMENT_TYPE_VHDX",
+        "DEPLOYMENT_TYPE_K8S",
+        "DEPLOYMENT_TYPE_LINUX_BROKER",
+        "DEPLOYMENT_TYPE_LINUX_AMD64_BROKER",
+        "DEPLOYMENT_TYPE_LINUX_ARM64_BROKER",
+        "DEPLOYMENT_TYPE_WINDOWS_BROKER",
+        "DEPLOYMENT_TYPE_DARWIN_AMD64_BROKER",
+        "DEPLOYMENT_TYPE_DARWIN_ARM64_BROKER",
+        "DEPLOYMENT_TYPE_QCOW2_ARM",
+        "DEPLOYMENT_TYPE_QCOW2_NVIDIA_ARM"
+      ],
+      "title": "SourceDeploymentType"
+    }
+  }
+}

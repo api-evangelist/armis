@@ -1,0 +1,397 @@
+openapi: 3.2.0
+info:
+  title: Armis API v3 Device Custom Properties API
+  version: 0.13.0
+servers:
+- url: https://api.armis.com/v3
+tags:
+- name: Device Custom Properties
+paths:
+  /settings/device-custom-properties:
+    post:
+      tags:
+      - Device Custom Properties
+      summary: Create a new device custom property configuration
+      description: '### Required scopes:
+
+        * `PERMISSION.SETTINGS.CUSTOM_PROPERTIES.MANAGE`'
+      operationId: post_settings_device_custom_properties_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Config'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersistentConfig'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+    get:
+      tags:
+      - Device Custom Properties
+      summary: List all device custom property configurations
+      description: '### Required scopes:
+
+        * `PERMISSION.SETTINGS.CUSTOM_PROPERTIES.READ`'
+      operationId: get_settings_device_custom_properties_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersistentConfigItems'
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+  /settings/device-custom-properties/{config_id}:
+    delete:
+      tags:
+      - Device Custom Properties
+      summary: Delete a device custom property configuration
+      description: '### Required scopes:
+
+        * `PERMISSION.SETTINGS.CUSTOM_PROPERTIES.MANAGE`'
+      operationId: delete_settings_device_custom_properties__config_id__delete
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: config_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Config Id
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Device Custom Properties
+      summary: Get a device custom property configuration
+      description: '### Required scopes:
+
+        * `PERMISSION.SETTINGS.CUSTOM_PROPERTIES.READ`'
+      operationId: get_settings_device_custom_properties__config_id__get
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: config_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Config Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersistentConfig'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - Device Custom Properties
+      summary: Update a device custom property configuration
+      description: '### Required scopes:
+
+        * `PERMISSION.SETTINGS.CUSTOM_PROPERTIES.MANAGE`'
+      operationId: patch_settings_device_custom_properties__config_id__patch
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: config_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Config Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartialConfigRequest'
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    PersistentConfig:
+      properties:
+        name:
+          type: string
+          maxLength: 40
+          pattern: ^[\w_]*$
+          title: Name
+        description:
+          anyOf:
+          - type: string
+            maxLength: 250
+          - type: 'null'
+          title: Description
+        type:
+          type: string
+          enum:
+          - boolean
+          - enum
+          - externalLink
+          - integer
+          - string
+          - timestamp
+          title: Type
+        allowed_values:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Allowed Values
+        id:
+          type: integer
+          title: Id
+        created_by:
+          type: string
+          title: Created By
+        creation_time:
+          type: string
+          format: date-time
+          title: Creation Time
+      type: object
+      required:
+      - name
+      - type
+      - id
+      - created_by
+      - creation_time
+      title: PersistentConfig
+      examples:
+      - allowed_values:
+        - Small
+        - Medium
+        - Large
+        created_by: user@acme.com
+        creation_time: '2025-06-16T00:00:00Z'
+        description: The size of the device.
+        id: 1
+        name: Size
+        type: enum
+    Config:
+      properties:
+        name:
+          type: string
+          maxLength: 40
+          pattern: ^[\w_]*$
+          title: Name
+        description:
+          anyOf:
+          - type: string
+            maxLength: 250
+          - type: 'null'
+          title: Description
+        type:
+          type: string
+          enum:
+          - boolean
+          - enum
+          - externalLink
+          - integer
+          - string
+          - timestamp
+          title: Type
+        allowed_values:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Allowed Values
+      type: object
+      required:
+      - name
+      - type
+      title: Config
+      examples:
+      - allowed_values:
+        - Small
+        - Medium
+        - Large
+        description: The size of the device.
+        name: Size
+        type: enum
+      - description: The year the device was built.
+        name: BuildYear
+        type: integer
+    PersistentConfigItems:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/PersistentConfig'
+          type: array
+          title: Items
+      type: object
+      required:
+      - items
+      title: PersistentConfigItems
+      examples:
+      - items:
+        - allowed_values:
+          - Small
+          - Medium
+          - Large
+          created_by: user@acme.com
+          creation_time: '2025-06-16T00:00:00Z'
+          description: The size of the device.
+          id: 1
+          name: Size
+          type: enum
+        - created_by: user@acme.com
+          creation_time: '2025-06-16T00:00:00Z'
+          description: The year the device was built.
+          id: 2
+          name: BuildYear
+          type: integer
+    PartialConfigRequest:
+      properties:
+        description:
+          anyOf:
+          - type: string
+            maxLength: 250
+          - type: 'null'
+          title: Description
+        allowed_values:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Allowed Values
+      type: object
+      title: PartialConfigRequest
+      examples:
+      - description: The year the device was first seen.
+      - allowed_values:
+        - s
+        - m
+        - l
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-Armis-Client-Name
+x-provenance:
+  method: searched
+  source: https://dev.armis.com/reference
+  harvested: '2026-10-20'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://dev.armis.com/reference/delete_settings_boundaries__boundary_id__delete.md
+  - https://dev.armis.com/reference/delete_settings_device_custom_properties__config_id__delete.md
+  - https://dev.armis.com/reference/delete_settings_integrations__integration_id__delete.md
+  - https://dev.armis.com/reference/delete_settings_sites__site_id__delete.md
+  - https://dev.armis.com/reference/enable_data_export__entity___enable_post.md
+  - https://dev.armis.com/reference/fields_assets__search_fields_get.md
+  - https://dev.armis.com/reference/get_alerts__alert_id__get.md
+  - https://dev.armis.com/reference/get_collectors__collector_number__get.md
+  - https://dev.armis.com/reference/get_collectors__image_get.md
+  - https://dev.armis.com/reference/get_collectors_get.md
+  - https://dev.armis.com/reference/get_data_export__entity__get.md
+  - https://dev.armis.com/reference/get_policies_get.md
+  - https://dev.armis.com/reference/get_settings_boundaries__boundary_id__get.md
+  - https://dev.armis.com/reference/get_settings_boundaries_get.md
+  - https://dev.armis.com/reference/get_settings_device_custom_properties__config_id__get.md
+  - https://dev.armis.com/reference/get_settings_device_custom_properties_get.md
+  - https://dev.armis.com/reference/get_settings_integrations__integration_id__get.md
+  - https://dev.armis.com/reference/get_settings_integrations_get.md
+  - https://dev.armis.com/reference/get_settings_sites__site_id__get.md
+  - https://dev.armis.com/reference/get_settings_sites_get.md
+  - https://dev.armis.com/reference/patch_settings_boundaries__boundary_id__patch.md
+  - https://dev.armis.com/reference/patch_settings_device_custom_properties__config_id__patch.md
+  - https://dev.armis.com/reference/patch_settings_integrations__integration_id__patch.md
+  - https://dev.armis.com/reference/patch_settings_sites__site_id__patch.md
+  - https://dev.armis.com/reference/post_arps_post.md
+  - https://dev.armis.com/reference/post_assets__bulk_post.md
+  - https://dev.armis.com/reference/post_oauth_token_post.md
+  - https://dev.armis.com/reference/post_settings_boundaries_post.md
+  - https://dev.armis.com/reference/post_settings_device_custom_properties_post.md
+  - https://dev.armis.com/reference/post_settings_integrations_post.md
+  - https://dev.armis.com/reference/post_settings_sites_post.md
+  - https://dev.armis.com/reference/search_assets__search_post.md
+  - https://dev.armis.com/reference/search_settings_integrations__search_post.md
+  - https://dev.armis.com/reference/toggle_data_export__entity__patch.md
+  merge:
+    pages: 34
+    deduped: 206
+    conflicts_kept_first: 0

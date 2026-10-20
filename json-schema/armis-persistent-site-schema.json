@@ -1,0 +1,195 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/armis/main/json-schema/armis-persistent-site-schema.json",
+  "title": "PersistentSite",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/armis-api-v3-api-openapi.yml#/components/schemas/PersistentSite",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Name"
+    },
+    "location": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Location",
+      "description": "The name of the location of the site, such as an address. When this field is set, the `lat` and `lng` are automatically derived from it."
+    },
+    "parent_id": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Parent Id"
+    },
+    "tier": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Tier"
+    },
+    "asq_rule": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/AsqRule"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Devices matching this ASQ rule will be associated with this site."
+    },
+    "asq_rule_description": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Asq Rule Description"
+    },
+    "network_equipment_device_ids": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "integer"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Network Equipment Device Ids",
+      "description": "Devices that are detected through these network equipment devices will be associated with this site."
+    },
+    "integration_ids": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "integer"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Integration Ids",
+      "description": "Devices that are detected through these integration will be associated with this site."
+    },
+    "id": {
+      "type": "integer",
+      "title": "Id"
+    },
+    "lat": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Latitude",
+      "description": "The latitude coordinate of the physical location of the site on earth. This field is read-only and is automatically derived from the `location` field."
+    },
+    "lng": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Longitude",
+      "description": "The longitude coordinate of the physical location of the site on earth. This field is read-only and is automatically derived from the `location` field."
+    }
+  },
+  "type": "object",
+  "required": [
+    "name",
+    "id"
+  ],
+  "$defs": {
+    "AndRule": {
+      "properties": {
+        "or": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "description": "Another AsqRule"
+              }
+            ]
+          },
+          "type": "array",
+          "title": "Or"
+        }
+      },
+      "type": "object",
+      "required": [
+        "and"
+      ],
+      "title": "AndRule"
+    },
+    "AsqRule": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/AndRule"
+        },
+        {
+          "$ref": "#/$defs/OrRule"
+        }
+      ],
+      "title": "AsqRule"
+    },
+    "OrRule": {
+      "properties": {
+        "and": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "description": "Another AsqRule"
+              }
+            ]
+          },
+          "type": "array",
+          "title": "And"
+        }
+      },
+      "type": "object",
+      "required": [
+        "or"
+      ],
+      "title": "OrRule"
+    }
+  }
+}

@@ -9,14 +9,12 @@ authentication:
   ref: authentication/armis-security-authentication.yml
 tenancy:
   model: per-tenant host
-  note: >-
-    Each customer operates a dedicated tenant at <tenant>.armis.com; the REST API
-    is served under /api/v1 on the tenant host. Vendor ID identifies the calling
-    integration across tenants.
+  note: Each customer operates a dedicated tenant at <tenant>.armis.com; the REST API is served under /api/v1 on
+    the tenant host. Vendor ID identifies the calling integration across tenants.
 pagination:
   observed: page-size control
   params:
-    - page-limit  # CLI --page-limit, default 500, range 1-1000
+  - page-limit
   note: Derived from the Armis CLI global flags; full REST pagination contract not publicly documented.
 scopes:
   supported: true
@@ -24,8 +22,39 @@ scopes:
 idempotency:
   supported: unknown
   note: No documented idempotency-key contract found in public SDK/CLI/MCP surfaces.
+  coverage: none
+  checked: '2026-10-20'
+  evidence: No Idempotency-Key header or replay protection in the v3 OpenAPI (34 operations) or the dev.armis.com
+    docs (authentication, rate-limiting, best-practices, faq).
 output_formats:
-  cli: [human, json, sarif, junit]
+  cli:
+  - human
+  - json
+  - sarif
+  - junit
 error_semantics:
   ref: null
   note: No public OpenAPI or error-code reference available to capture the error envelope.
+reversibility:
+  status: undocumented
+  note: Configuration objects (sites, boundaries, integrations, device custom properties) can be removed with their
+    DELETE operations and edited with PATCH, but the docs state no undo/restore operation or reversal window; asset
+    bulk upserts and ARP uploads have no documented reversal.
+  surfaces:
+  - write: post_settings_sites_post
+    reversal: delete_settings_sites__site_id__delete
+    window: null
+  - write: post_settings_boundaries_post
+    reversal: delete_settings_boundaries__boundary_id__delete
+    window: null
+  - write: post_settings_integrations_post
+    reversal: delete_settings_integrations__integration_id__delete
+    window: null
+  - write: enable_data_export__entity___enable_post
+    reversal: toggle_data_export__entity__patch
+    window: null
+  source: openapi/armis-api-v3-api-openapi.yml
+rate_limit_signaling:
+  status: 429
+  source: https://dev.armis.com/docs/rate-limiting
+  see: rate-limits/armis-rate-limits.yml

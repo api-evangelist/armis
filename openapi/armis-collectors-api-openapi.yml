@@ -1,0 +1,465 @@
+openapi: 3.2.0
+info:
+  title: Armis API v3 Collectors API
+  version: 0.13.0
+servers:
+- url: https://api.armis.com/v3
+tags:
+- name: Collectors
+paths:
+  /collectors:
+    get:
+      tags:
+      - Collectors
+      summary: List collectors
+      description: '### Required scopes:
+
+        * `PERMISSION.SETTINGS.COLLECTOR.READ`'
+      operationId: get_collectors_get
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: after
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: After
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 10
+          title: Limit
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersistentCollectorItems'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /collectors/_image:
+    get:
+      tags:
+      - Collectors
+      summary: Get the details required to download and run a collector's image
+      description: '### Required scopes:
+
+        * `PERMISSION.SETTINGS.COLLECTOR.READ`'
+      operationId: get_collectors__image_get
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: image_type
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/ImageType'
+          default: OVA
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectorImageDetails'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /collectors/{collector_number}:
+    get:
+      tags:
+      - Collectors
+      summary: Get a collector by its number
+      description: '### Required scopes:
+
+        * `PERMISSION.SETTINGS.COLLECTOR.READ`'
+      operationId: get_collectors__collector_number__get
+      security:
+      - HTTPBearer: []
+      - APIKeyHeader: []
+      parameters:
+      - name: collector_number
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Collector Number
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersistentCollector'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    CollectorStatus:
+      type: string
+      enum:
+      - Active
+      - Collector Received
+      - Critical
+      - Inactive
+      - Initializing
+      - In Shipping
+      - Offline
+      - Pending activation
+      - Warning
+      title: CollectorStatus
+    SourceDeploymentType:
+      type: string
+      enum:
+      - DEPLOYMENT_TYPE_AMI
+      - DEPLOYMENT_TYPE_QCOW2
+      - DEPLOYMENT_TYPE_RPM
+      - DEPLOYMENT_TYPE_OVA
+      - DEPLOYMENT_TYPE_DEB
+      - DEPLOYMENT_TYPE_VHD
+      - DEPLOYMENT_TYPE_VHDX
+      - DEPLOYMENT_TYPE_K8S
+      - DEPLOYMENT_TYPE_LINUX_BROKER
+      - DEPLOYMENT_TYPE_LINUX_AMD64_BROKER
+      - DEPLOYMENT_TYPE_LINUX_ARM64_BROKER
+      - DEPLOYMENT_TYPE_WINDOWS_BROKER
+      - DEPLOYMENT_TYPE_DARWIN_AMD64_BROKER
+      - DEPLOYMENT_TYPE_DARWIN_ARM64_BROKER
+      - DEPLOYMENT_TYPE_QCOW2_ARM
+      - DEPLOYMENT_TYPE_QCOW2_NVIDIA_ARM
+      title: SourceDeploymentType
+    CollectorImageDetails:
+      properties:
+        image_password:
+          type: string
+          title: Image Password
+          description: The password for the OS that is encapsulated by the image.
+        image_type:
+          $ref: '#/components/schemas/ImageType'
+          description: The type of the image
+        url:
+          type: string
+          title: Url
+          description: The temporary, presigned URL from which the OS image file can be downloaded.
+        url_expiration_date:
+          type: string
+          format: date-time
+          title: Url Expiration Date
+          description: Expiration date of the URL.
+      type: object
+      required:
+      - image_password
+      - image_type
+      - url
+      - url_expiration_date
+      title: CollectorImageDetails
+      description: Detailed information required to securely download a collector's image.
+    CollectorRuntime:
+      type: string
+      enum:
+      - COLLECTOR_RUNTIME_HOST
+      - COLLECTOR_RUNTIME_CONTAINER
+      - COLLECTOR_RUNTIME_K8S
+      - COLLECTOR_RUNTIME_BROKER
+      title: CollectorRuntime
+    CollectorType:
+      type: string
+      enum:
+      - Application
+      - Broker
+      - Physical
+      - Unknown
+      - Virtual
+      title: CollectorType
+    ApplicationUpdateStatus:
+      type: string
+      enum:
+      - Automatic
+      - Disabled
+      - Manual
+      title: ApplicationUpdateStatus
+    PersistentCollector:
+      properties:
+        collector_number:
+          type: integer
+          title: Collector Number
+          description: The tenant-scoped sequential number identifying this collector.
+        name:
+          type: string
+          title: Name
+          description: The display name of the collector.
+        status:
+          anyOf:
+          - $ref: '#/components/schemas/CollectorStatus'
+          - type: 'null'
+          description: The current status of the collector.
+        type:
+          anyOf:
+          - $ref: '#/components/schemas/CollectorType'
+          - type: 'null'
+          description: The collector type (e.g., Physical, Virtual).
+        ip_address:
+          anyOf:
+          - type: string
+            format: ipv4
+          - type: 'null'
+          title: Ip Address
+          description: The default IPv4 address of the collector.
+        last_seen:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Seen
+          description: The last time the collector was seen.
+        mac_address:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Mac Address
+          description: The default MAC address of the collector.
+        subnet:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subnet
+          description: The default IPv4 CIDR subnet of the collector.
+        default_gateway:
+          anyOf:
+          - type: string
+            format: ipv4
+          - type: 'null'
+          title: Default Gateway
+          description: The default IPv4 gateway of the collector.
+        cluster_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Cluster Id
+          description: The cluster ID the collector belongs to.
+        https_proxy_redacted:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Https Proxy Redacted
+          description: The HTTPS proxy configured on the collector (redacted).
+        system_vendor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: System Vendor
+          description: The system vendor of the collector hardware.
+        k8s_namespace:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: K8S Namespace
+          description: The Kubernetes namespace of the collector.
+        serial_number:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Serial Number
+          description: The product serial number of the collector.
+        source_deployment_type:
+          anyOf:
+          - $ref: '#/components/schemas/SourceDeploymentType'
+          - type: 'null'
+          description: The deployment type used to provision the collector.
+        last_boot_time:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Boot Time
+          description: The last boot time of the collector.
+        creation_date:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Creation Date
+          description: The creation date of the collector.
+        tracking_number:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tracking Number
+          description: The tracking number for the collector shipment.
+        order_status_update:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Order Status Update
+          description: The last order status update time.
+        configui_password_expiry_date:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Configui Password Expiry Date
+          description: The expiry date of the collector's configuration UI password.
+        collector_runtime:
+          anyOf:
+          - $ref: '#/components/schemas/CollectorRuntime'
+          - type: 'null'
+          description: The runtime type of the collector.
+        application_version:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Application Version
+          description: The application software version.
+        application_update:
+          anyOf:
+          - $ref: '#/components/schemas/ApplicationUpdateStatus'
+          - type: 'null'
+          description: The application update status.
+      type: object
+      required:
+      - collector_number
+      - name
+      title: PersistentCollector
+    ImageType:
+      type: string
+      enum:
+      - DARWIN_AMD64_BROKER
+      - DARWIN_ARM64_BROKER
+      - DEB
+      - LINUX_AMD64_BROKER
+      - LINUX_ARM64_BROKER
+      - OVA
+      - QCOW2
+      - QCOW2_ARM
+      - QCOW2_NVIDIA_ARM
+      - RPM
+      - VHD
+      - VHDX
+      - WINDOWS_BROKER
+      title: ImageType
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    PersistentCollectorItems:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/PersistentCollector'
+          type: array
+          title: Items
+        next:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Next
+      type: object
+      required:
+      - items
+      title: PersistentCollectorItems
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-Armis-Client-Name
+x-provenance:
+  method: searched
+  source: https://dev.armis.com/reference
+  harvested: '2026-10-20'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://dev.armis.com/reference/delete_settings_boundaries__boundary_id__delete.md
+  - https://dev.armis.com/reference/delete_settings_device_custom_properties__config_id__delete.md
+  - https://dev.armis.com/reference/delete_settings_integrations__integration_id__delete.md
+  - https://dev.armis.com/reference/delete_settings_sites__site_id__delete.md
+  - https://dev.armis.com/reference/enable_data_export__entity___enable_post.md
+  - https://dev.armis.com/reference/fields_assets__search_fields_get.md
+  - https://dev.armis.com/reference/get_alerts__alert_id__get.md
+  - https://dev.armis.com/reference/get_collectors__collector_number__get.md
+  - https://dev.armis.com/reference/get_collectors__image_get.md
+  - https://dev.armis.com/reference/get_collectors_get.md
+  - https://dev.armis.com/reference/get_data_export__entity__get.md
+  - https://dev.armis.com/reference/get_policies_get.md
+  - https://dev.armis.com/reference/get_settings_boundaries__boundary_id__get.md
+  - https://dev.armis.com/reference/get_settings_boundaries_get.md
+  - https://dev.armis.com/reference/get_settings_device_custom_properties__config_id__get.md
+  - https://dev.armis.com/reference/get_settings_device_custom_properties_get.md
+  - https://dev.armis.com/reference/get_settings_integrations__integration_id__get.md
+  - https://dev.armis.com/reference/get_settings_integrations_get.md
+  - https://dev.armis.com/reference/get_settings_sites__site_id__get.md
+  - https://dev.armis.com/reference/get_settings_sites_get.md
+  - https://dev.armis.com/reference/patch_settings_boundaries__boundary_id__patch.md
+  - https://dev.armis.com/reference/patch_settings_device_custom_properties__config_id__patch.md
+  - https://dev.armis.com/reference/patch_settings_integrations__integration_id__patch.md
+  - https://dev.armis.com/reference/patch_settings_sites__site_id__patch.md
+  - https://dev.armis.com/reference/post_arps_post.md
+  - https://dev.armis.com/reference/post_assets__bulk_post.md
+  - https://dev.armis.com/reference/post_oauth_token_post.md
+  - https://dev.armis.com/reference/post_settings_boundaries_post.md
+  - https://dev.armis.com/reference/post_settings_device_custom_properties_post.md
+  - https://dev.armis.com/reference/post_settings_integrations_post.md
+  - https://dev.armis.com/reference/post_settings_sites_post.md
+  - https://dev.armis.com/reference/search_assets__search_post.md
+  - https://dev.armis.com/reference/search_settings_integrations__search_post.md
+  - https://dev.armis.com/reference/toggle_data_export__entity__patch.md
+  merge:
+    pages: 34
+    deduped: 206
+    conflicts_kept_first: 0
