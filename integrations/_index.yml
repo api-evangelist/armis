@@ -27,70 +27,6 @@
   relationship: distribution-channel
   status: not-a-workflow
   arazzo: null
-- slug: armis-crowdstrike-own
-  label: CrowdStrike (own)
-  partner: crowdstrike
-  partner_name: CrowdStrike (own)
-  type: marketplace
-  marketplace: own
-  channel: partner-built
-  evidence: https://marketplace.crowdstrike.com/listings/armis-data-connector/
-  source: edge
-  relationship: platform-app
-  status: not-a-workflow
-  arazzo: null
-- slug: armis-microsoft-sentinel-own
-  label: Microsoft Sentinel (own)
-  partner: microsoft-sentinel
-  partner_name: Microsoft Sentinel (own)
-  category: Security - Network
-  type: marketplace
-  marketplace: own
-  channel: partner-built
-  evidence: https://github.com/Azure/Azure-Sentinel/tree/master/Solutions/Armis
-  source: edge
-  relationship: platform-app
-  status: not-a-workflow
-  arazzo: null
-- slug: armis-okta-own
-  label: Okta (own)
-  partner: okta
-  partner_name: Okta (own)
-  category: Directory and HR Sync
-  type: marketplace
-  marketplace: own
-  channel: partner-built
-  evidence: https://www.okta.com/integrations/armis/
-  source: edge
-  relationship: platform-app
-  status: not-a-workflow
-  arazzo: null
-- slug: armis-palo-alto-networks-own
-  label: Palo Alto Networks (own)
-  partner: palo-alto-networks
-  partner_name: Palo Alto Networks (own)
-  category: Network Security
-  type: marketplace
-  marketplace: own
-  channel: partner-built
-  evidence: https://cortex.marketplace.pan.dev/marketplace/details/Armis/
-  source: edge
-  relationship: platform-app
-  status: not-a-workflow
-  arazzo: null
-- slug: armis-splunk-own
-  label: Splunk (own)
-  partner: splunk
-  partner_name: Splunk (own)
-  category: app
-  type: marketplace
-  marketplace: own
-  channel: partner-built
-  evidence: https://splunkbase.splunk.com/app/4873/
-  source: edge
-  relationship: platform-app
-  status: not-a-workflow
-  arazzo: null
 - slug: armis-cloud-security-alliance-star-registry
   label: Cloud Security Alliance STAR Registry
   partner_name: Cloud Security Alliance STAR Registry
@@ -167,5 +103,109 @@
     identity_source: register-name
     identity_note: register gave only the name; exact normalised match to the repo's apis.yml name, one repo, Wikidata
       P856 not contradicting (Kin 2026-10-20 decision 2)
+  status: not-a-workflow
+  arazzo: null
+- slug: armis-sequoia-capital
+  label: Sequoia Capital
+  partner: sequoia-capital
+  partner_name: Sequoia Capital
+  category: vc portfolio participation
+  type: register
+  channel: standard-directory
+  evidence: https://sequoiacap.com/companies/armis-security
+  source: edge
+  relationship: standard-participant
+  contract_reference:
+    register: Sequoia Capital companies (sequoiacap.com/companies/<slug>, from the site's sitemap.xml)
+    standard: null
+    spec_file: null
+    role: vc-portfolio-company
+    registered_name: Armis
+    register_id: https://sequoiacap.com/companies/armis-security
+    register_country: null
+    register_website: https://armis.com/
+    matched_domain: armis.com
+    matched_by: domain
+    signal_note: 'participation only: the venture firm''s own published portfolio lists the company (investment);
+      an ownership and participation record, not conformance or certification'
+    detected_by: sweep-vc-portfolios.py
+    detected: '2026-10-21'
+  status: not-a-workflow
+  arazzo: null
+- slug: armis-crowdstrike-own
+  label: CrowdStrike (own)
+  partner: crowdstrike
+  partner_name: CrowdStrike (own)
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://marketplace.crowdstrike.com/listings/armis-data-connector/
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: armis-microsoft-sentinel-own
+  label: Microsoft Sentinel (own)
+  partner: microsoft-sentinel
+  partner_name: Microsoft Sentinel (own)
+  category: Security - Network
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://github.com/Azure/Azure-Sentinel/tree/master/Solutions/Armis
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: armis-okta-own
+  label: Okta (own)
+  partner: okta
+  partner_name: Okta (own)
+  category: Directory and HR Sync
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://www.okta.com/integrations/armis/
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: armis-palo-alto-networks-own
+  label: Palo Alto Networks (own)
+  partner: palo-alto-networks
+  partner_name: Palo Alto Networks (own)
+  category: Network Security
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://cortex.marketplace.pan.dev/marketplace/details/Armis/
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: armis-splunk-own
+  label: Splunk (own)
+  partner: splunk
+  partner_name: Splunk (own)
+  category: app
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://splunkbase.splunk.com/app/4873/
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: armis-cisco-own
+  label: Cisco (own)
+  partner: cisco
+  partner_name: Cisco (own)
+  category: Identity Management
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://marketplace.cisco.com/en-US/apps/380895
+  source: edge
+  relationship: platform-app
   status: not-a-workflow
   arazzo: null

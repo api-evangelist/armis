@@ -33,6 +33,13 @@ checked:
 - https://cloudsecurityalliance.org/membership/current
 - https://fidoalliance.org/certification/fido-certified-products/
 - https://www.cisa.gov/securebydesign/pledge/secure-design-pledge-signers
+- https://a16z.com/portfolio/
+- https://www.battery.com/company/
+- https://www.battery.com/wp-admin/admin-ajax.php
+- https://www.indexventures.com/companies/
+- https://www.sequoiacap.com/our-companies/
+- https://www.sequoiacap.com/sitemap.xml
+- cisco/integrations/cisco-integration-edges.yml
 summary: null
 marketplace_apps: []
 edges:
@@ -67,6 +74,126 @@ edges:
   seller_name: Armis, Inc.
   detected_by: sweep-cloud-marketplaces.py
   detected: '2026-10-13'
+- partner_name: Cloud Security Alliance STAR Registry
+  partner: null
+  partner_match: register
+  type: register
+  channel: standard-directory
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://cloudsecurityalliance.org/star/registry/armis-inc/services/the-armis-security-platform
+  category: Cloud security assurance
+  contract_reference:
+    register: CSA STAR Registry (cloudsecurityalliance.org/star/registry)
+    spec_file: null
+    standard: CSA STAR
+    role: star-level-1
+    registered_name: Armis, Inc.
+    registry_id: armis-inc
+    service_url: http://www.Armis.com/
+    matched_domain: armis.com
+    matched_by: domain
+    identity_source: the service URL the organisation filed on its STAR listing (no lookup)
+    levels:
+    - STAR Level 1
+    certified_products: []
+    signal_note: STAR Level 1 (CAIQ self-assessment) = participation; certified_products = one entry per STAR Level
+      2 / STAR for AI Level 2 assessment TYPE (third-party certification, attestation, C-STAR, ValidAIted); lapsed
+      = every instance marked (Deprecated) by the registry; service counts never recorded
+    detected_by: sweep-compliance-assurance.py
+    detected: '2026-10-20'
+  detected_by: sweep-compliance-assurance.py
+  first_seen: '2026-10-20'
+- partner_name: Agent Skills (own GitHub org)
+  partner: null
+  partner_match: register
+  type: register
+  direction: provider-built
+  category: Agent Skills package
+  evidence: https://github.com/ArmisSecurity/armis-appsec-mcp
+  channel: provider-built
+  relationship: compatible
+  shape: agent-skills
+  evidence_kind: own-repo
+  degree: skill-repo
+  report_only: true
+  agent_skills:
+    org: armissecurity
+    current: true
+    repos:
+    - repo: ArmisSecurity/armis-appsec-mcp
+      archived: false
+      lapsed: false
+      pushed: '2026-10-20'
+    - repo: ArmisSecurity/armis-knowledge-mcp
+      archived: false
+      lapsed: false
+      pushed: '2026-07-30'
+  contract_reference:
+    register: 'provider''s own GitHub org (GitHub REST API: repo + git tree holds SKILL.md)'
+    spec_file: null
+    standard: Agent Skills (agentskills.io)
+    role: agent-skills-repo
+    matched_org: armissecurity
+    matched_by: org-profile-domain:armis.com
+    detected_by: sweep-agent-skills.py
+    detected: '2026-10-20'
+  detected_by: sweep-agent-skills.py
+  first_seen: '2026-10-20'
+- partner_name: CISA Secure by Design Pledge
+  partner: null
+  partner_match: register-name
+  type: register
+  channel: standard-directory
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://www.cisa.gov/securebydesign/pledge/secure-design-pledge-signers
+  category: secure-by-design software pledge
+  contract_reference:
+    register: CISA Secure by Design Pledge signers (cisa.gov/securebydesign/pledge)
+    standard: 'CISA Secure by Design Pledge (seven goals: MFA, default passwords, vulnerability classes, patches,
+      disclosure policy, CVEs, evidence of intrusions)'
+    spec_file: null
+    role: secure-by-design-pledge-signer
+    registered_name: Armis
+    matched_domain: null
+    matched_by: register-name
+    signal_note: 'participation only: a voluntary public pledge listed by CISA; not an audit or conformance result
+      (no certified_products, no tier)'
+    detected_by: sweep-cloud-security-star.py
+    detected: '2026-10-20'
+    register_name_note: register-name 'armis' = armis; no wikidata P856
+    identity_source: register-name
+    identity_note: register gave only the name; exact normalised match to the repo's apis.yml name, one repo, Wikidata
+      P856 not contradicting (Kin 2026-10-20 decision 2)
+  detected_by: sweep-cloud-security-star.py
+  first_seen: '2026-10-20'
+- partner_name: Sequoia Capital
+  partner: sequoia-capital
+  partner_match: register
+  type: register
+  channel: standard-directory
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://sequoiacap.com/companies/armis-security
+  category: vc portfolio participation
+  contract_reference:
+    register: Sequoia Capital companies (sequoiacap.com/companies/<slug>, from the site's sitemap.xml)
+    standard: null
+    spec_file: null
+    role: vc-portfolio-company
+    registered_name: Armis
+    register_id: https://sequoiacap.com/companies/armis-security
+    register_country: null
+    register_website: https://armis.com/
+    matched_domain: armis.com
+    matched_by: domain
+    signal_note: 'participation only: the venture firm''s own published portfolio lists the company (investment);
+      an ownership and participation record, not conformance or certification'
+    detected_by: sweep-vc-portfolios.py
+    detected: '2026-10-21'
+  detected_by: sweep-vc-portfolios.py
+  first_seen: '2026-10-21'
 - partner_name: CrowdStrike (own)
   partner: crowdstrike
   partner_match: mirror
@@ -166,98 +293,22 @@ edges:
   detected: '2026-10-14'
   detected_by: mirror-platform-listings.py
   category: app
-- partner_name: Cloud Security Alliance STAR Registry
-  partner: null
-  partner_match: register
-  type: register
-  channel: standard-directory
-  relationship: standard-participant
-  direction: partner-built
-  evidence: https://cloudsecurityalliance.org/star/registry/armis-inc/services/the-armis-security-platform
-  category: Cloud security assurance
-  contract_reference:
-    register: CSA STAR Registry (cloudsecurityalliance.org/star/registry)
-    spec_file: null
-    standard: CSA STAR
-    role: star-level-1
-    registered_name: Armis, Inc.
-    registry_id: armis-inc
-    service_url: http://www.Armis.com/
-    matched_domain: armis.com
-    matched_by: domain
-    identity_source: the service URL the organisation filed on its STAR listing (no lookup)
-    levels:
-    - STAR Level 1
-    certified_products: []
-    signal_note: STAR Level 1 (CAIQ self-assessment) = participation; certified_products = one entry per STAR Level
-      2 / STAR for AI Level 2 assessment TYPE (third-party certification, attestation, C-STAR, ValidAIted); lapsed
-      = every instance marked (Deprecated) by the registry; service counts never recorded
-    detected_by: sweep-compliance-assurance.py
-    detected: '2026-10-20'
-  detected_by: sweep-compliance-assurance.py
-  first_seen: '2026-10-20'
-- partner_name: Agent Skills (own GitHub org)
-  partner: null
-  partner_match: register
-  type: register
-  direction: provider-built
-  category: Agent Skills package
-  evidence: https://github.com/ArmisSecurity/armis-appsec-mcp
-  channel: provider-built
-  relationship: compatible
-  shape: agent-skills
-  evidence_kind: own-repo
-  degree: skill-repo
-  report_only: true
-  agent_skills:
-    org: armissecurity
-    current: true
-    repos:
-    - repo: ArmisSecurity/armis-appsec-mcp
-      archived: false
-      lapsed: false
-      pushed: '2026-10-20'
-    - repo: ArmisSecurity/armis-knowledge-mcp
-      archived: false
-      lapsed: false
-      pushed: '2026-07-30'
-  contract_reference:
-    register: 'provider''s own GitHub org (GitHub REST API: repo + git tree holds SKILL.md)'
-    spec_file: null
-    standard: Agent Skills (agentskills.io)
-    role: agent-skills-repo
-    matched_org: armissecurity
-    matched_by: org-profile-domain:armis.com
-    detected_by: sweep-agent-skills.py
-    detected: '2026-10-20'
-  detected_by: sweep-agent-skills.py
-  first_seen: '2026-10-20'
-- partner_name: CISA Secure by Design Pledge
-  partner: null
-  partner_match: register-name
-  type: register
-  channel: standard-directory
-  relationship: standard-participant
-  direction: partner-built
-  evidence: https://www.cisa.gov/securebydesign/pledge/secure-design-pledge-signers
-  category: secure-by-design software pledge
-  contract_reference:
-    register: CISA Secure by Design Pledge signers (cisa.gov/securebydesign/pledge)
-    standard: 'CISA Secure by Design Pledge (seven goals: MFA, default passwords, vulnerability classes, patches,
-      disclosure policy, CVEs, evidence of intrusions)'
-    spec_file: null
-    role: secure-by-design-pledge-signer
-    registered_name: Armis
-    matched_domain: null
-    matched_by: register-name
-    signal_note: 'participation only: a voluntary public pledge listed by CISA; not an audit or conformance result
-      (no certified_products, no tier)'
-    detected_by: sweep-cloud-security-star.py
-    detected: '2026-10-20'
-    register_name_note: register-name 'armis' = armis; no wikidata P856
-    identity_source: register-name
-    identity_note: register gave only the name; exact normalised match to the repo's apis.yml name, one repo, Wikidata
-      P856 not contradicting (Kin 2026-10-20 decision 2)
-  detected_by: sweep-cloud-security-star.py
-  first_seen: '2026-10-20'
+- partner_name: Cisco (own)
+  partner: cisco
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://marketplace.cisco.com/en-US/apps/380895
+  mirror_of: cisco/integrations/cisco-integration-edges.yml
+  apps:
+  - Armis
+  - Armis for Healthcare
+  listing_count: 2
+  detected: '2026-10-21'
+  detected_by: mirror-platform-listings.py
+  category: Identity Management
 templates: []
