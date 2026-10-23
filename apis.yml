@@ -61,6 +61,9 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: CapabilityMap
+  url: capabilities/armis-capability-edges.yml
+  name: Armis Business Capability Map
 - type: AgenticAccess
   url: agentic-access/armis-agentic-access.yml
 - type: Spectral
