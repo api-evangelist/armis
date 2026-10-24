@@ -399,6 +399,8 @@ apis:
   humanURL: https://dev.armis.com/docs/your-guide-to-building-with-armis-apis
   baseURL: https://api.armis.com/v3
   tags:
+  - Integration
+  tags_raw:
   - Integrations
   properties:
   - type: OpenAPI
