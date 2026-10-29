@@ -64,6 +64,145 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Armis is a company surfaced as a portfolio company of general-catalyst, insight-partners and added to the API Evangelist network as a stub for enrichment. Sector: defense-government. This profile is a lead awaiting the enrichment pipeline.
+Armis is a cyber exposure management and asset intelligence company. Its Armis Centrix platform discovers, protects, and manages every physical and virtual asset in an enterprise environment — IT, OT, ICS, IoT, IoMT, medical devices, cloud workloads, and applications — giving security teams real-time visibility, risk prioritization, and threat detection across the full attack surface. Armis exposes this intelligence through a tenant-scoped REST API secured with OAuth2 client-credentials, an official Python SDK (armis-sdk), a Go application-security scanning CLI (armis-cli), and two published Model Context Protocol servers (armis-knowledge-mcp and armis-appsec-mcp) for agent-native AppSec workflows. The company was surfaced as a portfolio company of General Catalyst and Insight Partners and enriched by the API Evangelist pipeline from its public developer surface.
 
-Backed by: general-catalyst, insight-partners — https://www.armis.com
+**Areas:** Company · Defense Government · Security · Cybersecurity · Asset Intelligence · Exposure Management · IoT · OT Security · Vulnerability Management · Developer Tools
+
+## Armis on APIs.io
+
+Everything profiled for Armis is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/armis/](https://apis.io/providers/armis/)** — or go straight to one of the APIs or properties below.
+
+### APIs (12)
+
+- [Armis Developer Portal MCP Server](https://apis.io/apis/armis/armis-developer-portal-mcp/) — Remote MCP server hosted on the Armis developer portal exposing endpoint discovery, endpoint detail, search, authentication and request execution against…
+- [Armis Alerts API](https://apis.io/apis/armis/armis-alerts-api/) — The Alerts API from Armis — 1 operation(s) for alerts.
+- [Armis ARP API](https://apis.io/apis/armis/armis-arp-api/) — The ARP API from Armis — 1 operation(s) for arp.
+- [Armis Assets API](https://apis.io/apis/armis/armis-assets-api/) — The Assets API from Armis — 3 operation(s) for assets.
+- [Armis Authentication API](https://apis.io/apis/armis/armis-authentication-api/) — Manage authentication of the API.
+- [Armis Boundaries API](https://apis.io/apis/armis/armis-boundaries-api/) — The Boundaries API from Armis — 2 operation(s) for boundaries.
+- [Armis Collectors API](https://apis.io/apis/armis/armis-collectors-api/) — The Collectors API from Armis — 3 operation(s) for collectors.
+- [Armis Data Export API](https://apis.io/apis/armis/armis-data-export-api/) — The Data Export API from Armis — 2 operation(s) for data export.
+- [Armis Device Custom Properties API](https://apis.io/apis/armis/armis-device-custom-properties-api/) — The Device Custom Properties API from Armis — 2 operation(s) for device custom properties.
+- [Armis Integrations API](https://apis.io/apis/armis/armis-integrations-api/) — The Integrations API from Armis — 3 operation(s) for integrations.
+- [Armis Policies API](https://apis.io/apis/armis/armis-policies-api/) — The Policies API from Armis — 1 operation(s) for policies.
+- [Armis Sites API](https://apis.io/apis/armis/armis-sites-api/) — The Sites API from Armis — 2 operation(s) for sites.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [armis-mcp.yml](https://apis.io/servers/armis/armis-mcp-yml/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Armis Agentic Access](https://apis.io/agentic-access/armis/armis-agentic-access/)
+
+#### JSON Schema (6)
+
+The data models the API reads and writes.
+
+- [AuthRequest](https://apis.io/schemas/armis/armis-auth-request/)
+- [PersistentAlert](https://apis.io/schemas/armis/armis-persistent-alert/)
+- [PersistentCollector](https://apis.io/schemas/armis/armis-persistent-collector/)
+- [PersistentIntegration](https://apis.io/schemas/armis/armis-persistent-integration/)
+- [PersistentSite](https://apis.io/schemas/armis/armis-persistent-site/)
+- [SearchAssetsRequest](https://apis.io/schemas/armis/armis-search-assets-request/)
+
+#### JSON-LD (1)
+
+Linked-data contexts for the provider's vocabulary.
+
+- [Armis Context](https://apis.io/jsonld/armis/armis-context/)
+
+#### Governance rules (1)
+
+Spectral rulesets for the provider's contracts.
+
+- [Armis API Rules](https://apis.io/rules/armis/armis-rules/)
+
+#### Security (4)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Armis Authentication](https://apis.io/security/armis/armis-authentication/)
+- [Armis Domain Security](https://apis.io/security/armis/armis-domain-security/)
+- [Armis Trust Center](https://apis.io/security/armis/armis-trust-center/)
+- [Armis Vulnerability Disclosure](https://apis.io/security/armis/armis-vulnerability-disclosure/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Armis Rate Limits](https://apis.io/rate-limits/armis/armis-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.armis.com)
+- [Documentation](https://armis-python-sdk.readthedocs.io)
+- [API reference](https://dev.armis.com/reference)
+- [Support](https://support.armis.com/)
+- [Changelog](https://dev.armis.com/docs/migration-from-api-v1)
+- [Blog](https://www.armis.com/blog/)
+- [Compliance](https://trust.armis.com/)
+- [GitHub](https://github.com/ArmisSecurity)
+
+## API Evangelist rating
+
+**Kin Score 58.5** — strong · rubric 0.24.0 · scored 2026-10-20
+
+| Facet | Score |
+|---|---|
+| Discoverability | 75.0 |
+| Contract quality | 61.0 |
+| Contract governance | 80.9 |
+| Operational transparency | 47.9 |
+| Developer ergonomics | 66.7 |
+| Access clarity | 15.8 |
+
+**Agent readiness 52.9** — agent-ready (gated down from agent-native)
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | unknown |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | yes |
+| Well Known Catalog | yes |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+
+**Regulatory alignment 35.3** — Government & Public Sector
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/armis/](https://apis.io/providers/armis/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Armis: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/armis/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
